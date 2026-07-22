@@ -908,7 +908,7 @@ section[id] { scroll-margin-top: 88px; }
         align-self: stretch;
         justify-content: flex-start;
         margin-top: 0 !important;
-        padding-top: clamp(225px, 20.5vw, 285px);
+        padding-top: clamp(195px, 18.25vw, 255px);
     }
     .hero-trust-panel {
         max-width: 450px;
@@ -1083,22 +1083,28 @@ section h2 {
 #chuyen-gia .grid > div { max-width: none; }
 #chuyen-gia .grid > div > div:first-child { height: 280px; }
 #chuyen-gia .grid > div img { transform: none !important; }
+.doctor-card-copy {
+    position: relative;
+    z-index: 3;
+    margin-top: -43px !important;
+}
 .doctor-title-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: max-content;
-    margin: 0 auto 9px;
-    padding: 5px 10px;
-    border: 1px solid rgba(110,165,47,.3);
+    min-height: 36px;
+    margin: 0 auto 13px;
+    padding: 8px 16px;
+    border: 2px solid rgba(110,165,47,.5);
     border-radius: 999px;
-    color: #527c25;
-    background: #f1f7e9;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+    color: #41671b;
+    background: #f5faef;
+    box-shadow: 0 8px 20px rgba(18,63,95,.16), inset 0 1px 0 rgba(255,255,255,.92);
     font-family: 'Nunito', sans-serif;
-    font-size: 11.5px;
+    font-size: 14px;
     font-weight: 900;
-    letter-spacing: .055em;
+    letter-spacing: .065em;
     line-height: 1;
 }
 
@@ -1526,7 +1532,7 @@ footer .bg-white {
     .hero-content h1 > span:nth-child(3),
     .hero-content > p { margin-left: auto; margin-right: auto; }
     .hero-content > div { justify-content: center; }
-    .hero-visual { margin-top: 14px !important; }
+    .hero-visual { margin-top: -8px !important; }
     .hero-visual > .relative { max-width: 610px; }
     #chuyen-gia .grid > div > div:first-child { height: 300px; }
 }
@@ -1534,13 +1540,15 @@ footer .bg-white {
 @media (max-width: 767px) {
     .hero-section::before {
         height: 1360px;
-        background-position: center, center, 66% center;
+        background-position: center, center, 68% 110px;
+        background-size: cover, cover, auto clamp(880px, 255vw, 1040px);
     }
     body { font-size: 15px; padding-bottom: 0; }
     .navbar { min-height: 66px; padding: 8px 0; }
     .navbar > .max-w-7xl { padding-left: 14px; padding-right: 14px; gap: 8px; }
-    .navbar .nav-logo img { height: 32px !important; max-width: 130px; }
-    .brand-slot { width: 122px !important; }
+    .navbar .nav-logo { display: flex; width: 100%; align-items: center; }
+    .navbar .nav-logo img { width: 100% !important; height: auto !important; max-width: none; max-height: none; }
+    .brand-slot { width: clamp(124px, 39vw, 158px) !important; }
     .navbar .btn-nav-cta { min-height: 40px; padding: 8px 11px; font-size: 12px; }
     .hero-section { padding-top: 94px !important; padding-bottom: 50px !important; }
     .hero-content h1 > span:first-child { font-size: 12px !important; }
@@ -1649,7 +1657,7 @@ footer .bg-white {
     }
     .navbar .brand-slot {
         grid-column: 1;
-        width: 118px !important;
+        width: clamp(124px, 38vw, 150px) !important;
         min-width: 0;
     }
     .navbar > .max-w-7xl > .w-auto { display: contents; }
@@ -1659,7 +1667,7 @@ footer .bg-white {
         min-height: 44px;
     }
     .navbar .nav-logo img {
-        width: 118px;
+        width: 100% !important;
         max-width: 100%;
         height: auto !important;
     }
@@ -1707,7 +1715,8 @@ footer .bg-white {
             linear-gradient(180deg, rgba(5,25,38,.10) 44%, #071f2e 100%),
             linear-gradient(90deg, rgba(5,25,38,.95) 0%, rgba(7,31,46,.78) 62%, rgba(7,31,46,.35) 100%),
             url('assets/images/hero/hero-doctor-examination.webp');
-        background-position: center, center, 70% top;
+        background-position: center, center, 68% 90px;
+        background-size: cover, cover, auto clamp(880px, 255vw, 1040px);
     }
     .hero-section::after { height: 180px; }
     .hero-section > .max-w-7xl {
@@ -1773,7 +1782,7 @@ footer .bg-white {
 
     .hero-visual {
         width: 100%;
-        margin-top: 2px !important;
+        margin-top: -14px !important;
         align-items: stretch;
     }
     .hero-trust-panel {
@@ -2131,8 +2140,8 @@ footer .bg-white {
         padding-left: 10px;
         padding-right: 10px;
     }
-    .navbar .brand-slot { width: 106px !important; }
-    .navbar .nav-logo img { width: 106px; }
+    .navbar .brand-slot { width: clamp(112px, 34vw, 128px) !important; }
+    .navbar .nav-logo img { width: 100% !important; }
     .navbar .btn-nav-cta { padding-inline: 8px; font-size: 10.5px; }
     .mobile-menu-toggle { width: 40px; height: 40px; flex-basis: 40px; }
     .hero-section > .max-w-7xl { padding-left: 15px; padding-right: 15px; }
@@ -2664,7 +2673,7 @@ footer .bg-white {
                         <img src="https://hoanglongclinic.vn/uploads/thumb/gs-ts-dao-van-long.jpg" class="w-full h-full object-cover object-top transition-transform duration-700 md:group-hover:scale-110" alt="GS Đào Văn Long" decoding="async" loading="lazy" width="600" height="700">
                     </div>
                     <div class="p-6 flex flex-col flex-1 text-center items-center">
-                        <div class="mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
+                        <div class="doctor-card-copy mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
                             <span class="doctor-title-badge">GS.TS.BS.</span>
                             <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">ĐÀO VĂN LONG</span>
                         </div>
@@ -2679,7 +2688,7 @@ footer .bg-white {
                         <img src="https://hoanglongclinic.vn/uploads/bac-sy-nghiem-dinh-phan.jpg" onerror="this.onerror=null; this.src='https://placehold.co/600x700/e2e8f0/475569?text=BS+Phàn'" class="w-full h-full object-cover object-top transition-transform duration-700 md:group-hover:scale-110" alt="PGS Nghiêm Đình Phàn" decoding="async" loading="lazy" width="600" height="700">
                     </div>
                     <div class="p-6 flex flex-col flex-1 text-center items-center">
-                        <div class="mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
+                        <div class="doctor-card-copy mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
                             <span class="doctor-title-badge">PGS.TS.BS.</span>
                             <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">NGHIÊM ĐÌNH PHÀN</span>
                         </div>
@@ -2694,7 +2703,7 @@ footer .bg-white {
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm87jL_EjaWu0q3ygGZu0rA-QgFGq3lu0fEtX8z7tMxw&s=10" class="w-full h-full object-cover object-top md:group-hover:scale-110 transition-transform duration-700" alt="PGS Nguyễn Duy Thắng" decoding="async" loading="lazy" width="600" height="700">
                     </div>
                     <div class="p-6 text-center flex flex-col flex-1 items-center">
-                        <div class="mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
+                        <div class="doctor-card-copy mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
                             <span class="doctor-title-badge">PGS.TS.BS.</span>
                             <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">NGUYỄN DUY THẮNG</span>
                         </div>
@@ -2709,7 +2718,7 @@ footer .bg-white {
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFdKVWrPrYQ9kfZsg3xS1phMZTox0MdOuq27ZPBp7JvA&s=10" class="w-full h-full object-cover object-[center_15%] md:group-hover:scale-110 transition-transform duration-700" alt="BSCKII Phạm Thị Lan Hương" decoding="async" loading="lazy" width="600" height="700">
                     </div>
                     <div class="p-6 text-center flex flex-col flex-1 items-center">
-                        <div class="mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
+                        <div class="doctor-card-copy mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
                             <span class="doctor-title-badge">BSCKII.</span>
                             <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">PHẠM THỊ LAN HƯƠNG</span>
                         </div>
