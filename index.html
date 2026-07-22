@@ -1712,10 +1712,10 @@ footer .bg-white {
     .hero-section::before {
         height: 100%;
         background-image:
-            linear-gradient(180deg, rgba(5,25,38,.10) 44%, #071f2e 100%),
+            linear-gradient(180deg, rgba(5,25,38,.06) 0, rgba(5,25,38,.10) 610px, rgba(7,31,46,.68) 850px, #071f2e 1010px, #071f2e 100%),
             linear-gradient(90deg, rgba(5,25,38,.95) 0%, rgba(7,31,46,.78) 62%, rgba(7,31,46,.35) 100%),
             url('assets/images/hero/hero-doctor-examination.webp');
-        background-position: center, center, 68% 90px;
+        background-position: center, center, 68% top;
         background-size: cover, cover, auto clamp(880px, 255vw, 1040px);
     }
     .hero-section::after { height: 180px; }
@@ -2071,8 +2071,9 @@ footer .bg-white {
     .form-input {
         min-height: 50px;
         padding: 12px 14px !important;
-        font-size: 16px;
+        font-size: 14.5px;
     }
+    .form-input::placeholder { font-size: 14px; }
     textarea.form-input { min-height: 108px; }
     .registration-card .btn-primary {
         width: 100%;
@@ -3209,7 +3210,7 @@ footer .bg-white {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-8 mb-8 md:mb-12 text-center md:text-left">
 
                 <div class="lg:col-span-4 flex flex-col items-center md:items-start">
-                    <img src="https://hoanglongclinic.vn/uploads/logo-phong-kham-da-khoa-hoang-long.png" alt="Logo" class="h-10 md:h-12 w-auto mb-4 object-contain" decoding="async" loading="lazy" width="536" height="83">
+                    <img src="assets/images/brand/logo-footer-hoang-long.png" alt="Logo Phòng khám Đa khoa Hoàng Long" class="h-10 md:h-12 w-auto mb-4 object-contain" decoding="async" loading="lazy" width="508" height="61">
                     <p class="text-[13px] font-semibold text-bodyText leading-relaxed mb-5 md:pr-4">Phòng khám đa khoa Hoàng Long chuyên Nội soi - Chẩn đoán hình ảnh tích hợp Trí tuệ nhân tạo AI hỗ trợ phát hiện bệnh lý Tiêu hóa - Gan mật.</p>
 
                     <div class="flex items-center gap-4 mb-5">
