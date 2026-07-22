@@ -39,7 +39,9 @@ Trong Vercel, mở project > Settings > Domains và thêm tên miền hoặc sub
 
 ## Lưu ý trước khi chạy quảng cáo
 
-- Các ảnh còn dùng đường dẫn `file:///D:/...` sẽ không được upload lên Vercel; trình duyệt sẽ chuyển sang ảnh dự phòng hiện có.
-- Ảnh nền lấy từ Facebook CDN có thể hết hạn. Nên tải ảnh về và đặt trong thư mục `assets/images/`.
+- 16 ảnh cơ sở phòng khám đã được tối ưu WebP và đóng gói trong `assets/images/clinic/`, có thể hiển thị trực tiếp trên Vercel.
+- QR Zalo OA đã được đóng gói trong `assets/images/qr/`; QR Mini App vẫn giữ ảnh chờ cho đến khi có file chính thức.
+- Sáu ảnh dây soi đã được tối ưu WebP và đóng gói trong `assets/images/endoscopy/`; landing page không còn đường dẫn ảnh `file:///D:/...`.
+- Ảnh nền hero đã được đóng gói cục bộ tại `assets/images/hero/`, không còn phụ thuộc vào link Facebook CDN.
 - Form hiện chỉ hiển thị thông báo cảm ơn, chưa gửi dữ liệu về CRM, Google Sheets hoặc email.
 - Nên bổ sung Google Analytics, Meta Pixel và theo dõi sự kiện gửi form trước khi chạy chiến dịch.
