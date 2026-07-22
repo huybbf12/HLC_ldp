@@ -138,11 +138,11 @@ img { -webkit-user-drag: none; user-select: none; }
 
 /* ANIMATION CROSSFADE CHO DÂY 700 LASER */
 @keyframes crossfade {
-    0%, 35% { opacity: 1; }
-    65%, 100% { opacity: 0; }
+    0%, 28% { opacity: 1; }
+    58%, 100% { opacity: 0; }
 }
 .animate-crossfade {
-    animation: crossfade 2.5s infinite alternate ease-in-out;
+    animation: crossfade 1.6s infinite alternate ease-in-out;
 }
 
 /* Navbar Clean */
@@ -720,8 +720,14 @@ section[id] { scroll-margin-top: 88px; }
     height: 8px;
     flex: 0 0 auto;
     border-radius: 50%;
-    background: #a9dc6f;
-    box-shadow: 0 0 0 5px rgba(169,220,111,.13), 0 0 18px rgba(169,220,111,.6);
+    background: #e63946;
+    box-shadow: 0 0 0 0 rgba(230,57,70,.58), 0 0 16px rgba(230,57,70,.72);
+    animation: liveStatusPulse 1.45s ease-out infinite;
+}
+@keyframes liveStatusPulse {
+    0% { box-shadow: 0 0 0 0 rgba(230,57,70,.58), 0 0 12px rgba(230,57,70,.62); }
+    70% { box-shadow: 0 0 0 8px rgba(230,57,70,0), 0 0 20px rgba(230,57,70,.74); }
+    100% { box-shadow: 0 0 0 0 rgba(230,57,70,0), 0 0 12px rgba(230,57,70,.58); }
 }
 .hero-trust-shield {
     display: grid;
@@ -827,6 +833,18 @@ section[id] { scroll-margin-top: 88px; }
     box-shadow: 0 14px 32px rgba(0,0,0,.2);
     animation: resultCardFloat 2.8s ease-in-out infinite;
     will-change: transform;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease;
+}
+.hero-result-ribbon:hover {
+    border-color: rgba(185,223,141,.92);
+    background: #ffffff;
+    box-shadow: 0 17px 38px rgba(0,0,0,.26);
+}
+.hero-result-ribbon:focus-visible {
+    outline: 3px solid rgba(185,223,141,.88);
+    outline-offset: 3px;
 }
 .hero-result-ribbon__icon {
     display: grid;
@@ -853,7 +871,11 @@ section[id] { scroll-margin-top: 88px; }
     font-weight: 900;
     line-height: 1.25;
 }
-.hero-result-ribbon > i:last-child { color: #6ea52f; }
+.hero-result-ribbon > i:last-child {
+    color: #6ea52f;
+    transition: transform .2s ease;
+}
+.hero-result-ribbon:hover > i:last-child { transform: translateX(3px); }
 @media (prefers-reduced-motion: reduce) {
     .hero-result-ribbon {
         animation: none;
@@ -1041,6 +1063,19 @@ section h2 {
 }
 #mri-ct { margin-top: 72px !important; margin-bottom: 72px !important; }
 #mri-ct img { border: 1px solid var(--line); border-radius: 18px !important; transform: none !important; }
+.mri-title-main,
+.mri-title-sub { display: block; }
+.mri-title-main {
+    font-size: clamp(24px, 2.65vw, 34px);
+    letter-spacing: -.04em;
+    line-height: 1.18;
+    white-space: nowrap;
+}
+.mri-title-sub {
+    margin-top: 7px;
+    font-size: clamp(20px, 2.15vw, 28px);
+    line-height: 1.28;
+}
 #he-thong-day-soi {
     padding-top: 76px !important;
     padding-bottom: 76px !important;
@@ -1048,6 +1083,24 @@ section h2 {
 #chuyen-gia .grid > div { max-width: none; }
 #chuyen-gia .grid > div > div:first-child { height: 280px; }
 #chuyen-gia .grid > div img { transform: none !important; }
+.doctor-title-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: max-content;
+    margin: 0 auto 9px;
+    padding: 5px 10px;
+    border: 1px solid rgba(110,165,47,.3);
+    border-radius: 999px;
+    color: #527c25;
+    background: #f1f7e9;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+    font-family: 'Nunito', sans-serif;
+    font-size: 11.5px;
+    font-weight: 900;
+    letter-spacing: .055em;
+    line-height: 1;
+}
 
 #review-registration {
     padding-top: 84px !important;
@@ -1909,6 +1962,8 @@ footer .bg-white {
     #mri-ct .order-1 { text-align: left; }
     #mri-ct .order-1 h3 { font-size: 27px !important; line-height: 1.22 !important; }
     #mri-ct .order-1 h3 span { font-size: 18px !important; line-height: 1.4; }
+    .mri-title-main { font-size: clamp(19px, 6.15vw, 24px); }
+    .mri-title-sub { margin-top: 6px; font-size: clamp(17px, 5.35vw, 21px); }
     #mri-ct .order-1 p { font-size: 14px !important; line-height: 1.62 !important; }
     #mri-ct .order-2 { gap: 9px; }
     #mri-ct img { min-height: 150px; border-radius: 13px !important; }
@@ -2153,7 +2208,7 @@ footer .bg-white {
         <div class="max-w-7xl mx-auto px-4 md:px-6 w-full flex items-center justify-between">
             <div class="brand-slot w-[120px] md:w-[200px] lg:w-[250px] flex justify-start shrink-0">
                 <a href="#" class="nav-logo">
-                    <img src="https://hoanglongclinic.vn/uploads/logo-phong-kham-da-khoa-hoang-long.png" alt="Logo Hoàng Long Clinic" class="h-8 md:h-12 lg:h-16 w-auto object-contain" decoding="async" loading="eager" fetchpriority="high" width="536" height="83">
+                    <img src="assets/images/brand/logo-hoang-long.png" alt="Logo Phòng khám Đa khoa Hoàng Long" class="h-8 md:h-12 lg:h-16 w-auto object-contain" decoding="async" loading="eager" fetchpriority="high" width="536" height="67">
                 </a>
             </div>
 
@@ -2261,14 +2316,14 @@ footer .bg-white {
                                 </div>
                             </div>
 
-                            <div class="hero-result-ribbon">
+                            <a href="#review-registration" class="hero-result-ribbon" aria-label="Đi đến biểu mẫu đăng ký nhận tư vấn">
                                 <span class="hero-result-ribbon__icon" aria-hidden="true"><i class="fa-solid fa-file-circle-check"></i></span>
                                 <div>
                                     <small>Quy trình thuận tiện</small>
                                     <strong>Nhận kết quả trong ngày</strong>
                                 </div>
                                 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -2375,7 +2430,7 @@ footer .bg-white {
             <div class="text-center w-full flex flex-col items-center">
                 <div class="badge mb-4">Không gian khám chữa bệnh hiện đại</div>
                 <h2 class="text-[26px] md:text-[38px] font-black text-medical uppercase mb-4 leading-[1.3]">
-                    Trang thiết bị tiên tiến &amp; <br class="hidden md:block">Không gian khám bệnh riêng tư
+                    Trang thiết bị tiên tiến &amp; <br class="hidden md:block">Không gian khám bệnh hiện đại
                 </h2>
 
                 <div class="text-[14px] md:text-[16px] lg:text-[16.5px] text-bodyText font-medium max-w-[1050px] mx-auto leading-[1.7] px-2 md:px-0">
@@ -2507,7 +2562,7 @@ footer .bg-white {
                         <div class="flex flex-wrap justify-center md:justify-start items-center gap-3 mb-4">
                             <div class="badge bg-primary/10 border border-primary/20 m-0">Chẩn Đoán Chính Xác</div>
                         </div>
-                        <h2 class="text-[26px] md:text-[34px] font-black text-medical uppercase mb-4 leading-tight">Hệ thống MRI &amp; CT Scanner <br><span class="text-primary text-[20px] md:text-[28px]">kết hợp cùng nội soi</span></h2>
+                        <h2 class="mri-combined-title font-black text-medical uppercase mb-4 leading-tight"><span class="mri-title-main">Hệ thống MRI &amp; CT Scanner</span><span class="mri-title-sub text-primary">kết hợp cùng nội soi</span></h2>
                         <p class="text-[14px] md:text-[16px] text-bodyText mb-5 font-medium leading-relaxed px-2 md:px-0">
                             Tại Phòng khám Đa khoa Hoàng Long, chẩn đoán tiêu hóa không chỉ dừng lại ở nội soi. Chúng tôi kết hợp hệ thống chẩn đoán hình ảnh tân tiến bao gồm máy <strong>Chụp cộng hưởng từ (MRI)</strong> và <strong>Cắt lớp vi tính (CT Scanner)</strong> để mang lại góc nhìn toàn diện và chính xác nhất cho người bệnh.
                         </p>
@@ -2547,9 +2602,9 @@ footer .bg-white {
                     <div class="base-card group bg-white/95 text-center flex flex-col items-center border-none p-5 md:p-6 h-full shadow-lg">
                         <div class="relative w-full h-40 md:h-48 mb-4 md:mb-5 rounded-[1rem] overflow-hidden shadow-sm shrink-0 bg-white">
                             <!-- Ảnh Mặc Định -->
-                            <img src="assets/images/endoscopy/z8020613938987_02028f6d364cb0159ed89fe16d9bf31d.webp" alt="Dây soi 600 Mặc định" class="absolute inset-0 w-full h-full object-contain transition-opacity duration-500 md:group-hover:opacity-0 p-2 z-20" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/endoscopy/z8020613938987_02028f6d364cb0159ed89fe16d9bf31d.webp" alt="Dây soi 600 Mặc định" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 md:group-hover:opacity-0 z-20" decoding="async" loading="lazy" width="600" height="400">
                             <!-- Ảnh Khi Hover -->
-                            <img src="assets/images/endoscopy/z8013701086573_cae7d286e1753fa35396de3cba3f5574.webp" alt="Dây soi 600 Thực tế" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 md:group-hover:opacity-100 z-10 active:opacity-100" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/endoscopy/z8013701086573_cae7d286e1753fa35396de3cba3f5574.webp" alt="Dây soi 600 Thực tế" class="absolute inset-0 w-full h-full object-contain p-2 opacity-0 transition-opacity duration-500 md:group-hover:opacity-100 z-10 active:opacity-100" decoding="async" loading="lazy" width="600" height="400">
                         </div>
                         <h3 class="font-black text-[17px] md:text-[19px] text-medical uppercase mb-2 md:mb-3 font-sans">DÂY SERIES 600</h3>
                         <p class="text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] font-medium flex-1">Phù hợp với các bệnh nhân trẻ, ít bệnh nền, dùng để kiểm tra sức khỏe định kỳ hoặc kiểm tra lại sau điều trị các bệnh lý đường tiêu hóa thông thường.</p>
@@ -2571,7 +2626,7 @@ footer .bg-white {
                             <!-- Ảnh Khi Hover -->
                             <img src="assets/images/endoscopy/z8013714412558_60683ffdda4edf6f0f2de284b6d68a69.webp" alt="Dây soi Laser Thực tế" class="absolute inset-0 w-full h-full object-contain p-2 opacity-0 transition-opacity duration-500 md:group-hover:opacity-100 z-10 active:opacity-100" decoding="async" loading="lazy" width="600" height="400">
                         </div>
-                        <h3 class="font-black text-[17px] md:text-[19px] text-medical uppercase mb-2 md:mb-3 font-sans">DÂY SERIE 700 / LASER</h3>
+                        <h3 class="font-black text-[17px] md:text-[19px] text-medical uppercase mb-2 md:mb-3 font-sans">DÂY SERIE 700</h3>
                         <p class="text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] font-medium flex-1">Phù hợp với các bệnh nhân cần kiểm tra kỹ ống tiêu hóa, tầm soát ung thư sớm, kiểm tra polyp đại tràng, có tiền sử các bệnh lý đường tiêu hóa phức tạp. Bệnh nhân ngoài 50 tuổi, bệnh nhân chưa từng nội soi tiêu hóa, dây soi có hiệu quả phát hiện bệnh lý cao với mức chi phí hợp lý.</p>
                         <span class="md:hidden text-accent/80 text-[12px] italic mt-3 block">*(Chạm vào ảnh để xem thực tế)</span>
                     </div>
@@ -2580,9 +2635,9 @@ footer .bg-white {
                     <div class="base-card group bg-white/95 text-center flex flex-col items-center border-none p-5 md:p-6 h-full shadow-lg">
                         <div class="relative w-full h-40 md:h-48 mb-4 md:mb-5 rounded-[1rem] overflow-hidden shadow-sm shrink-0 bg-white">
                             <!-- Ảnh Mặc Định -->
-                            <img src="assets/images/endoscopy/z8020618827689_0cfbf76e91e3da362491900ba5f015e8.webp" alt="Dây soi Zoom Mặc định" class="absolute inset-0 w-full h-full object-contain transition-opacity duration-500 md:group-hover:opacity-0 p-2 z-20" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/endoscopy/z8020618827689_0cfbf76e91e3da362491900ba5f015e8.webp" alt="Dây soi Zoom Mặc định" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 md:group-hover:opacity-0 z-20" decoding="async" loading="lazy" width="600" height="400">
                             <!-- Ảnh Khi Hover -->
-                            <img src="assets/images/endoscopy/z8013714412558_60683ffdda4edf6f0f2de284b6d68a69.webp" alt="Dây soi Zoom Thực tế" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 md:group-hover:opacity-100 z-10 active:opacity-100" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/endoscopy/z8013714412558_60683ffdda4edf6f0f2de284b6d68a69.webp" alt="Dây soi Zoom Thực tế" class="absolute inset-0 w-full h-full object-contain p-2 opacity-0 transition-opacity duration-500 md:group-hover:opacity-100 z-10 active:opacity-100" decoding="async" loading="lazy" width="600" height="400">
                         </div>
                         <h3 class="font-black text-[17px] md:text-[19px] text-medical uppercase mb-2 md:mb-3 font-sans">DÂY SERIE 700 ZOOM</h3>
                         <p class="text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] font-medium flex-1">Hệ thống dây soi có khả năng phóng đại lên đến 300 lần, kết hợp công nghệ AI hỗ trợ bác sĩ phát hiện và tầm soát sớm các tổn thương tiêu hóa, nguy cơ ung thư tiêu hóa từ sớm.</p>
@@ -2610,7 +2665,7 @@ footer .bg-white {
                     </div>
                     <div class="p-6 flex flex-col flex-1 text-center items-center">
                         <div class="mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
-                            <span class="text-[13px] md:text-[14px] font-bold text-gray-500 block mb-1">GS.TS.BS.</span>
+                            <span class="doctor-title-badge">GS.TS.BS.</span>
                             <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">ĐÀO VĂN LONG</span>
                         </div>
                         <p class="text-[13.5px] md:text-[14px] text-bodyText font-medium mb-6 flex-1">Hơn 40 năm kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật.</p>
@@ -2625,7 +2680,7 @@ footer .bg-white {
                     </div>
                     <div class="p-6 flex flex-col flex-1 text-center items-center">
                         <div class="mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
-                            <span class="text-[13px] md:text-[14px] font-bold text-gray-500 block mb-1">PGS.TS.BS.</span>
+                            <span class="doctor-title-badge">PGS.TS.BS.</span>
                             <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">NGHIÊM ĐÌNH PHÀN</span>
                         </div>
                         <p class="text-[13.5px] md:text-[14px] text-bodyText font-medium mb-6 flex-1">Đồng hành cùng phòng khám nâng cao chuyên môn khám và điều trị các bệnh tiêu hóa hơn 10 năm qua.</p>
@@ -2640,7 +2695,7 @@ footer .bg-white {
                     </div>
                     <div class="p-6 text-center flex flex-col flex-1 items-center">
                         <div class="mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
-                            <span class="text-[13px] md:text-[14px] font-bold text-gray-500 block mb-1">PGS.TS.BS.</span>
+                            <span class="doctor-title-badge">PGS.TS.BS.</span>
                             <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">NGUYỄN DUY THẮNG</span>
                         </div>
                         <p class="text-[13.5px] md:text-[14px] text-bodyText font-medium mb-6 flex-1">Gần 30 năm kinh nghiệm nghiên cứu và phát triển các kỹ thuật mới trong điều trị các bệnh lý tiêu hóa.</p>
@@ -2655,7 +2710,7 @@ footer .bg-white {
                     </div>
                     <div class="p-6 text-center flex flex-col flex-1 items-center">
                         <div class="mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
-                            <span class="text-[13px] md:text-[14px] font-bold text-gray-500 block mb-1">BSCKII.</span>
+                            <span class="doctor-title-badge">BSCKII.</span>
                             <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">PHẠM THỊ LAN HƯƠNG</span>
                         </div>
                         <p class="text-[13.5px] md:text-[14px] text-bodyText font-medium mb-6 flex-1">Thầy thuốc ưu tú, hơn 30 năm kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật.</p>
@@ -2919,9 +2974,8 @@ footer .bg-white {
                         <form onsubmit="event.preventDefault(); alert('Cảm ơn bạn! Đội ngũ HLC sẽ liên hệ lại trong thời gian sớm nhất.');" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                             <input type="text" required placeholder="Họ và Tên *" class="form-input w-full" aria-label="Họ và tên" autocomplete="name">
                             <input type="tel" required placeholder="Số điện thoại *" class="form-input w-full" aria-label="Số điện thoại" autocomplete="tel" inputmode="tel">
-                            <input type="date" class="form-input text-gray-500 w-full md:col-span-2" aria-label="Ngày đặt lịch">
-                            <select class="form-input text-gray-500 w-full md:col-span-2" aria-label="Chọn dịch vụ">
-                                <option value="">-- Dịch vụ quan tâm --</option>
+                            <select class="form-input text-gray-500 w-full md:col-span-2" aria-label="Dịch vụ quan tâm, không bắt buộc">
+                                <option value="">-- Dịch vụ quan tâm (không bắt buộc) --</option>
                                 <option value="1">Nội soi dạ dày / đại tràng tiền mê</option>
                                 <option value="2">Khám bệnh lý tiêu hóa, gan mật</option>
                                 <option value="3">Gói tầm soát ung thư sớm</option>
