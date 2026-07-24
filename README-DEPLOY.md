@@ -7,6 +7,25 @@ Landing page đã có luồng nhận đăng ký:
 - Google Sheet đích: `1KgKKoN4qwxw4qmRHp6wMxUY0ZxNgkCUoVQYwOfwAPug`
 - Email nhận thông báo: `hoanglongclinic.news@gmail.com`
 - Tab dữ liệu được tự tạo: `Lead Landing Page`
+- Mã tham chiếu dễ theo dõi: `HLC-NS-YYYYMMDD-001`
+
+Mỗi ngày, phần số thứ tự bắt đầu lại từ `001`. UUID cũ vẫn được giữ trong cột `Mã hệ thống` để chống ghi trùng.
+
+## Nâng cấp từ phiên bản đã hoạt động
+
+Nếu landing page của bạn đang nhận được Sheet và email, không cần tạo lại secret hoặc deployment Apps Script:
+
+1. Thay toàn bộ code hiện tại trong Apps Script bằng nội dung mới của `integrations/google-apps-script.gs`.
+2. Chọn **Deploy → Manage deployments → Edit → New version → Deploy**.
+3. Đẩy toàn bộ mã nguồn mới lên GitHub để Vercel tự triển khai, hoặc chạy `npx vercel@latest --prod`.
+4. Gửi một form thử.
+
+Lần nhận lead đầu tiên sau khi cập nhật, Apps Script sẽ:
+
+- Chèn cột `Mã tham chiếu` vào đầu tab hiện tại.
+- Đổi `Mã lead` cũ thành `Mã hệ thống`.
+- Tạo mã tham chiếu cho các dòng cũ dựa trên ngày nhận lead.
+- Tiếp tục đánh số an toàn cho lead mới mà không xóa hoặc ghi đè dữ liệu.
 
 ## 1. Thiết lập Google Sheet và Gmail
 
@@ -77,6 +96,8 @@ Hai biến này chỉ tồn tại phía máy chủ; không đổi tên thành bi
 
    - Tab `Lead Landing Page` trong Google Sheet có một dòng mới.
    - `hoanglongclinic.news@gmail.com` nhận được email thông báo.
+   - Cột `Mã tham chiếu` có dạng `HLC-NS-20260724-001`.
+   - Form hiển thị mã tham chiếu trong thông báo thành công.
    - Cột `Thông báo email` hiển thị `Đã gửi`.
 
 Không dùng dữ liệu sức khỏe thật khi test. Sau khi kiểm tra xong, có thể đổi trạng thái lead hoặc xóa dòng thử.

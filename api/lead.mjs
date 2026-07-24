@@ -176,9 +176,13 @@ export async function POST(request) {
     }, 502);
   }
 
+  const referenceCode = cleanText(result.referenceCode, 80);
   return json({
     ok: true,
     leadId: lead.leadId,
-    message: 'Đăng ký thành công. Hoàng Long Clinic sẽ sớm liên hệ với bạn.',
+    referenceCode,
+    message: referenceCode
+      ? `Đăng ký thành công. Mã tham chiếu của bạn là ${referenceCode}. Hoàng Long Clinic sẽ sớm liên hệ.`
+      : 'Đăng ký thành công. Hoàng Long Clinic sẽ sớm liên hệ với bạn.',
   });
 }

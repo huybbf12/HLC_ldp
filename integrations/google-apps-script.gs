@@ -9,9 +9,12 @@
 const SPREADSHEET_ID = '1KgKKoN4qwxw4qmRHp6wMxUY0ZxNgkCUoVQYwOfwAPug';
 const SHEET_NAME = 'Lead Landing Page';
 const NOTIFICATION_EMAIL = 'hoanglongclinic.news@gmail.com';
+const REFERENCE_PREFIX = 'HLC-NS';
+const REFERENCE_TIME_ZONE = 'Asia/Ho_Chi_Minh';
 
 const HEADERS = [
-  'Mã lead',
+  'Mã tham chiếu',
+  'Mã hệ thống',
   'Thời gian',
   'Họ và tên',
   'Số điện thoại',
@@ -54,6 +57,63 @@ function escapeHtml_(value) {
     .replace(/'/g, '&#39;');
 }
 
+function styleHeader_(sheet) {
+  sheet.setFrozenRows(1);
+  sheet.getRange(1, 1, 1, HEADERS.length)
+    .setValues([HEADERS])
+    .setFontWeight('bold')
+    .setBackground('#084c7a')
+    .setFontColor('#ffffff');
+}
+
+function backfillReferenceCodes_(sheet) {
+  var lastRow = sheet.getLastRow();
+  if (lastRow < 2) return;
+
+  var rowCount = lastRow - 1;
+  var rows = sheet.getRange(2, 1, rowCount, 3).getValues();
+  var maxSequenceByDate = {};
+  var referencePattern = new RegExp('^' + REFERENCE_PREFIX + '-(\\d{8})-(\\d+)$');
+  var changed = false;
+
+  rows.forEach(function(row) {
+    var match = cleanText_(row[0], 80).match(referencePattern);
+    if (!match) return;
+
+    var dateKey = match[1];
+    var sequence = Number(match[2]) || 0;
+    maxSequenceByDate[dateKey] = Math.max(maxSequenceByDate[dateKey] || 0, sequence);
+  });
+
+  rows.forEach(function(row) {
+    if (cleanText_(row[0], 80)) return;
+
+    var submittedAt = new Date(row[2]);
+    if (isNaN(submittedAt.getTime())) return;
+
+    var dateKey = Utilities.formatDate(submittedAt, REFERENCE_TIME_ZONE, 'yyyyMMdd');
+    var nextSequence = (maxSequenceByDate[dateKey] || 0) + 1;
+    maxSequenceByDate[dateKey] = nextSequence;
+    row[0] = REFERENCE_PREFIX + '-' + dateKey + '-' + String(nextSequence).padStart(3, '0');
+    changed = true;
+  });
+
+  if (changed) {
+    sheet.getRange(2, 1, rowCount, 1).setValues(rows.map(function(row) {
+      return [row[0]];
+    }));
+  }
+
+  var properties = PropertiesService.getScriptProperties();
+  Object.keys(maxSequenceByDate).forEach(function(dateKey) {
+    var propertyKey = 'LEAD_SEQUENCE_' + dateKey;
+    var storedSequence = Number(properties.getProperty(propertyKey)) || 0;
+    if (maxSequenceByDate[dateKey] > storedSequence) {
+      properties.setProperty(propertyKey, String(maxSequenceByDate[dateKey]));
+    }
+  });
+}
+
 function getOrCreateSheet_() {
   var spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
   var sheet = spreadsheet.getSheetByName(SHEET_NAME);
@@ -63,15 +123,25 @@ function getOrCreateSheet_() {
   }
 
   if (sheet.getLastRow() === 0) {
-    sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
-    sheet.setFrozenRows(1);
-    sheet.getRange(1, 1, 1, HEADERS.length)
-      .setFontWeight('bold')
-      .setBackground('#084c7a')
-      .setFontColor('#ffffff');
+    styleHeader_(sheet);
     sheet.autoResizeColumns(1, HEADERS.length);
+  } else {
+    var firstHeader = cleanText_(sheet.getRange(1, 1).getValue(), 100);
+    var secondHeader = cleanText_(sheet.getRange(1, 2).getValue(), 100);
+
+    // Tự nâng cấp tab do phiên bản cũ tạo: chèn mã tham chiếu nhưng giữ nguyên toàn bộ lead.
+    if (firstHeader === 'Mã lead') {
+      sheet.insertColumnBefore(1);
+      sheet.getRange(1, 1).setValue('Mã tham chiếu');
+      sheet.getRange(1, 2).setValue('Mã hệ thống');
+    } else if (firstHeader === 'Mã tham chiếu' && secondHeader === 'Mã lead') {
+      sheet.getRange(1, 2).setValue('Mã hệ thống');
+    }
+
+    styleHeader_(sheet);
   }
 
+  backfillReferenceCodes_(sheet);
   return sheet;
 }
 
@@ -79,7 +149,7 @@ function findLeadRow_(sheet, leadId) {
   if (!leadId || sheet.getLastRow() < 2) return null;
 
   var match = sheet
-    .getRange(2, 1, sheet.getLastRow() - 1, 1)
+    .getRange(2, 2, sheet.getLastRow() - 1, 1)
     .createTextFinder(leadId)
     .matchEntireCell(true)
     .findNext();
@@ -90,12 +160,13 @@ function findLeadRow_(sheet, leadId) {
 function sendLeadEmail_(lead) {
   var service = lead.service || 'Chưa chọn';
   var note = lead.note || 'Không có';
-  var subject = '[Lead nội soi] ' + lead.name + ' – ' + lead.phone;
+  var subject = '[' + lead.referenceCode + '] Lead nội soi – ' + lead.name + ' – ' + lead.phone;
   var htmlBody = [
     '<div style="font-family:Arial,sans-serif;max-width:640px;color:#17324d">',
     '<h2 style="color:#084c7a">Có đăng ký tư vấn mới từ landing page</h2>',
+    '<p style="display:inline-block;margin:0 0 14px;padding:8px 12px;border-radius:8px;background:#e8f4fb;color:#084c7a;font-size:16px;font-weight:bold">Mã tham chiếu: ' + escapeHtml_(lead.referenceCode) + '</p>',
     '<table cellpadding="8" cellspacing="0" style="border-collapse:collapse;width:100%">',
-    '<tr><td style="font-weight:bold;border-bottom:1px solid #e5e7eb">Mã lead</td><td style="border-bottom:1px solid #e5e7eb">' + escapeHtml_(lead.leadId) + '</td></tr>',
+    '<tr><td style="font-weight:bold;border-bottom:1px solid #e5e7eb">Mã hệ thống</td><td style="border-bottom:1px solid #e5e7eb">' + escapeHtml_(lead.leadId) + '</td></tr>',
     '<tr><td style="font-weight:bold;border-bottom:1px solid #e5e7eb">Họ và tên</td><td style="border-bottom:1px solid #e5e7eb">' + escapeHtml_(lead.name) + '</td></tr>',
     '<tr><td style="font-weight:bold;border-bottom:1px solid #e5e7eb">Số điện thoại</td><td style="border-bottom:1px solid #e5e7eb"><a href="tel:' + escapeHtml_(lead.phone) + '">' + escapeHtml_(lead.phone) + '</a></td></tr>',
     '<tr><td style="font-weight:bold;border-bottom:1px solid #e5e7eb">Dịch vụ</td><td style="border-bottom:1px solid #e5e7eb">' + escapeHtml_(service) + '</td></tr>',
@@ -112,7 +183,8 @@ function sendLeadEmail_(lead) {
     htmlBody: htmlBody,
     body: [
       'Có đăng ký tư vấn mới từ landing page',
-      'Mã lead: ' + lead.leadId,
+      'Mã tham chiếu: ' + lead.referenceCode,
+      'Mã hệ thống: ' + lead.leadId,
       'Họ và tên: ' + lead.name,
       'Số điện thoại: ' + lead.phone,
       'Dịch vụ: ' + service,
@@ -121,6 +193,30 @@ function sendLeadEmail_(lead) {
     ].join('\n'),
     name: 'Hoàng Long Clinic',
   });
+}
+
+function createReferenceCode_(sheet, submittedAt) {
+  var dateKey = Utilities.formatDate(submittedAt, REFERENCE_TIME_ZONE, 'yyyyMMdd');
+  var propertyKey = 'LEAD_SEQUENCE_' + dateKey;
+  var properties = PropertiesService.getScriptProperties();
+  var maxSequence = Number(properties.getProperty(propertyKey)) || 0;
+
+  if (sheet.getLastRow() >= 2) {
+    var prefix = REFERENCE_PREFIX + '-' + dateKey + '-';
+    var references = sheet.getRange(2, 1, sheet.getLastRow() - 1, 1).getDisplayValues();
+
+    references.forEach(function(row) {
+      var referenceCode = cleanText_(row[0], 80);
+      if (referenceCode.indexOf(prefix) !== 0) return;
+
+      var sequence = Number(referenceCode.slice(prefix.length)) || 0;
+      maxSequence = Math.max(maxSequence, sequence);
+    });
+  }
+
+  var nextSequence = maxSequence + 1;
+  properties.setProperty(propertyKey, String(nextSequence));
+  return REFERENCE_PREFIX + '-' + dateKey + '-' + String(nextSequence).padStart(3, '0');
 }
 
 function doGet() {
@@ -168,13 +264,20 @@ function doPost(event) {
 
     var existingRow = findLeadRow_(sheet, lead.leadId);
     if (existingRow) {
-      return jsonResponse_({ ok: true, leadId: lead.leadId, duplicate: true });
+      return jsonResponse_({
+        ok: true,
+        leadId: lead.leadId,
+        referenceCode: cleanText_(sheet.getRange(existingRow, 1).getValue(), 80),
+        duplicate: true,
+      });
     }
 
     var submittedAt = new Date(lead.submittedAt);
     if (isNaN(submittedAt.getTime())) submittedAt = new Date();
+    lead.referenceCode = createReferenceCode_(sheet, submittedAt);
 
     sheet.appendRow([
+      safeCell_(lead.referenceCode, 80),
       safeCell_(lead.leadId, 100),
       submittedAt,
       safeCell_(lead.name, 100),
@@ -199,15 +302,16 @@ function doPost(event) {
   var emailSent = true;
   try {
     sendLeadEmail_(lead);
-    sheet.getRange(rowNumber, 13).setValue('Đã gửi');
+    sheet.getRange(rowNumber, 14).setValue('Đã gửi');
   } catch (error) {
     emailSent = false;
-    sheet.getRange(rowNumber, 13).setValue('Lỗi gửi – kiểm tra quota/quyền Gmail');
+    sheet.getRange(rowNumber, 14).setValue('Lỗi gửi – kiểm tra quota/quyền Gmail');
   }
 
   return jsonResponse_({
     ok: true,
     leadId: lead.leadId,
+    referenceCode: lead.referenceCode,
     emailSent: emailSent,
   });
 }

@@ -66,7 +66,11 @@ test('valid lead is normalized and forwarded to Apps Script', async () => {
   let forwarded;
   globalThis.fetch = async (url, options) => {
     forwarded = { url: String(url), options, body: JSON.parse(options.body) };
-    return Response.json({ ok: true, emailSent: true });
+    return Response.json({
+      ok: true,
+      emailSent: true,
+      referenceCode: 'HLC-NS-20260724-001',
+    });
   };
 
   const response = await POST(requestFor(validBody()));
@@ -79,6 +83,8 @@ test('valid lead is normalized and forwarded to Apps Script', async () => {
   assert.equal(forwarded.body.secret, process.env.LEAD_WEBHOOK_SECRET);
   assert.equal(forwarded.body.utmSource, 'facebook');
   assert.match(forwarded.body.leadId, /^[0-9a-f-]{36}$/);
+  assert.equal(result.referenceCode, 'HLC-NS-20260724-001');
+  assert.match(result.message, /HLC-NS-20260724-001/);
 });
 
 test('invalid Vietnamese phone is rejected', async () => {
