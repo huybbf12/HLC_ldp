@@ -97,7 +97,7 @@ Hai biến này chỉ tồn tại phía máy chủ; không đổi tên thành bi
    - Tab `Lead Landing Page` trong Google Sheet có một dòng mới.
    - `hoanglongclinic.news@gmail.com` nhận được email thông báo.
    - Cột `Mã tham chiếu` có dạng `HLC-NS-20260724-001`.
-   - Form hiển thị mã tham chiếu trong thông báo thành công.
+   - Form hiển thị thông báo thành công kèm biểu tượng tích; mã tham chiếu chỉ xuất hiện trong Sheet và email.
    - Cột `Thông báo email` hiển thị `Đã gửi`.
 
 Không dùng dữ liệu sức khỏe thật khi test. Sau khi kiểm tra xong, có thể đổi trạng thái lead hoặc xóa dòng thử.

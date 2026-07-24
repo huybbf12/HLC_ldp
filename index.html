@@ -2221,9 +2221,47 @@ footer .bg-white {
 }
 
 .lead-form-status.is-success {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     color: #166534;
     background: #f0fdf4;
     border: 1px solid #bbf7d0;
+}
+
+.lead-success-check {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+    border-radius: 50%;
+    background: #16a34a;
+    box-shadow: 0 5px 14px rgba(22, 163, 74, .25);
+    animation: lead-success-pop .5s cubic-bezier(.17, .89, .32, 1.49) both;
+}
+
+.lead-success-check::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    border: 2px solid rgba(22, 163, 74, .32);
+    border-radius: inherit;
+    animation: lead-success-ring .8s ease-out both;
+}
+
+.lead-success-check::after {
+    content: "";
+    position: absolute;
+    left: 9px;
+    top: 5px;
+    width: 8px;
+    height: 13px;
+    border-right: 3px solid #ffffff;
+    border-bottom: 3px solid #ffffff;
+    transform: rotate(45deg) scale(0);
+    transform-origin: center;
+    animation: lead-check-draw .28s .22s ease-out forwards;
 }
 
 .lead-form-status.is-error {
@@ -2250,6 +2288,23 @@ footer .bg-white {
 
 @keyframes lead-spinner {
     to { transform: rotate(360deg); }
+}
+
+@keyframes lead-success-pop {
+    0% { opacity: 0; transform: scale(.25); }
+    70% { opacity: 1; transform: scale(1.12); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes lead-success-ring {
+    0% { opacity: 0; transform: scale(.55); }
+    35% { opacity: 1; }
+    100% { opacity: 0; transform: scale(1.45); }
+}
+
+@keyframes lead-check-draw {
+    from { transform: rotate(45deg) scale(0); }
+    to { transform: rotate(45deg) scale(1); }
 }
 
 @media (max-width: 767px) {
@@ -2540,11 +2595,18 @@ footer .bg-white {
                     Hệ thống phòng khám và phòng nội soi được thiết kế hiện đại theo tiêu chuẩn quốc tế đáp ứng các yêu cầu vệ sinh nghiêm ngặt.<br>Không gian thoáng đãng và thoải mái giúp khách hàng giảm bớt căng thẳng khi đến thăm khám và điều&nbsp;trị.
                 </div>
 
-                <div class="mt-5">
+                <div class="mt-5 w-full flex flex-col md:flex-row items-center justify-center gap-2.5 md:gap-3">
                     <a href="https://www.youtube.com/watch?v=6Kyx2n-xHgE&t=2s" target="_blank" rel="noopener noreferrer"
-                       class="inline-flex items-center justify-center gap-2.5 bg-red-50 hover:bg-red-100 text-accent font-bold px-5 md:px-6 py-2.5 rounded-full transition-all duration-300 md:hover:scale-105 border border-red-100 mb-2 font-sans shadow-sm cursor-pointer text-[13px] md:text-[15px] w-full md:w-auto">
+                       class="inline-flex items-center justify-center gap-2.5 bg-red-50 hover:bg-red-100 text-accent font-bold px-5 md:px-6 py-2.5 rounded-full transition-all duration-300 md:hover:scale-105 border border-red-100 font-sans shadow-sm cursor-pointer text-[13px] md:text-[15px] w-full md:w-auto">
                         <i class="fa-brands fa-youtube text-[20px] text-red-600 animate-fast-pulse shrink-0"></i>
                         <span class="truncate">Tham quan trực tuyến phòng khám của chúng tôi</span>
+                    </a>
+
+                    <a href="https://www.youtube.com/shorts/74BMDNlKHCQ" target="_blank" rel="noopener noreferrer"
+                       aria-label="Xem video hướng dẫn tới Phòng khám Hoàng Long trên YouTube, mở trong tab mới"
+                       class="inline-flex items-center justify-center gap-2.5 bg-medical hover:bg-accent text-white font-bold px-5 md:px-6 py-2.5 rounded-full transition-all duration-300 md:hover:scale-105 border font-sans shadow-sm cursor-pointer text-[13px] md:text-[15px] w-full md:w-auto">
+                        <i class="fa-solid fa-map-location-dot text-[18px] text-white shrink-0" aria-hidden="true"></i>
+                        <span>Hướng dẫn tới phòng khám</span>
                     </a>
                 </div>
             </div>
@@ -3619,9 +3681,21 @@ footer .bg-white {
             };
 
             const showFormStatus = (message, type) => {
-                formStatus.textContent = message;
+                formStatus.replaceChildren();
                 formStatus.classList.remove('is-success', 'is-error');
                 if (type) formStatus.classList.add(type);
+
+                if (type === 'is-success' && message) {
+                    const checkIcon = document.createElement('span');
+                    checkIcon.className = 'lead-success-check';
+                    checkIcon.setAttribute('aria-hidden', 'true');
+
+                    const messageText = document.createElement('span');
+                    messageText.textContent = message;
+                    formStatus.append(checkIcon, messageText);
+                } else {
+                    formStatus.textContent = message;
+                }
             };
 
             resetStartedAt();
@@ -3677,7 +3751,7 @@ footer .bg-white {
                     leadForm.reset();
                     resetStartedAt();
                     showFormStatus(
-                        result.message || 'Đăng ký thành công. Hoàng Long Clinic sẽ sớm liên hệ với bạn.',
+                        result.message || 'Đăng ký thành công. Hoàng Long Clinic sẽ sớm liên hệ.',
                         'is-success'
                     );
                 } catch (error) {
