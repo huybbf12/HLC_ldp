@@ -16,9 +16,10 @@ Mỗi ngày, phần số thứ tự bắt đầu lại từ `001`. UUID cũ vẫ
 Nếu landing page của bạn đang nhận được Sheet và email, không cần tạo lại secret hoặc deployment Apps Script:
 
 1. Thay toàn bộ code hiện tại trong Apps Script bằng nội dung mới của `integrations/google-apps-script.gs`.
-2. Chọn **Deploy → Manage deployments → Edit → New version → Deploy**.
-3. Đẩy toàn bộ mã nguồn mới lên GitHub để Vercel tự triển khai, hoặc chạy `npx vercel@latest --prod`.
-4. Gửi một form thử.
+2. Trong danh sách hàm ở thanh công cụ Apps Script, chọn `prepareLeadSystem` rồi nhấn **Run** một lần. Hàm này chuẩn bị cấu trúc Sheet và bộ đếm trước khi khách gửi form.
+3. Chọn **Deploy → Manage deployments → Edit → New version → Deploy**.
+4. Đẩy toàn bộ mã nguồn mới lên GitHub để Vercel tự triển khai, hoặc chạy `npx vercel@latest --prod`.
+5. Gửi một form thử.
 
 Lần nhận lead đầu tiên sau khi cập nhật, Apps Script sẽ:
 
@@ -26,6 +27,7 @@ Lần nhận lead đầu tiên sau khi cập nhật, Apps Script sẽ:
 - Đổi `Mã lead` cũ thành `Mã hệ thống`.
 - Tạo mã tham chiếu cho các dòng cũ dựa trên ngày nhận lead.
 - Tiếp tục đánh số an toàn cho lead mới mà không xóa hoặc ghi đè dữ liệu.
+- Ghi nhớ phiên bản cấu trúc và bộ đếm, tránh quét lại toàn bộ Sheet trong mỗi lượt đăng ký.
 
 ## 1. Thiết lập Google Sheet và Gmail
 

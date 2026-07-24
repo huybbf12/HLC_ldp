@@ -60,6 +60,7 @@ function createHarness() {
   ];
   const properties = new Map([['LEAD_WEBHOOK_SECRET', 'test-secret']]);
   const sentEmails = [];
+  const metrics = { getRangeCalls: 0 };
 
   function ensureCell(row, column) {
     while (data.length < row) data.push([]);
@@ -136,9 +137,10 @@ function createHarness() {
 
   const sheet = {
     getLastRow: () => data.length,
-    getRange: (row, column, rowCount = 1, columnCount = 1) => (
-      new Range(row, column, rowCount, columnCount)
-    ),
+    getRange(row, column, rowCount = 1, columnCount = 1) {
+      metrics.getRangeCalls += 1;
+      return new Range(row, column, rowCount, columnCount);
+    },
     insertColumnBefore(position) {
       data.forEach(row => row.splice(position - 1, 0, ''));
     },
@@ -213,12 +215,13 @@ function createHarness() {
   });
 
   vm.runInContext(appsScriptCode, context);
-  return { context, data, properties, sentEmails };
+  return { context, data, properties, sentEmails, metrics };
 }
 
 test('existing Sheet is migrated without losing old lead data', () => {
-  const { context, data, properties } = createHarness();
+  const { context, data, properties, metrics } = createHarness();
   vm.runInContext('getOrCreateSheet_()', context);
+  const callsAfterMigration = metrics.getRangeCalls;
 
   assert.equal(data[0][0], 'Mã tham chiếu');
   assert.equal(data[0][1], 'Mã hệ thống');
@@ -227,6 +230,10 @@ test('existing Sheet is migrated without losing old lead data', () => {
   assert.equal(data[1][1], 'uuid-old-1');
   assert.equal(data[1][3], 'Khách cũ 1');
   assert.equal(properties.get('LEAD_SEQUENCE_20260724'), '2');
+  assert.equal(properties.get('LEAD_SCHEMA_VERSION'), '2');
+
+  vm.runInContext('getOrCreateSheet_()', context);
+  assert.equal(metrics.getRangeCalls, callsAfterMigration);
 });
 
 test('new lead receives the next reference code in Sheet and email', () => {

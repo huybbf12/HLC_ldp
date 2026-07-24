@@ -2270,6 +2270,36 @@ footer .bg-white {
     border: 1px solid #fecaca;
 }
 
+.lead-form-status.is-pending {
+    color: #075985;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+}
+
+.clinic-directions-cta {
+    color: #ffffff !important;
+    background: #084c7a !important;
+    border-color: #084c7a !important;
+    box-shadow: 0 8px 20px rgba(8, 76, 122, .18);
+}
+
+.clinic-directions-cta span,
+.clinic-directions-cta i {
+    color: #ffffff !important;
+}
+
+.clinic-directions-cta:hover {
+    color: #ffffff !important;
+    background: #e63946 !important;
+    border-color: #e63946 !important;
+    box-shadow: 0 10px 24px rgba(230, 57, 70, .22);
+}
+
+.clinic-directions-cta:focus-visible {
+    outline: 3px solid rgba(8, 76, 122, .28);
+    outline-offset: 3px;
+}
+
 #lead-submit[disabled] {
     cursor: wait;
     opacity: .72;
@@ -2604,7 +2634,7 @@ footer .bg-white {
 
                     <a href="https://www.youtube.com/shorts/74BMDNlKHCQ" target="_blank" rel="noopener noreferrer"
                        aria-label="Xem video hướng dẫn tới Phòng khám Hoàng Long trên YouTube, mở trong tab mới"
-                       class="inline-flex items-center justify-center gap-2.5 bg-medical hover:bg-accent text-white font-bold px-5 md:px-6 py-2.5 rounded-full transition-all duration-300 md:hover:scale-105 border font-sans shadow-sm cursor-pointer text-[13px] md:text-[15px] w-full md:w-auto">
+                       class="clinic-directions-cta inline-flex items-center justify-center gap-2.5 font-bold px-5 md:px-6 py-2.5 rounded-full transition-all duration-300 md:hover:scale-105 border font-sans cursor-pointer text-[13px] md:text-[15px] w-full md:w-auto">
                         <i class="fa-solid fa-map-location-dot text-[18px] text-white shrink-0" aria-hidden="true"></i>
                         <span>Hướng dẫn tới phòng khám</span>
                     </a>
@@ -3682,7 +3712,7 @@ footer .bg-white {
 
             const showFormStatus = (message, type) => {
                 formStatus.replaceChildren();
-                formStatus.classList.remove('is-success', 'is-error');
+                formStatus.classList.remove('is-success', 'is-error', 'is-pending');
                 if (type) formStatus.classList.add(type);
 
                 if (type === 'is-success' && message) {
@@ -3711,7 +3741,7 @@ footer .bg-white {
 
                 submitButton.disabled = true;
                 submitButton.innerHTML = '<span class="lead-submit-spinner" aria-hidden="true"></span><span class="text-[13px] md:text-[14px] uppercase font-black tracking-widest">Đang gửi...</span>';
-                showFormStatus('', null);
+                showFormStatus('Đang đồng bộ thông tin với phòng khám...', 'is-pending');
 
                 const payload = {
                     name: formData.get('name'),

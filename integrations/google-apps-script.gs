@@ -11,6 +11,7 @@ const SHEET_NAME = 'Lead Landing Page';
 const NOTIFICATION_EMAIL = 'hoanglongclinic.news@gmail.com';
 const REFERENCE_PREFIX = 'HLC-NS';
 const REFERENCE_TIME_ZONE = 'Asia/Ho_Chi_Minh';
+const LEAD_SCHEMA_VERSION = '2';
 
 const HEADERS = [
   'Mã tham chiếu',
@@ -117,6 +118,7 @@ function backfillReferenceCodes_(sheet) {
 function getOrCreateSheet_() {
   var spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
   var sheet = spreadsheet.getSheetByName(SHEET_NAME);
+  var properties = PropertiesService.getScriptProperties();
 
   if (!sheet) {
     sheet = spreadsheet.insertSheet(SHEET_NAME);
@@ -125,7 +127,8 @@ function getOrCreateSheet_() {
   if (sheet.getLastRow() === 0) {
     styleHeader_(sheet);
     sheet.autoResizeColumns(1, HEADERS.length);
-  } else {
+    properties.setProperty('LEAD_SCHEMA_VERSION', LEAD_SCHEMA_VERSION);
+  } else if (properties.getProperty('LEAD_SCHEMA_VERSION') !== LEAD_SCHEMA_VERSION) {
     var firstHeader = cleanText_(sheet.getRange(1, 1).getValue(), 100);
     var secondHeader = cleanText_(sheet.getRange(1, 2).getValue(), 100);
 
@@ -139,9 +142,10 @@ function getOrCreateSheet_() {
     }
 
     styleHeader_(sheet);
+    backfillReferenceCodes_(sheet);
+    properties.setProperty('LEAD_SCHEMA_VERSION', LEAD_SCHEMA_VERSION);
   }
 
-  backfillReferenceCodes_(sheet);
   return sheet;
 }
 
@@ -199,9 +203,11 @@ function createReferenceCode_(sheet, submittedAt) {
   var dateKey = Utilities.formatDate(submittedAt, REFERENCE_TIME_ZONE, 'yyyyMMdd');
   var propertyKey = 'LEAD_SEQUENCE_' + dateKey;
   var properties = PropertiesService.getScriptProperties();
-  var maxSequence = Number(properties.getProperty(propertyKey)) || 0;
+  var storedSequence = properties.getProperty(propertyKey);
+  var maxSequence = Number(storedSequence) || 0;
 
-  if (sheet.getLastRow() >= 2) {
+  // Chỉ quét cột mã một lần khi bộ đếm của ngày chưa tồn tại.
+  if (storedSequence === null && sheet.getLastRow() >= 2) {
     var prefix = REFERENCE_PREFIX + '-' + dateKey + '-';
     var references = sheet.getRange(2, 1, sheet.getLastRow() - 1, 1).getDisplayValues();
 
@@ -217,6 +223,17 @@ function createReferenceCode_(sheet, submittedAt) {
   var nextSequence = maxSequence + 1;
   properties.setProperty(propertyKey, String(nextSequence));
   return REFERENCE_PREFIX + '-' + dateKey + '-' + String(nextSequence).padStart(3, '0');
+}
+
+function prepareLeadSystem() {
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(10000);
+    getOrCreateSheet_();
+    return 'Hệ thống lead đã sẵn sàng.';
+  } finally {
+    if (lock.hasLock()) lock.releaseLock();
+  }
 }
 
 function doGet() {
