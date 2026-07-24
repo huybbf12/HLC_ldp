@@ -329,6 +329,7 @@ img { -webkit-user-drag: none; user-select: none; }
 @media (min-width: 768px) {
     .floating-zalo { bottom: 145px; right: 25px; }
     .floating-hotline { bottom: 85px; right: 25px; }
+    .floating-zalo .icon.md\:hidden { display: none; }
 }
 
 /* Back to Top */
@@ -468,25 +469,99 @@ section[id], footer {
     background: rgba(15, 23, 42, 0.92);
 }
 .native-lightbox[hidden] { display: none; }
+.native-lightbox__stage {
+    max-width: min(1100px, 92vw);
+    text-align: center;
+}
 .native-lightbox img {
+    display: block;
     max-width: min(1100px, 92vw);
     max-height: 82vh;
+    margin: 0 auto;
     border-radius: 16px;
     object-fit: contain;
     box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
 }
-.native-lightbox p { margin-top: 14px; color: white; text-align: center; font-weight: 700; }
+.native-lightbox p {
+    margin: 14px 52px 0;
+    color: white;
+    text-align: center;
+    font-weight: 700;
+}
+.native-lightbox__counter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 54px;
+    min-height: 28px;
+    margin-top: 8px;
+    padding: 4px 10px;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 999px;
+    color: rgba(255,255,255,.82);
+    background: rgba(255,255,255,.08);
+    font-size: 12px;
+    font-weight: 800;
+}
 .native-lightbox button {
     position: absolute;
-    top: 18px;
-    right: 18px;
     width: 44px;
     height: 44px;
+    border: 1px solid rgba(255,255,255,.2);
     border-radius: 50%;
-    background: white;
-    color: #1E293B;
-    font-size: 24px;
+    color: #ffffff;
+    background: rgba(15,23,42,.72);
     cursor: pointer;
+    transition: transform .2s ease, background-color .2s ease, border-color .2s ease;
+}
+.native-lightbox button:hover,
+.native-lightbox button:focus-visible {
+    border-color: rgba(255,255,255,.65);
+    background: rgba(110,165,47,.92);
+    outline: none;
+    transform: scale(1.06);
+}
+.native-lightbox__close {
+    top: 18px;
+    right: 18px;
+    z-index: 3;
+    background: #ffffff !important;
+    color: #1E293B !important;
+    font-size: 27px;
+    line-height: 1;
+}
+.native-lightbox__nav {
+    top: 50%;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    transform: translateY(-50%);
+}
+.native-lightbox__nav:hover,
+.native-lightbox__nav:focus-visible {
+    transform: translateY(-50%) scale(1.08);
+}
+.native-lightbox__nav .icon { font-size: 18px; }
+.native-lightbox__prev { left: clamp(12px, 3vw, 42px); }
+.native-lightbox__next { right: clamp(12px, 3vw, 42px); }
+.native-lightbox__prev .icon { transform: rotate(180deg); }
+
+@media (max-width: 639px) {
+    .native-lightbox { padding: 68px 12px 28px; }
+    .native-lightbox img {
+        max-width: calc(100vw - 24px);
+        max-height: 72dvh;
+        border-radius: 12px;
+    }
+    .native-lightbox p {
+        margin: 12px 44px 0;
+        font-size: 13px;
+        line-height: 1.45;
+    }
+    .native-lightbox__close { top: 12px; right: 12px; }
+    .native-lightbox__nav { width: 42px; height: 42px; }
+    .native-lightbox__prev { left: 9px; }
+    .native-lightbox__next { right: 9px; }
 }
 
 @media (max-width: 959px) {
@@ -973,7 +1048,7 @@ section[id] { scroll-margin-top: 88px; }
     display: block;
     margin-bottom: 2px;
     color: #73808b;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 800;
     letter-spacing: .04em;
     text-transform: uppercase;
@@ -981,7 +1056,7 @@ section[id] { scroll-margin-top: 88px; }
 .hero-result-ribbon strong {
     display: block;
     color: var(--brand-navy);
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 900;
     line-height: 1.25;
 }
@@ -1691,7 +1766,7 @@ footer .bg-white {
     .hero-trust-metric > div > span:last-child { font-size: 9px; }
     .hero-result-ribbon { grid-template-columns: 38px minmax(0, 1fr) auto; gap: 10px; padding: 11px; }
     .hero-result-ribbon__icon { width: 38px; height: 38px; }
-    .hero-result-ribbon strong { font-size: 13px; }
+    .hero-result-ribbon strong { font-size: 14px; }
     .difference-block { margin-top: 46px !important; }
     section h2 { font-size: 32px !important; }
     .difference-grid > div,
@@ -1780,7 +1855,7 @@ footer .bg-white {
     }
     .navbar .brand-slot {
         grid-column: 1;
-        width: clamp(124px, 38vw, 150px) !important;
+        width: clamp(145px, 42vw, 168px) !important;
         min-width: 0;
     }
     .navbar > .max-w-7xl > .w-auto { display: contents; }
@@ -1955,8 +2030,8 @@ footer .bg-white {
         border-radius: 12px;
     }
     .hero-result-ribbon__icon { width: 36px; height: 36px; border-radius: 10px; }
-    .hero-result-ribbon small { font-size: 8.5px; }
-    .hero-result-ribbon strong { font-size: 12.5px; }
+    .hero-result-ribbon small { font-size: 9.5px; }
+    .hero-result-ribbon strong { font-size: 14px; }
 
     .difference-block { margin-top: 38px !important; }
     .difference-block > .text-center { margin-bottom: 22px !important; }
@@ -2189,6 +2264,12 @@ footer .bg-white {
     .review-time { font-size: 10.5px; white-space: normal; }
     .review-text-clamp { -webkit-line-clamp: 3; }
     .registration-card { padding: 18px !important; border-radius: 15px !important; }
+    .registration-card .registration-title {
+        font-size: clamp(17.5px, 5.6vw, 22px) !important;
+        line-height: 1.25 !important;
+        letter-spacing: -.025em;
+        white-space: nowrap;
+    }
     .registration-card h3 { font-size: 23px !important; text-align: center; }
     .registration-card form { gap: 12px; }
     .form-input {
@@ -2197,6 +2278,12 @@ footer .bg-white {
         font-size: 14.5px;
     }
     .form-input::placeholder { font-size: 14px; }
+    select.form-input {
+        min-height: 58px;
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+        line-height: 1.35;
+    }
     textarea.form-input { min-height: 108px; }
     .registration-card .btn-primary {
         width: 100%;
@@ -2264,7 +2351,7 @@ footer .bg-white {
         padding-left: 10px;
         padding-right: 10px;
     }
-    .navbar .brand-slot { width: clamp(112px, 34vw, 128px) !important; }
+    .navbar .brand-slot { width: clamp(136px, 38vw, 146px) !important; }
     .navbar .nav-logo img { width: 100% !important; }
     .navbar .btn-nav-cta { padding-inline: 8px; font-size: 10.5px; }
     .mobile-menu-toggle { width: 40px; height: 40px; flex-basis: 40px; }
@@ -2942,7 +3029,7 @@ footer .bg-white {
                         <span class="fujifilm-brand-line">Phòng khám Đa khoa Hoàng Long sở hữu đồng bộ các dòng dây soi ống mềm hiện đại từ <span class="fujifilm-origin"><img src="https://www.fujifilm.com/vn/themes/custom/fujifilm_com_g2/common/img/fujifilm_corporate_logo.svg" alt="FUJIFILM" class="fujifilm-brand-logo" decoding="async" loading="lazy" width="160" height="32"><span>(Nhật Bản),</span></span></span>
                         <span class="fujifilm-copy-line">phục vụ chính xác cho từng nhu cầu thăm khám và tầm soát của người bệnh.</span>
                     </p>
-                    <a href="#" class="text-primary hover:text-primaryDark font-bold italic mt-2 inline-block text-[14px] md:text-[15px] transition-colors underline decoration-primary/30 underline-offset-4 hover:decoration-primary">
+                    <a href="https://hoanglongclinic.vn/vi/chuyen-khoa/chan-doan-hinh-anh-co-ai/thong-tin-can-biet-ve-cac-loai-day-soi-tai-phong-kham-da-khoa-hoang-long.240867.htm" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primaryDark font-bold italic mt-2 inline-block text-[14px] md:text-[15px] transition-colors underline decoration-primary/30 underline-offset-4 hover:decoration-primary">
                         &gt;&gt; Bác sĩ chuyên khoa tư vấn dòng dây soi phù hợp với tình trạng triệu chứng của bạn.
                     </a>
                 </div>
@@ -3318,7 +3405,7 @@ footer .bg-white {
                 <div class="col-span-1 lg:col-span-7 flex flex-col justify-center w-full h-full mt-4 lg:mt-0">
                     <div class="registration-card bg-white p-5 md:p-8 rounded-[1.5rem] md:rounded-[2rem] shadow-2xl relative w-full h-full border-4 border-white/30 flex flex-col justify-center">
                         <div class="mb-4 md:mb-5 text-center">
-                            <h2 class="text-[22px] md:text-[30px] font-black text-medical uppercase mb-2 leading-tight">Điền thông tin nhận tư vấn</h2>
+                            <h2 class="registration-title text-[22px] md:text-[30px] font-black text-medical uppercase mb-2 leading-tight">Điền thông tin tư vấn</h2>
                         </div>
 
                         <form id="lead-form" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
@@ -4031,7 +4118,7 @@ footer .bg-white {
         }
 
         // Lightbox ảnh thuần, dùng tài nguyên tương đối để hoạt động trên GitHub/Vercel.
-        const galleryLinks = document.querySelectorAll('[uk-lightbox] a[href]');
+        const galleryLinks = Array.from(document.querySelectorAll('[uk-lightbox] a[href]'));
         if (galleryLinks.length) {
             const nativeLightbox = document.createElement('div');
             nativeLightbox.className = 'native-lightbox';
@@ -4039,36 +4126,78 @@ footer .bg-white {
             nativeLightbox.setAttribute('role', 'dialog');
             nativeLightbox.setAttribute('aria-modal', 'true');
             nativeLightbox.setAttribute('aria-label', 'Xem ảnh cơ sở vật chất');
-            nativeLightbox.innerHTML = '<button type="button" aria-label="Đóng ảnh">×</button><div><img alt=""><p></p></div>';
+            nativeLightbox.innerHTML =
+                '<button type="button" class="native-lightbox__close" aria-label="Đóng ảnh">×</button>' +
+                '<button type="button" class="native-lightbox__nav native-lightbox__prev" aria-label="Xem ảnh trước"><svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg></button>' +
+                '<div class="native-lightbox__stage"><img alt=""><p></p><span class="native-lightbox__counter" aria-live="polite"></span></div>' +
+                '<button type="button" class="native-lightbox__nav native-lightbox__next" aria-label="Xem ảnh tiếp theo"><svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg></button>';
             document.body.appendChild(nativeLightbox);
 
             const lightboxImage = nativeLightbox.querySelector('img');
             const lightboxCaption = nativeLightbox.querySelector('p');
+            const lightboxCounter = nativeLightbox.querySelector('.native-lightbox__counter');
+            const lightboxClose = nativeLightbox.querySelector('.native-lightbox__close');
+            const lightboxPrevious = nativeLightbox.querySelector('.native-lightbox__prev');
+            const lightboxNext = nativeLightbox.querySelector('.native-lightbox__next');
+            let activeGalleryIndex = 0;
+            let lastFocusedElement = null;
+            let touchStartX = 0;
+
+            const showGalleryImage = index => {
+                activeGalleryIndex = (index + galleryLinks.length) % galleryLinks.length;
+                const link = galleryLinks[activeGalleryIndex];
+                const thumbnail = link.querySelector('img');
+                lightboxImage.src = link.href;
+                lightboxImage.alt = thumbnail ? thumbnail.alt : 'Ảnh cơ sở vật chất';
+                lightboxCaption.textContent = link.dataset.caption || lightboxImage.alt;
+                lightboxCounter.textContent = `${activeGalleryIndex + 1} / ${galleryLinks.length}`;
+            };
+
             const closeLightbox = () => {
                 nativeLightbox.hidden = true;
                 lightboxImage.removeAttribute('src');
                 document.body.style.overflow = '';
+                if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+                    lastFocusedElement.focus();
+                }
             };
 
-            galleryLinks.forEach(link => {
+            galleryLinks.forEach((link, index) => {
                 link.addEventListener('click', event => {
                     event.preventDefault();
-                    const thumbnail = link.querySelector('img');
-                    lightboxImage.src = link.href;
-                    lightboxImage.alt = thumbnail ? thumbnail.alt : 'Ảnh cơ sở vật chất';
-                    lightboxCaption.textContent = link.dataset.caption || lightboxImage.alt;
+                    lastFocusedElement = link;
+                    showGalleryImage(index);
                     nativeLightbox.hidden = false;
                     document.body.style.overflow = 'hidden';
-                    nativeLightbox.querySelector('button').focus();
+                    lightboxClose.focus();
                 });
             });
 
-            nativeLightbox.querySelector('button').addEventListener('click', closeLightbox);
+            lightboxClose.addEventListener('click', closeLightbox);
+            lightboxPrevious.addEventListener('click', event => {
+                event.stopPropagation();
+                showGalleryImage(activeGalleryIndex - 1);
+            });
+            lightboxNext.addEventListener('click', event => {
+                event.stopPropagation();
+                showGalleryImage(activeGalleryIndex + 1);
+            });
             nativeLightbox.addEventListener('click', event => {
                 if (event.target === nativeLightbox) closeLightbox();
             });
+            nativeLightbox.addEventListener('touchstart', event => {
+                touchStartX = event.changedTouches[0].clientX;
+            }, { passive: true });
+            nativeLightbox.addEventListener('touchend', event => {
+                const distance = event.changedTouches[0].clientX - touchStartX;
+                if (Math.abs(distance) < 50) return;
+                showGalleryImage(activeGalleryIndex + (distance < 0 ? 1 : -1));
+            }, { passive: true });
             document.addEventListener('keydown', event => {
-                if (event.key === 'Escape' && !nativeLightbox.hidden) closeLightbox();
+                if (nativeLightbox.hidden) return;
+                if (event.key === 'Escape') closeLightbox();
+                if (event.key === 'ArrowLeft') showGalleryImage(activeGalleryIndex - 1);
+                if (event.key === 'ArrowRight') showGalleryImage(activeGalleryIndex + 1);
             });
         }
 
