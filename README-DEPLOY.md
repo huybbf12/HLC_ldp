@@ -159,5 +159,19 @@ Mỗi lần push lên GitHub, Vercel sẽ tạo deployment mới. Nếu thay đ�
 - Sáu ảnh dây soi: `assets/images/endoscopy/`
 - Ảnh hero: `assets/images/hero/`
 - Logo navbar/footer: `assets/images/brand/`
+- Font chữ nội bộ: `assets/fonts/`
+- Giấy phép icon SVG nội bộ: `assets/icons/`
 - Mã Apps Script để sao chép: `integrations/google-apps-script.gs`
 - Biến môi trường mẫu: `.env.example`
+
+## 9. Tối ưu hiệu suất đã áp dụng
+
+- Google Fonts và Font Awesome CDN đã được loại khỏi đường tải quan trọng.
+- Nunito và Be Vietnam Pro được phục vụ trực tiếp từ `assets/fonts/` với `font-display: swap`.
+- Trang chỉ nhúng 25 biểu tượng SVG thật sự sử dụng, không tải hai webfont Font Awesome dung lượng lớn.
+- Ảnh hero được preload và gắn `fetchpriority="high"`; không dùng `loading="lazy"`.
+- Hai ảnh nền trang trí bên ngoài chỉ tải sau nội dung chính hoặc khi người dùng sắp cuộn tới.
+- Bộ đếm chạy ở 30 khung hình/giây; phép đo review được gom thành một lượt đọc rồi một lượt ghi để tránh reflow lặp.
+- Chiều cao trang được lưu tạm và chỉ cập nhật khi kích thước nội dung thay đổi, không đọc lại ở mọi sự kiện cuộn.
+
+Khi đưa phiên bản này lên GitHub, phải giữ nguyên cả thư mục `assets/fonts/` và `assets/icons/`. Sau khi Vercel hoàn tất deployment mới, chạy lại PageSpeed Insights trên chính URL production để đo LCP trong điều kiện mạng thực tế.
