@@ -2166,6 +2166,99 @@ footer .bg-white {
     }
 }
 
+.lead-honeypot {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.lead-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: #475569;
+    font-family: Nunito, sans-serif;
+    font-size: 12.5px;
+    font-weight: 650;
+    line-height: 1.45;
+    cursor: pointer;
+}
+
+.lead-consent input {
+    width: 17px;
+    height: 17px;
+    margin-top: 1px;
+    flex: 0 0 auto;
+    accent-color: #084c7a;
+}
+
+.lead-consent a {
+    color: #084c7a;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.lead-form-status {
+    width: 100%;
+    min-height: 20px;
+    margin-top: 10px;
+    border-radius: 10px;
+    font-family: Nunito, sans-serif;
+    font-size: 12.5px;
+    font-weight: 750;
+    line-height: 1.45;
+    text-align: center;
+}
+
+.lead-form-status:not(:empty) {
+    padding: 10px 12px;
+}
+
+.lead-form-status.is-success {
+    color: #166534;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+}
+
+.lead-form-status.is-error {
+    color: #b91c1c;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+}
+
+#lead-submit[disabled] {
+    cursor: wait;
+    opacity: .72;
+    transform: none !important;
+    animation: none !important;
+}
+
+.lead-submit-spinner {
+    width: 15px;
+    height: 15px;
+    border: 2px solid rgba(255,255,255,.45);
+    border-top-color: #fff;
+    border-radius: 999px;
+    animation: lead-spinner .7s linear infinite;
+}
+
+@keyframes lead-spinner {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 767px) {
+    .lead-consent,
+    .lead-form-status {
+        font-size: 11.5px;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -2981,22 +3074,36 @@ footer .bg-white {
                             <h2 class="text-[22px] md:text-[30px] font-black text-medical uppercase mb-2 leading-tight">Điền thông tin nhận tư vấn</h2>
                         </div>
 
-                        <form onsubmit="event.preventDefault(); alert('Cảm ơn bạn! Đội ngũ HLC sẽ liên hệ lại trong thời gian sớm nhất.');" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                            <input type="text" required placeholder="Họ và Tên *" class="form-input w-full" aria-label="Họ và tên" autocomplete="name">
-                            <input type="tel" required placeholder="Số điện thoại *" class="form-input w-full" aria-label="Số điện thoại" autocomplete="tel" inputmode="tel">
-                            <select class="form-input text-gray-500 w-full md:col-span-2" aria-label="Dịch vụ quan tâm, không bắt buộc">
+                        <form id="lead-form" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                            <div class="lead-honeypot" aria-hidden="true">
+                                <label>Không điền trường này
+                                    <input type="text" name="website" tabindex="-1" autocomplete="off">
+                                </label>
+                            </div>
+                            <input type="hidden" name="formStartedAt" value="">
+
+                            <input type="text" name="name" required minlength="2" maxlength="100" placeholder="Họ và Tên *" class="form-input w-full" aria-label="Họ và tên" autocomplete="name">
+                            <input type="tel" name="phone" required maxlength="20" pattern="(?:\+?84|0)[ .-]?(?:3|5|7|8|9)(?:[ .-]?[0-9]){8}" title="Nhập số điện thoại Việt Nam hợp lệ, ví dụ 0912345678" placeholder="Số điện thoại *" class="form-input w-full" aria-label="Số điện thoại" autocomplete="tel" inputmode="tel">
+                            <select name="service" class="form-input text-gray-500 w-full md:col-span-2" aria-label="Dịch vụ quan tâm, không bắt buộc">
                                 <option value="">-- Dịch vụ quan tâm (không bắt buộc) --</option>
-                                <option value="1">Nội soi dạ dày / đại tràng tiền mê</option>
-                                <option value="2">Khám bệnh lý tiêu hóa, gan mật</option>
-                                <option value="3">Gói tầm soát ung thư sớm</option>
-                                <option value="4">Khám sức khỏe tổng quát</option>
+                                <option value="Nội soi dạ dày / đại tràng tiền mê">Nội soi dạ dày / đại tràng tiền mê</option>
+                                <option value="Khám bệnh lý tiêu hóa, gan mật">Khám bệnh lý tiêu hóa, gan mật</option>
+                                <option value="Gói tầm soát ung thư sớm">Gói tầm soát ung thư sớm</option>
+                                <option value="Khám sức khỏe tổng quát">Khám sức khỏe tổng quát</option>
                             </select>
-                            <textarea rows="3" placeholder="Ghi chú triệu chứng hiện tại của bạn..." class="form-input w-full md:col-span-2 resize-none" aria-label="Ghi chú triệu chứng"></textarea>
+                            <textarea name="note" rows="3" maxlength="500" placeholder="Ghi chú nhu cầu hoặc triệu chứng hiện tại (không bắt buộc)..." class="form-input w-full md:col-span-2 resize-none" aria-label="Ghi chú nhu cầu hoặc triệu chứng"></textarea>
+
+                            <label class="lead-consent md:col-span-2">
+                                <input type="checkbox" name="consent" value="yes" required>
+                                <span>Tôi đồng ý để Hoàng Long Clinic sử dụng thông tin trên nhằm liên hệ tư vấn và hỗ trợ đặt lịch.</span>
+                            </label>
 
                             <div class="mt-2 flex flex-col items-center w-full md:col-span-2">
-                                <button type="submit" class="btn-primary !w-full md:!w-max !py-3 md:!py-3 flex items-center justify-center shadow-lg transition-transform md:hover:-translate-y-1 animate-fast-pulse">
+                                <button id="lead-submit" type="submit" class="btn-primary !w-full md:!w-max !py-3 md:!py-3 flex items-center justify-center gap-2 shadow-lg transition-transform md:hover:-translate-y-1 animate-fast-pulse">
                                     <span class="text-[13px] md:text-[14px] uppercase font-black tracking-widest">Nhận tư vấn miễn phí ngay</span>
                                 </button>
+
+                                <div id="lead-form-status" class="lead-form-status" role="status" aria-live="polite"></div>
 
                                 <div class="bg-red-50 text-accent px-4 md:px-5 py-2.5 rounded-lg mt-3 text-[12px] md:text-[12.5px] font-bold flex items-center justify-center gap-2 border border-red-100 w-full max-w-sm">
                                     <i class="fas fa-shield-alt text-[14px] shrink-0"></i> <span>Thông tin của bạn được bảo mật tuyệt đối</span>
@@ -3498,6 +3605,98 @@ footer .bg-white {
                 toggleRealImage();
             });
         });
+
+        // Gửi đăng ký qua Vercel Function; khóa nút để tránh gửi trùng và phản hồi ngay trên form.
+        const leadForm = document.getElementById('lead-form');
+        if (leadForm) {
+            const submitButton = document.getElementById('lead-submit');
+            const formStatus = document.getElementById('lead-form-status');
+            const startedAtInput = leadForm.elements.namedItem('formStartedAt');
+            const defaultButtonHtml = submitButton.innerHTML;
+
+            const resetStartedAt = () => {
+                startedAtInput.value = String(Date.now());
+            };
+
+            const showFormStatus = (message, type) => {
+                formStatus.textContent = message;
+                formStatus.classList.remove('is-success', 'is-error');
+                if (type) formStatus.classList.add(type);
+            };
+
+            resetStartedAt();
+
+            leadForm.addEventListener('submit', async event => {
+                event.preventDefault();
+                if (submitButton.disabled || !leadForm.reportValidity()) return;
+
+                const formData = new FormData(leadForm);
+                const urlParameters = new URLSearchParams(window.location.search);
+                const controller = new AbortController();
+                const timeoutId = window.setTimeout(() => controller.abort(), 15000);
+
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<span class="lead-submit-spinner" aria-hidden="true"></span><span class="text-[13px] md:text-[14px] uppercase font-black tracking-widest">Đang gửi...</span>';
+                showFormStatus('', null);
+
+                const payload = {
+                    name: formData.get('name'),
+                    phone: formData.get('phone'),
+                    service: formData.get('service'),
+                    note: formData.get('note'),
+                    consent: formData.get('consent') === 'yes',
+                    website: formData.get('website'),
+                    formStartedAt: formData.get('formStartedAt'),
+                    sourceUrl: window.location.href,
+                    referrer: document.referrer,
+                    utm: {
+                        source: urlParameters.get('utm_source') || '',
+                        medium: urlParameters.get('utm_medium') || '',
+                        campaign: urlParameters.get('utm_campaign') || '',
+                        content: urlParameters.get('utm_content') || '',
+                        term: urlParameters.get('utm_term') || ''
+                    }
+                };
+
+                try {
+                    const response = await fetch('/api/lead', {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload),
+                        signal: controller.signal
+                    });
+
+                    const result = await response.json().catch(() => ({}));
+                    if (!response.ok || !result.ok) {
+                        const submissionError = new Error(result.message || 'Chưa thể gửi đăng ký lúc này.');
+                        submissionError.field = result.field;
+                        throw submissionError;
+                    }
+
+                    leadForm.reset();
+                    resetStartedAt();
+                    showFormStatus(
+                        result.message || 'Đăng ký thành công. Hoàng Long Clinic sẽ sớm liên hệ với bạn.',
+                        'is-success'
+                    );
+                } catch (error) {
+                    const message = error.name === 'AbortError'
+                        ? 'Kết nối mất nhiều thời gian hơn dự kiến. Vui lòng thử lại hoặc gọi hotline.'
+                        : (error.message || 'Chưa thể gửi đăng ký lúc này. Vui lòng thử lại hoặc gọi hotline.');
+                    showFormStatus(message, 'is-error');
+
+                    if (error.field) {
+                        const field = leadForm.elements.namedItem(error.field);
+                        if (field && typeof field.focus === 'function') field.focus();
+                    }
+                } finally {
+                    window.clearTimeout(timeoutId);
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = defaultButtonHtml;
+                }
+            });
+        }
 
         // Lightbox ảnh thuần, dùng tài nguyên tương đối để hoạt động trên GitHub/Vercel.
         const galleryLinks = document.querySelectorAll('[uk-lightbox] a[href]');
