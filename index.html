@@ -2649,6 +2649,20 @@ footer .bg-white {
     margin-top: 4px;
     color: #b9df8d;
 }
+.hero-content .hero-care-badge {
+    padding: 9px 16px;
+    gap: 8px;
+    font-size: 13.5px;
+    letter-spacing: .06em;
+}
+.hero-care-badge > .icon {
+    width: 18px;
+    height: 18px;
+}
+.hero-ai-break {
+    display: block;
+    margin-top: 2px;
+}
 
 .difference-card {
     --card-tone: #3b7dad;
@@ -2857,6 +2871,49 @@ footer .bg-white {
     border-color: rgba(255,255,255,.2) !important;
     box-shadow: 0 18px 38px rgba(0,0,0,.2) !important;
 }
+.mri-gallery-item {
+    position: relative;
+    height: 164px;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 16px 34px rgba(0,0,0,.19);
+}
+#mri-ct .mri-ct-visual .mri-gallery-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    object-fit: cover;
+    transform: none !important;
+    box-shadow: none !important;
+}
+#mri-ct .mri-ct-visual .mri-gallery-item--equipment img {
+    padding: 12px 12px 27px !important;
+    object-fit: contain;
+}
+.mri-gallery-item figcaption {
+    position: absolute;
+    inset: auto 8px 8px;
+    padding: 6px 9px;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 9px;
+    color: #ffffff;
+    background: rgba(7,31,46,.76);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    font-family: 'Nunito', sans-serif;
+    font-size: 10.5px;
+    font-weight: 900;
+    letter-spacing: .045em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
 #mri-ct .mri-ct-copy .badge {
     color: #dff2c8;
     border-color: rgba(204,234,169,.24);
@@ -2932,21 +2989,21 @@ footer .bg-white {
     align-items: center;
     gap: 10px;
 }
-.scope-card__number {
-    display: inline-flex;
-    min-width: 38px;
-    height: 28px;
-    padding: 0 9px;
-    align-items: center;
-    justify-content: center;
+.scope-card__device-icon {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 auto;
+    place-items: center;
     border: 1px solid color-mix(in srgb, var(--scope-tone) 22%, transparent);
-    border-radius: 999px;
+    border-radius: 11px;
     color: var(--scope-tone);
     background: var(--scope-soft);
-    font-family: 'Be Vietnam Pro', sans-serif;
-    font-size: 11px;
-    font-weight: 900;
-    line-height: 1;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+}
+.scope-card__device-icon .icon {
+    width: 22px;
+    height: 22px;
 }
 #he-thong-day-soi .scope-card__heading h3 {
     margin: 0 !important;
@@ -2970,6 +3027,15 @@ footer .bg-white {
 }
 
 @media (max-width: 1023px) {
+    .hero-content .hero-care-badge {
+        padding: 8px 13px;
+        gap: 7px;
+        font-size: 12px;
+    }
+    .hero-care-badge > .icon {
+        width: 16px;
+        height: 16px;
+    }
     .hero-title-lead {
         margin-bottom: 4px;
         font-size: .46em;
@@ -3096,6 +3162,19 @@ footer .bg-white {
     #mri-ct .mri-ct-visual-grid {
         gap: 9px;
     }
+    .mri-gallery-item {
+        height: 128px;
+        border-radius: 12px;
+    }
+    #mri-ct .mri-ct-visual .mri-gallery-item--equipment img {
+        padding: 9px 9px 24px !important;
+    }
+    .mri-gallery-item figcaption {
+        inset: auto 6px 6px;
+        padding: 5px 7px;
+        border-radius: 7px;
+        font-size: 9px;
+    }
 
     #he-thong-day-soi .scope-card {
         padding: 18px !important;
@@ -3103,10 +3182,14 @@ footer .bg-white {
     .scope-card__heading {
         margin-bottom: 11px;
     }
-    .scope-card__number {
-        min-width: 36px;
-        height: 26px;
-        font-size: 10.5px;
+    .scope-card__device-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 10px;
+    }
+    .scope-card__device-icon .icon {
+        width: 20px;
+        height: 20px;
     }
     .scope-card__benefits > li {
         padding: 9px 0;
@@ -3126,6 +3209,14 @@ footer .bg-white {
         <symbol id="icon-phone" viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></symbol>
         <symbol id="icon-arrow-up" viewBox="0 0 384 512"><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></symbol>
         <symbol id="icon-stethoscope" viewBox="0 0 576 512"><path d="M142.4 21.9c5.6 16.8-3.5 34.9-20.2 40.5L96 71.1V192c0 53 43 96 96 96s96-43 96-96V71.1l-26.1-8.7c-16.8-5.6-25.8-23.7-20.2-40.5s23.7-25.8 40.5-20.2l26.1 8.7C334.4 19.1 352 43.5 352 71.1V192c0 77.2-54.6 141.6-127.3 156.7C231 404.6 278.4 448 336 448c61.9 0 112-50.1 112-112V265.3c-28.3-12.3-48-40.5-48-73.3c0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V336c0 97.2-78.8 176-176 176c-92.9 0-168.9-71.9-175.5-163.1C87.2 334.2 32 269.6 32 192V71.1c0-27.5 17.6-52 43.8-60.7l26.1-8.7c16.8-5.6 34.9 3.5 40.5 20.2zM480 224a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></symbol>
+        <symbol id="icon-endoscope" viewBox="0 0 64 64" fill="none">
+            <rect x="7" y="7" width="22" height="30" rx="6" stroke="currentColor" stroke-width="4"/>
+            <circle cx="14" cy="16" r="2.5" fill="currentColor"/>
+            <circle cx="22" cy="16" r="2.5" fill="currentColor"/>
+            <path d="M13 27h10M18 37v5c0 9 7 15 16 15 8 0 14-4 18-11 3-5 4-10 4-17" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+            <rect x="51" y="17" width="9" height="14" rx="4.5" stroke="currentColor" stroke-width="4"/>
+            <path d="M55.5 17v-4" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+        </symbol>
         <symbol id="icon-arrow-right" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></symbol>
         <symbol id="icon-phone-volume" viewBox="0 0 512 512"><path d="M280 0C408.1 0 512 103.9 512 232c0 13.3-10.7 24-24 24s-24-10.7-24-24c0-101.6-82.4-184-184-184c-13.3 0-24-10.7-24-24s10.7-24 24-24zm8 192a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm-32-72c0-13.3 10.7-24 24-24c75.1 0 136 60.9 136 136c0 13.3-10.7 24-24 24s-24-10.7-24-24c0-48.6-39.4-88-88-88c-13.3 0-24-10.7-24-24zM117.5 1.4c19.4-5.3 39.7 4.6 47.4 23.2l40 96c6.8 16.3 2.1 35.2-11.6 46.3L144 207.3c33.3 70.4 90.3 127.4 160.7 160.7L345 318.7c11.2-13.7 30-18.4 46.3-11.6l96 40c18.6 7.7 28.5 28 23.2 47.4l-24 88C481.8 499.9 466 512 448 512C200.6 512 0 311.4 0 64C0 46 12.1 30.2 29.5 25.4l88-24z"/></symbol>
         <symbol id="icon-shield-heart" viewBox="0 0 512 512"><path d="M269.4 2.9C265.2 1 260.7 0 256 0s-9.2 1-13.4 2.9L54.3 82.8c-22 9.3-38.4 31-38.3 57.2c.5 99.2 41.3 280.7 213.6 363.2c16.7 8 36.1 8 52.8 0C454.7 420.7 495.5 239.2 496 140c.1-26.2-16.3-47.9-38.3-57.2L269.4 2.9zM144 221.3c0-33.8 27.4-61.3 61.3-61.3c16.2 0 31.8 6.5 43.3 17.9l7.4 7.4 7.4-7.4c11.5-11.5 27.1-17.9 43.3-17.9c33.8 0 61.3 27.4 61.3 61.3c0 16.2-6.5 31.8-17.9 43.3l-82.7 82.7c-6.2 6.2-16.4 6.2-22.6 0l-82.7-82.7c-11.5-11.5-17.9-27.1-17.9-43.3z"/></symbol>
@@ -3206,7 +3297,7 @@ footer .bg-white {
             <ul class="nav-links hidden xl:flex flex-1 justify-center">
                 <li><a href="#home">Giới Thiệu</a></li>
                 <li><a href="#thuc-trang">Thực Trạng</a></li>
-                <li><a href="#trang-thiet-bi">Trang Thiết Bị</a></li>
+                <li><a href="#trang-thiet-bi">Cơ Sở Vật Chất</a></li>
                 <li><a href="#chuyen-gia">Đội Ngũ Chuyên Gia</a></li>
                 <li><a href="#faq">Câu Hỏi Thường Gặp</a></li>
             </ul>
@@ -3222,7 +3313,7 @@ footer .bg-white {
             <div class="mobile-nav-heading">Đi đến nội dung</div>
             <a href="#home">Giới thiệu</a>
             <a href="#thuc-trang">Thực trạng</a>
-            <a href="#trang-thiet-bi">Trang thiết bị</a>
+            <a href="#trang-thiet-bi">Cơ sở vật chất</a>
             <a href="#chuyen-gia">Đội ngũ chuyên gia</a>
             <a href="#faq">Câu hỏi thường gặp</a>
         </div>
@@ -3251,7 +3342,7 @@ footer .bg-white {
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-center w-full mb-8">
 
                     <div class="hero-content text-left lg:col-span-7 relative z-20">
-                        <div class="badge mb-4 md:mb-6 bg-white/80 backdrop-blur-md border border-primary/30 shadow-sm"><svg class="icon text-primary" aria-hidden="true" focusable="false"><use href="#icon-stethoscope"></use></svg> Chăm sóc sức khỏe tiêu hóa</div>
+                        <div class="hero-care-badge badge mb-4 md:mb-6 bg-white/80 backdrop-blur-md border border-primary/30 shadow-sm"><svg class="icon text-primary" aria-hidden="true" focusable="false"><use href="#icon-stethoscope"></use></svg> Chăm sóc sức khỏe tiêu hóa</div>
 
                         <!-- CHỈNH CỠ CHỮ HEADER CHO MOBILE -->
                         <h1 class="font-black leading-[1.25] mb-5 md:mb-6">
@@ -3264,7 +3355,7 @@ footer .bg-white {
                                 <span class="hero-title-health">khỏe mạnh</span>
                             </span>
                             <span class="block text-[18px] md:text-[24px] lg:text-[28px] font-extrabold mt-3 md:mt-4 leading-[1.4] text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-medical uppercase">
-                                Khám tiêu hóa chuyên sâu – Tầm soát sớm tích hợp AI
+                                Khám tiêu hóa chuyên sâu – Tầm soát sớm <span class="hero-ai-break">tích hợp AI</span>
                             </span>
                         </h1>
 
@@ -3570,9 +3661,22 @@ footer .bg-white {
                 <div class="mri-ct-panel grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                     <div class="mri-ct-visual order-2 lg:order-1">
                         <div class="mri-ct-visual-grid grid grid-cols-2 gap-3 md:gap-5 relative">
-                            <!-- Bỏ hiệu ứng translate so le trên mobile (giữ lại trên md trở lên) để không bị đâm vào text -->
-                            <img src="https://hoanglongclinic.vn/Uploads/8-copy.png?w=718" alt="Máy MRI" class="rounded-[1rem] md:rounded-[1.25rem] shadow-sm bg-white w-full object-contain p-2 h-40 md:h-[350px] transform md:translate-y-6 transition duration-500 md:hover:scale-105" decoding="async" loading="lazy" width="718" height="718">
-                            <img src="https://hoanglongclinic.vn/Uploads/7-chay-like.png?w=718" alt="Máy CT Scanner" class="rounded-[1rem] md:rounded-[1.25rem] shadow-sm bg-white w-full object-contain p-2 h-40 md:h-[350px] transform md:-translate-y-4 transition duration-500 md:hover:scale-105" decoding="async" loading="lazy" width="718" height="718">
+                            <figure class="mri-gallery-item">
+                                <img src="assets/images/clinic/pk11.webp" alt="Phòng chụp cộng hưởng từ MRI tại Hoàng Long Clinic" decoding="async" loading="lazy" width="600" height="400">
+                                <figcaption>Phòng chụp MRI</figcaption>
+                            </figure>
+                            <figure class="mri-gallery-item">
+                                <img src="assets/images/clinic/pk12.webp" alt="Phòng chụp cắt lớp vi tính CT tại Hoàng Long Clinic" decoding="async" loading="lazy" width="600" height="400">
+                                <figcaption>Phòng chụp CT</figcaption>
+                            </figure>
+                            <figure class="mri-gallery-item mri-gallery-item--equipment">
+                                <img src="https://hoanglongclinic.vn/Uploads/8-copy.png?w=718" alt="Hệ thống máy chụp cộng hưởng từ MRI" decoding="async" loading="lazy" width="718" height="718">
+                                <figcaption>Hệ thống MRI</figcaption>
+                            </figure>
+                            <figure class="mri-gallery-item mri-gallery-item--equipment">
+                                <img src="https://hoanglongclinic.vn/Uploads/7-chay-like.png?w=718" alt="Hệ thống máy chụp cắt lớp vi tính CT" decoding="async" loading="lazy" width="718" height="718">
+                                <figcaption>Hệ thống CT</figcaption>
+                            </figure>
                         </div>
                     </div>
                     <div class="mri-ct-copy order-1 lg:pl-6 text-center md:text-left">
@@ -3616,7 +3720,7 @@ footer .bg-white {
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-8 mt-6 md:mt-8">
                     <!-- Dây 600 -->
-                    <div class="scope-card scope-card--standard base-card group bg-white/95 text-center flex flex-col items-center border-none p-5 md:p-6 h-full shadow-lg" data-step="01">
+                    <div class="scope-card scope-card--standard base-card group bg-white/95 text-center flex flex-col items-center border-none p-5 md:p-6 h-full shadow-lg">
                         <div class="scope-card__visual relative w-full h-40 md:h-48 mb-4 md:mb-5 rounded-[1rem] overflow-hidden shadow-sm shrink-0 bg-white">
                             <!-- Ảnh Mặc Định -->
                             <img src="assets/images/endoscopy/z8020613938987_02028f6d364cb0159ed89fe16d9bf31d.webp" alt="Dây soi 600 Mặc định" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 md:group-hover:opacity-0 z-20" decoding="async" loading="lazy" width="600" height="400">
@@ -3624,7 +3728,7 @@ footer .bg-white {
                             <img src="assets/images/endoscopy/z8013701086573_cae7d286e1753fa35396de3cba3f5574.webp" alt="Dây soi 600 Thực tế" class="absolute inset-0 w-full h-full object-contain p-2 opacity-0 transition-opacity duration-500 md:group-hover:opacity-100 z-10 active:opacity-100" decoding="async" loading="lazy" width="600" height="400">
                         </div>
                         <div class="scope-card__heading">
-                            <span class="scope-card__number">01</span>
+                            <span class="scope-card__device-icon" aria-hidden="true"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-endoscope"></use></svg></span>
                             <h3 class="font-black text-[17px] md:text-[19px] text-medical uppercase font-sans">DÂY SERIES 600</h3>
                         </div>
                         <ul class="scope-card__benefits text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] font-medium flex-1 text-left w-full space-y-2.5">
@@ -3637,7 +3741,7 @@ footer .bg-white {
                     </div>
 
                     <!-- Dây Laser -->
-                    <div class="scope-card scope-card--advanced base-card group bg-white/95 text-center flex flex-col items-center border-none shadow-xl border border-primary/20 p-5 md:p-6 h-full relative" data-step="02">
+                    <div class="scope-card scope-card--advanced base-card group bg-white/95 text-center flex flex-col items-center border-none shadow-xl border border-primary/20 p-5 md:p-6 h-full relative">
                         <div class="scope-card__visual relative w-full h-40 md:h-48 mb-4 md:mb-5 rounded-[1rem] overflow-hidden shadow-sm border border-primary/10 shrink-0 bg-white">
                             <!-- Ảnh Mặc Định (Chớp tắt BLI/LCI) -->
                             <div class="absolute inset-0 w-full h-full transition-opacity duration-500 md:group-hover:opacity-0 z-20">
@@ -3651,7 +3755,7 @@ footer .bg-white {
                             <img src="assets/images/endoscopy/z8013714412558_60683ffdda4edf6f0f2de284b6d68a69.webp" alt="Dây soi Laser Thực tế" class="absolute inset-0 w-full h-full object-contain p-2 opacity-0 transition-opacity duration-500 md:group-hover:opacity-100 z-10 active:opacity-100" decoding="async" loading="lazy" width="600" height="400">
                         </div>
                         <div class="scope-card__heading">
-                            <span class="scope-card__number">02</span>
+                            <span class="scope-card__device-icon" aria-hidden="true"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-endoscope"></use></svg></span>
                             <h3 class="font-black text-[17px] md:text-[19px] text-medical uppercase font-sans">DÂY SERIE 700</h3>
                         </div>
                         <ul class="scope-card__benefits text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] font-medium flex-1 text-left w-full space-y-2.5">
@@ -3663,7 +3767,7 @@ footer .bg-white {
                     </div>
 
                     <!-- Dây Zoom -->
-                    <div class="scope-card scope-card--zoom base-card group bg-white/95 text-center flex flex-col items-center border-none p-5 md:p-6 h-full shadow-lg" data-step="03">
+                    <div class="scope-card scope-card--zoom base-card group bg-white/95 text-center flex flex-col items-center border-none p-5 md:p-6 h-full shadow-lg">
                         <div class="scope-card__visual relative w-full h-40 md:h-48 mb-4 md:mb-5 rounded-[1rem] overflow-hidden shadow-sm shrink-0 bg-white">
                             <!-- Ảnh Mặc Định -->
                             <img src="assets/images/endoscopy/z8020618827689_0cfbf76e91e3da362491900ba5f015e8.webp" alt="Dây soi Zoom Mặc định" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 md:group-hover:opacity-0 z-20" decoding="async" loading="lazy" width="600" height="400">
@@ -3671,7 +3775,7 @@ footer .bg-white {
                             <img src="assets/images/endoscopy/z8013714412558_60683ffdda4edf6f0f2de284b6d68a69.webp" alt="Dây soi Zoom Thực tế" class="absolute inset-0 w-full h-full object-contain p-2 opacity-0 transition-opacity duration-500 md:group-hover:opacity-100 z-10 active:opacity-100" decoding="async" loading="lazy" width="600" height="400">
                         </div>
                         <div class="scope-card__heading">
-                            <span class="scope-card__number">03</span>
+                            <span class="scope-card__device-icon" aria-hidden="true"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-endoscope"></use></svg></span>
                             <h3 class="font-black text-[17px] md:text-[19px] text-medical uppercase font-sans">DÂY SERIE 700 ZOOM</h3>
                         </div>
                         <ul class="scope-card__benefits text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] font-medium flex-1 text-left w-full space-y-2.5">
@@ -4257,9 +4361,9 @@ footer .bg-white {
                     <p class="text-[13px] font-semibold text-bodyText leading-relaxed mb-5 md:pr-4">Phòng khám đa khoa Hoàng Long chuyên Nội soi - Chẩn đoán hình ảnh tích hợp Trí tuệ nhân tạo AI hỗ trợ phát hiện bệnh lý Tiêu hóa - Gan mật.</p>
 
                     <div class="flex items-center gap-4 mb-5">
-                        <a href="https://www.facebook.com/phongkhamdakhoahoanglong" target="_blank" class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gray-100 flex items-center justify-center text-navy hover:bg-[#1877F2] hover:text-white transition shadow-sm" rel="noopener noreferrer" aria-label="Facebook Hoàng Long Clinic"><svg class="icon text-[18px] md:text-[20px]" aria-hidden="true" focusable="false"><use href="#icon-facebook-f"></use></svg></a>
-                        <a href="#" target="_blank" class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gray-100 flex items-center justify-center text-navy hover:bg-[#E4405F] hover:text-white transition shadow-sm" rel="noopener noreferrer" aria-label="Instagram Hoàng Long Clinic"><svg class="icon text-[18px] md:text-[20px]" aria-hidden="true" focusable="false"><use href="#icon-instagram"></use></svg></a>
-                        <a href="#" target="_blank" class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gray-100 flex items-center justify-center text-navy hover:bg-[#FF0000] hover:text-white transition shadow-sm" rel="noopener noreferrer" aria-label="YouTube Hoàng Long Clinic"><svg class="icon text-[18px] md:text-[20px]" aria-hidden="true" focusable="false"><use href="#icon-youtube"></use></svg></a>
+                        <a href="https://www.facebook.com/phongkhamhoanglong" target="_blank" class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gray-100 flex items-center justify-center text-navy hover:bg-[#1877F2] hover:text-white transition shadow-sm" rel="noopener noreferrer" aria-label="Facebook Hoàng Long Clinic"><svg class="icon text-[18px] md:text-[20px]" aria-hidden="true" focusable="false"><use href="#icon-facebook-f"></use></svg></a>
+                        <a href="https://www.instagram.com/phongkhamhoanglong/" target="_blank" class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gray-100 flex items-center justify-center text-navy hover:bg-[#E4405F] hover:text-white transition shadow-sm" rel="noopener noreferrer" aria-label="Instagram Hoàng Long Clinic"><svg class="icon text-[18px] md:text-[20px]" aria-hidden="true" focusable="false"><use href="#icon-instagram"></use></svg></a>
+                        <a href="https://www.youtube.com/channel/UCTMegdGcd4D9RTc1-r8h1xg" target="_blank" class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gray-100 flex items-center justify-center text-navy hover:bg-[#FF0000] hover:text-white transition shadow-sm" rel="noopener noreferrer" aria-label="YouTube Hoàng Long Clinic"><svg class="icon text-[18px] md:text-[20px]" aria-hidden="true" focusable="false"><use href="#icon-youtube"></use></svg></a>
                         <a href="https://zalo.me/0986954448" target="_blank" class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gray-100 flex items-center justify-center text-navy hover:bg-[#0068FF] hover:text-white transition shadow-sm" rel="noopener noreferrer">
                             <strong class="font-sans text-[12px] md:text-[13px] tracking-wider">Zalo</strong>
                         </a>
