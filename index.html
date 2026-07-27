@@ -2582,6 +2582,539 @@ footer .bg-white {
     }
 }
 
+/* ================================================================
+   CONTENT-LED REDESIGN — tối ưu các khối nội dung ngắn
+   Tạo phân cấp thị giác rõ, giữ toàn bộ hiệu ứng ở CSS thuần.
+   ================================================================ */
+.hero-title-lead,
+.hero-title-focus,
+.hero-title-health {
+    display: block;
+}
+.hero-title-lead {
+    margin-bottom: 5px;
+    color: rgba(255,255,255,.7) !important;
+    font-family: 'Nunito', sans-serif;
+    font-size: .48em;
+    font-weight: 900;
+    letter-spacing: .14em;
+    line-height: 1.25;
+    text-transform: uppercase;
+}
+.hero-title-focus {
+    color: #ffffff !important;
+}
+.hero-title-health {
+    position: relative;
+    width: max-content;
+    max-width: 100%;
+    margin-top: 5px;
+    color: #cceaa9 !important;
+}
+.hero-title-health::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -7px;
+    left: 0;
+    height: 4px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #b9df8d, rgba(185,223,141,.12));
+}
+.hero-content > p.hero-lead-copy {
+    max-width: 680px;
+    padding: 15px 17px;
+    border: 1px solid rgba(255,255,255,.13);
+    border-left: 4px solid #b9df8d;
+    border-radius: 0 15px 15px 0;
+    background: linear-gradient(90deg, rgba(5,25,38,.58), rgba(12,55,76,.25));
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+.hero-lead-copy > span:first-child {
+    display: block;
+}
+.hero-ai-copy {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-top: 9px;
+    color: #e2f2cf;
+    font-weight: 800;
+}
+.hero-ai-copy > .icon {
+    width: 18px;
+    height: 18px;
+    margin-top: 4px;
+    color: #b9df8d;
+}
+
+.difference-card {
+    --card-tone: #3b7dad;
+    --card-tone-soft: #eef6fb;
+}
+.difference-card--ai {
+    --card-tone: #d76d2b;
+    --card-tone-soft: #fff4ea;
+}
+.difference-card--comfort {
+    --card-tone: #5f9628;
+    --card-tone-soft: #f0f7e8;
+}
+.difference-grid .difference-card {
+    min-height: 305px;
+    padding: 30px !important;
+    border-top: 1px solid rgba(214,226,233,.95) !important;
+    text-align: left;
+    background:
+        radial-gradient(circle at 100% 0%, var(--card-tone-soft), transparent 42%),
+        #ffffff !important;
+}
+.difference-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: linear-gradient(180deg, var(--card-tone), color-mix(in srgb, var(--card-tone) 20%, transparent));
+}
+.difference-card::after {
+    content: attr(data-step);
+    position: absolute;
+    top: 13px;
+    right: 17px;
+    color: color-mix(in srgb, var(--card-tone) 12%, transparent);
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 64px;
+    font-weight: 900;
+    letter-spacing: -.08em;
+    line-height: 1;
+    pointer-events: none;
+}
+.difference-card > * {
+    position: relative;
+    z-index: 1;
+}
+.difference-grid .difference-card > div:first-child {
+    width: 68px !important;
+    height: 68px !important;
+    margin: 0 0 22px !important;
+    color: var(--card-tone) !important;
+    background: var(--card-tone-soft) !important;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--card-tone) 16%, transparent) !important;
+}
+.difference-card h4 {
+    max-width: 270px;
+    color: #123f5f !important;
+    font-size: 19px !important;
+    line-height: 1.35;
+}
+.difference-card p {
+    max-width: 330px;
+    color: #526273 !important;
+    font-size: 15px !important;
+    line-height: 1.72 !important;
+}
+
+.health-impact-card {
+    --impact-tone: #d94a56;
+    --impact-soft: #fff1f2;
+}
+.health-impact-card--chronic {
+    --impact-tone: #d8752f;
+    --impact-soft: #fff5eb;
+}
+.health-impact-card--screening {
+    --impact-tone: #65992f;
+    --impact-soft: #f0f7e8;
+}
+#thuc-trang .health-impact-card {
+    position: relative;
+    min-height: 300px;
+    padding: 29px !important;
+    overflow: hidden;
+    align-items: flex-start !important;
+    border-top: 1px solid rgba(218,228,234,.94) !important;
+    text-align: left;
+    background:
+        linear-gradient(180deg, var(--impact-soft) 0, #ffffff 42%) !important;
+}
+.health-impact-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 5px;
+    background: linear-gradient(90deg, var(--impact-tone), color-mix(in srgb, var(--impact-tone) 30%, transparent));
+}
+.health-impact-card::after {
+    content: attr(data-step);
+    position: absolute;
+    top: 21px;
+    right: 23px;
+    color: color-mix(in srgb, var(--impact-tone) 18%, transparent);
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 45px;
+    font-weight: 900;
+    letter-spacing: -.07em;
+    line-height: 1;
+}
+#thuc-trang .health-impact-card > div:first-child {
+    position: relative;
+    z-index: 1;
+    width: 68px !important;
+    height: 68px !important;
+    margin: 0 0 21px !important;
+    color: var(--impact-tone) !important;
+    background: #ffffff !important;
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--impact-tone) 17%, transparent) !important;
+}
+#thuc-trang .health-impact-card h3 {
+    position: relative;
+    z-index: 1;
+    min-height: 0;
+    margin-bottom: 12px !important;
+    padding: 0;
+    justify-content: flex-start;
+    color: #123f5f;
+    font-size: 18px !important;
+    line-height: 1.42;
+    text-align: left;
+}
+#thuc-trang .health-impact-card p {
+    position: relative;
+    z-index: 1;
+    color: #526273;
+    font-size: 14.5px !important;
+    line-height: 1.72 !important;
+}
+
+.facility-promise {
+    display: grid;
+    width: 100%;
+    max-width: 1050px;
+    margin: 3px auto 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+.facility-promise__item {
+    display: flex;
+    min-height: 92px;
+    padding: 18px;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid rgba(211,225,232,.95);
+    border-radius: 17px;
+    color: #405466;
+    background: rgba(255,255,255,.88);
+    box-shadow: 0 12px 28px rgba(18,63,95,.08);
+    font-size: 15px;
+    font-weight: 750;
+    line-height: 1.62;
+    text-align: left;
+}
+.facility-promise__icon {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    flex: 0 0 auto;
+    place-items: center;
+    border: 1px solid rgba(110,165,47,.2);
+    border-radius: 14px;
+    color: #5f912d;
+    background: #eff7e7;
+    font-size: 20px;
+}
+
+#mri-ct .mri-ct-panel {
+    position: relative;
+    padding: clamp(28px, 4vw, 52px);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 30px;
+    background:
+        radial-gradient(circle at 0 100%, rgba(110,165,47,.3), transparent 34%),
+        radial-gradient(circle at 100% 0, rgba(38,117,160,.34), transparent 38%),
+        linear-gradient(135deg, #071f2e 0%, #0c3b52 56%, #123f5f 100%);
+    box-shadow: 0 30px 72px rgba(18,63,95,.2);
+}
+#mri-ct .mri-ct-panel::before {
+    content: '';
+    position: absolute;
+    top: -140px;
+    right: -110px;
+    width: 330px;
+    height: 330px;
+    border: 1px solid rgba(204,234,169,.13);
+    border-radius: 50%;
+    box-shadow: 0 0 0 42px rgba(204,234,169,.025), 0 0 0 84px rgba(204,234,169,.018);
+    pointer-events: none;
+}
+.mri-ct-panel > * {
+    position: relative;
+    z-index: 1;
+}
+#mri-ct .mri-ct-visual img {
+    border-color: rgba(255,255,255,.2) !important;
+    box-shadow: 0 18px 38px rgba(0,0,0,.2) !important;
+}
+#mri-ct .mri-ct-copy .badge {
+    color: #dff2c8;
+    border-color: rgba(204,234,169,.24);
+    background: rgba(204,234,169,.1);
+}
+#mri-ct .mri-title-main {
+    color: #ffffff;
+    white-space: normal !important;
+}
+#mri-ct .mri-title-sub {
+    color: #cceaa9 !important;
+}
+#mri-ct .mri-ct-copy > p {
+    color: rgba(255,255,255,.76) !important;
+}
+#mri-ct .mri-benefit-list {
+    padding: 0 !important;
+}
+#mri-ct .mri-benefit-list li {
+    margin-top: 0;
+    padding: 12px 14px;
+    border: 1px solid rgba(255,255,255,.11);
+    border-radius: 13px;
+    color: rgba(255,255,255,.92) !important;
+    background: rgba(255,255,255,.065);
+    line-height: 1.55;
+}
+#mri-ct .mri-benefit-list li + li {
+    margin-top: 9px;
+}
+#mri-ct .mri-benefit-list .icon {
+    margin-top: 3px;
+    color: #b9df8d !important;
+}
+
+.scope-card {
+    --scope-tone: #3c7fae;
+    --scope-soft: #eef6fb;
+}
+.scope-card--advanced {
+    --scope-tone: #63962f;
+    --scope-soft: #f0f7e8;
+}
+.scope-card--zoom {
+    --scope-tone: #d76f2d;
+    --scope-soft: #fff4ea;
+}
+#he-thong-day-soi .scope-card {
+    position: relative;
+    padding: 22px !important;
+    overflow: hidden;
+    align-items: stretch !important;
+    border-top: 1px solid rgba(213,226,232,.96) !important;
+    text-align: left;
+    background:
+        linear-gradient(180deg, var(--scope-soft) 0, #ffffff 30%) !important;
+}
+.scope-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 5px;
+    background: linear-gradient(90deg, var(--scope-tone), color-mix(in srgb, var(--scope-tone) 28%, transparent));
+}
+#he-thong-day-soi .scope-card__visual {
+    border: 1px solid color-mix(in srgb, var(--scope-tone) 17%, #dce7ec) !important;
+    box-shadow: 0 14px 28px rgba(18,63,95,.1) !important;
+}
+.scope-card__heading {
+    display: flex;
+    width: 100%;
+    margin: 0 0 13px;
+    align-items: center;
+    gap: 10px;
+}
+.scope-card__number {
+    display: inline-flex;
+    min-width: 38px;
+    height: 28px;
+    padding: 0 9px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in srgb, var(--scope-tone) 22%, transparent);
+    border-radius: 999px;
+    color: var(--scope-tone);
+    background: var(--scope-soft);
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    line-height: 1;
+}
+#he-thong-day-soi .scope-card__heading h3 {
+    margin: 0 !important;
+    color: #123f5f !important;
+    line-height: 1.35;
+}
+.scope-card__benefits > li {
+    margin-top: 0 !important;
+    padding: 10px 0;
+    border-top: 1px solid rgba(218,228,234,.85);
+}
+.scope-card__benefits > li:first-child {
+    padding-top: 0;
+    border-top: 0;
+}
+.scope-card__benefits > li:last-child {
+    padding-bottom: 0;
+}
+.scope-card__benefits .icon {
+    color: var(--scope-tone) !important;
+}
+
+@media (max-width: 1023px) {
+    .hero-title-lead {
+        margin-bottom: 4px;
+        font-size: .46em;
+        letter-spacing: .12em;
+    }
+    .hero-title-health {
+        margin-top: 3px;
+    }
+    .hero-title-health::after {
+        bottom: -5px;
+        height: 3px;
+    }
+    .hero-content > p.hero-lead-copy {
+        padding: 13px 14px;
+        border-left-width: 3px;
+        border-radius: 0 12px 12px 0;
+    }
+    .hero-ai-copy {
+        gap: 8px;
+        margin-top: 7px;
+    }
+    .hero-ai-copy > .icon {
+        width: 16px;
+        height: 16px;
+        margin-top: 3px;
+    }
+
+    .difference-grid .difference-card {
+        min-height: 0;
+        padding: 18px !important;
+        background:
+            linear-gradient(110deg, var(--card-tone-soft), #ffffff 54%) !important;
+    }
+    .difference-card::before {
+        inset: 0 auto 0 0;
+        width: 4px;
+    }
+    .difference-card::after {
+        display: none;
+    }
+    .difference-grid .difference-card > div:first-child {
+        width: 52px !important;
+        height: 52px !important;
+        margin: 0 !important;
+    }
+    .difference-card h4 {
+        max-width: none;
+        font-size: 16px !important;
+    }
+    .difference-card p {
+        max-width: none;
+        font-size: 13.5px !important;
+        line-height: 1.58 !important;
+    }
+
+    #thuc-trang .health-impact-card {
+        display: grid !important;
+        min-height: 0;
+        padding: 19px !important;
+        grid-template-columns: 54px minmax(0, 1fr);
+        column-gap: 13px;
+        row-gap: 14px;
+        align-items: center !important;
+        background:
+            linear-gradient(110deg, var(--impact-soft), #ffffff 58%) !important;
+    }
+    .health-impact-card::after {
+        display: none;
+    }
+    #thuc-trang .health-impact-card > div:first-child {
+        grid-column: 1;
+        width: 54px !important;
+        height: 54px !important;
+        margin: 0 !important;
+    }
+    #thuc-trang .health-impact-card h3 {
+        display: block;
+        grid-column: 2;
+        margin: 0 !important;
+        font-size: 16.5px !important;
+        line-height: 1.38;
+    }
+    #thuc-trang .health-impact-card p {
+        grid-column: 1 / -1;
+        margin: 0;
+        padding-top: 13px;
+        border-top: 1px solid rgba(218,228,234,.9);
+        font-size: 13.5px !important;
+        line-height: 1.62 !important;
+    }
+
+    .facility-promise {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .facility-promise__item {
+        min-height: 0;
+        padding: 14px;
+        gap: 12px;
+        border-radius: 14px;
+        font-size: 13.5px;
+        line-height: 1.55;
+    }
+    .facility-promise__icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        font-size: 18px;
+    }
+
+    #mri-ct .mri-ct-panel {
+        padding: 20px;
+        gap: 25px;
+        border-radius: 21px;
+    }
+    #mri-ct .mri-ct-copy {
+        text-align: left;
+    }
+    #mri-ct .mri-benefit-list li {
+        padding: 11px 12px;
+        border-radius: 11px;
+        font-size: 13.5px;
+    }
+    #mri-ct .mri-ct-visual-grid {
+        gap: 9px;
+    }
+
+    #he-thong-day-soi .scope-card {
+        padding: 18px !important;
+    }
+    .scope-card__heading {
+        margin-bottom: 11px;
+    }
+    .scope-card__number {
+        min-width: 36px;
+        height: 26px;
+        font-size: 10.5px;
+    }
+    .scope-card__benefits > li {
+        padding: 9px 0;
+        font-size: 13.5px;
+        line-height: 1.55;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -2725,16 +3258,19 @@ footer .bg-white {
                             <span class="block text-[14px] md:text-[18px] lg:text-[20px] text-gray-500 font-bold uppercase tracking-[0.1em] md:tracking-[0.15em] mb-2 md:mb-3 font-sans">
                                 Phòng Khám Đa Khoa Hoàng Long
                             </span>
-                            <span class="block text-[28px] md:text-[40px] lg:text-[46px] xl:text-[52px] text-medical uppercase tracking-tight mb-2">
-                                Vì một hệ <br class="hidden md:block">Tiêu hóa – Gan mật khỏe mạnh
+                            <span class="hero-title-main block text-[28px] md:text-[40px] lg:text-[46px] xl:text-[52px] text-medical uppercase tracking-tight mb-2">
+                                <span class="hero-title-lead">Vì một hệ</span>
+                                <span class="hero-title-focus">Tiêu hóa – Gan mật</span>
+                                <span class="hero-title-health">khỏe mạnh</span>
                             </span>
                             <span class="block text-[18px] md:text-[24px] lg:text-[28px] font-extrabold mt-3 md:mt-4 leading-[1.4] text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-medical uppercase">
                                 Khám tiêu hóa chuyên sâu – Tầm soát sớm tích hợp AI
                             </span>
                         </h1>
 
-                        <p class="text-[14.5px] md:text-[16.5px] text-bodyText mb-6 md:mb-8 md:max-w-[90%] leading-[1.7] md:leading-[1.8] font-medium">
-                            Nội soi êm ái, không đau cùng chuyên gia đầu ngành nhiều năm kinh nghiệm. AI hỗ trợ phát hiện chính xác tổn thương nhỏ nhất – bảo vệ sức khỏe toàn diện.
+                        <p class="hero-lead-copy text-[14.5px] md:text-[16.5px] text-bodyText mb-6 md:mb-8 md:max-w-[90%] leading-[1.7] md:leading-[1.8] font-medium">
+                            <span>Nội soi êm ái, không đau cùng chuyên gia đầu ngành nhiều năm kinh nghiệm.</span>
+                            <span class="hero-ai-copy"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-microscope"></use></svg><span>AI hỗ trợ phát hiện chính xác tổn thương nhỏ nhất – bảo vệ sức khỏe toàn diện.</span></span>
                         </p>
 
                         <div class="flex flex-col sm:flex-row gap-4 mb-8">
@@ -2806,19 +3342,19 @@ footer .bg-white {
 
                     <div class="difference-grid grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8 px-2 md:px-0">
 
-                        <div class="bg-white/95 backdrop-blur-md p-6 md:p-8 rounded-[1.25rem] border border-gray-100 border-t-4 border-t-blue-500 shadow-xl hover:shadow-2xl transition-all md:hover:-translate-y-2 text-center h-full flex flex-col relative overflow-hidden">
+                        <div class="difference-card difference-card--expert bg-white/95 backdrop-blur-md p-6 md:p-8 rounded-[1.25rem] border border-gray-100 border-t-4 border-t-blue-500 shadow-xl hover:shadow-2xl transition-all md:hover:-translate-y-2 text-center h-full flex flex-col relative overflow-hidden" data-step="01">
                             <div class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600 flex items-center justify-center mb-4 md:mb-6 shrink-0 shadow-inner"><svg class="icon text-[28px] md:text-[36px]" aria-hidden="true" focusable="false"><use href="#icon-user-doctor"></use></svg></div>
                             <h4 class="font-bold text-navy text-[17px] md:text-[18px] mb-2 md:mb-3 font-sans">Đội Ngũ Chuyên Gia Đầu Ngành</h4>
                             <p class="text-bodyText text-[14px] md:text-[15px] leading-[1.7] font-medium flex-1">Quy tụ bác sĩ từng công tác tại Bệnh viện Bạch Mai, Đại học Y Hà Nội, nhiều năm kinh nghiệm điều trị Tiêu hóa – Gan mật.</p>
                         </div>
 
-                        <div class="bg-white/95 backdrop-blur-md p-6 md:p-8 rounded-[1.25rem] border border-gray-100 border-t-4 border-t-orange-500 shadow-xl hover:shadow-2xl transition-all md:hover:-translate-y-2 text-center h-full flex flex-col relative overflow-hidden">
+                        <div class="difference-card difference-card--ai bg-white/95 backdrop-blur-md p-6 md:p-8 rounded-[1.25rem] border border-gray-100 border-t-4 border-t-orange-500 shadow-xl hover:shadow-2xl transition-all md:hover:-translate-y-2 text-center h-full flex flex-col relative overflow-hidden" data-step="02">
                             <div class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full bg-gradient-to-br from-orange-50 to-orange-100 text-orange-500 flex items-center justify-center mb-4 md:mb-6 shrink-0 shadow-inner"><svg class="icon text-[28px] md:text-[36px]" aria-hidden="true" focusable="false"><use href="#icon-microscope"></use></svg></div>
                             <h4 class="font-bold text-navy text-[17px] md:text-[18px] mb-2 md:mb-3 font-sans">Nội Soi Tích Hợp Công Nghệ AI</h4>
                             <p class="text-bodyText text-[14px] md:text-[15px] leading-[1.7] font-medium flex-1">Dây soi có khả năng phóng đại đến 300 lần, kết hợp AI hỗ trợ phát hiện sớm tổn thương và nguy cơ ung thư tiêu hóa.</p>
                         </div>
 
-                        <div class="bg-white/95 backdrop-blur-md p-6 md:p-8 rounded-[1.25rem] border border-gray-100 border-t-4 border-t-primary shadow-xl hover:shadow-2xl transition-all md:hover:-translate-y-2 text-center h-full flex flex-col relative overflow-hidden">
+                        <div class="difference-card difference-card--comfort bg-white/95 backdrop-blur-md p-6 md:p-8 rounded-[1.25rem] border border-gray-100 border-t-4 border-t-primary shadow-xl hover:shadow-2xl transition-all md:hover:-translate-y-2 text-center h-full flex flex-col relative overflow-hidden" data-step="03">
                             <div class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full bg-gradient-to-br from-green-50 to-green-100 text-primary flex items-center justify-center mb-4 md:mb-6 shrink-0 shadow-inner"><svg class="icon text-[28px] md:text-[36px]" aria-hidden="true" focusable="false"><use href="#icon-shield-halved"></use></svg></div>
                             <h4 class="font-bold text-navy text-[17px] md:text-[18px] mb-2 md:mb-3 font-sans">Êm Ái &amp; An Toàn</h4>
                             <p class="text-bodyText text-[14px] md:text-[15px] leading-[1.7] font-medium flex-1">Quy trình nội soi nhẹ nhàng, không khó chịu. Nhận kết quả và ra về ngay trong ngày.</p>
@@ -2869,18 +3405,18 @@ footer .bg-white {
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-8 w-full max-w-[1400px]">
-                    <div class="base-card bg-white/95 text-center flex flex-col items-center border-none p-6 md:p-8 h-full shadow-lg">
+                    <div class="health-impact-card health-impact-card--daily base-card bg-white/95 text-center flex flex-col items-center border-none p-6 md:p-8 h-full shadow-lg" data-step="01">
                         <div class="w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-xl flex items-center justify-center text-[32px] md:text-[40px] mb-4 bg-red-50 text-red-500 shadow-sm"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-bed-pulse"></use></svg></div>
                         <h3 class="font-bold text-[16px] md:text-[17px] text-navy mb-3 font-sans min-h-[50px] flex items-center justify-center w-full px-2">Gây Hệ Lụy Đến Cuộc Sống Hàng&nbsp;Ngày</h3>
                         <p class="text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] md:leading-[1.75] font-medium flex-1">Ợ chua, đầy bụng, đau tức thượng vị, rối loạn tiêu hóa kéo dài khiến cơ thể mệt mỏi, ảnh hưởng chất lượng sống.</p>
                     </div>
-                    <div class="base-card bg-white/95 text-center flex flex-col items-center border-none shadow-xl border border-accent/20 p-6 md:p-8 h-full relative overflow-hidden md:hover:shadow-2xl transition-shadow transform md:-translate-y-2">
+                    <div class="health-impact-card health-impact-card--chronic base-card bg-white/95 text-center flex flex-col items-center border-none shadow-xl border border-accent/20 p-6 md:p-8 h-full relative overflow-hidden md:hover:shadow-2xl transition-shadow transform md:-translate-y-2" data-step="02">
                         <div class="w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-xl flex items-center justify-center text-[32px] md:text-[40px] mb-4 bg-red-50 text-accent shadow-sm"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-triangle-exclamation"></use></svg></div>
                         <h3 class="font-bold text-[16px] md:text-[17px] text-navy mb-3 font-sans min-h-[50px] flex items-center justify-center w-full px-2">Nguy Cơ Tiến Triển Các Bệnh Lý Mạn&nbsp;Tính</h3>
                         <!-- ĐÃ FIX TEXT Y KHOA VÀ THÊM KÝ TỰ CHỐNG TRÀN CHỮ (&nbsp;) CHO TỪ "TRẦM TRỌNG" -->
                         <p class="text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] md:leading-[1.75] font-medium flex-1">Viêm loét tiêu hóa nếu không phát hiện, điều trị kịp thời có thể diễn tiến thành viêm mãn tính, xuất huyết, thiếu máu.</p>
                     </div>
-                    <div class="base-card bg-white/95 text-center flex flex-col items-center border-none p-6 md:p-8 h-full shadow-lg">
+                    <div class="health-impact-card health-impact-card--screening base-card bg-white/95 text-center flex flex-col items-center border-none p-6 md:p-8 h-full shadow-lg" data-step="03">
                         <div class="w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-xl flex items-center justify-center text-[32px] md:text-[40px] mb-4 bg-primary/20 text-primaryDark shadow-sm"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-viruses"></use></svg></div>
                         <h3 class="font-bold text-[16px] md:text-[17px] text-navy mb-3 font-sans min-h-[50px] flex items-center justify-center w-full px-2">Tầm Quan Trọng Của Việc Tầm Soát&nbsp;Sớm</h3>
                         <p class="text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] md:leading-[1.75] font-medium flex-1">Chủ động tầm soát giúp phát hiện sớm tổn thương âm thầm tiến triển. Nội soi tích hợp AI hỗ trợ chẩn đoán chính xác, can thiệp kịp thời.</p>
@@ -2900,8 +3436,15 @@ footer .bg-white {
                     Trang thiết bị tiên tiến &amp; <br class="hidden md:block">Không gian khám bệnh hiện đại
                 </h2>
 
-                <div class="text-[14px] md:text-[16px] lg:text-[16.5px] text-bodyText font-medium max-w-[1050px] mx-auto leading-[1.7] px-2 md:px-0">
-                    Phòng khám và phòng nội soi đạt tiêu chuẩn quốc tế, đảm bảo vệ sinh nghiêm ngặt.<br>Không gian thoáng đãng, thoải mái giúp bạn giảm căng thẳng khi thăm khám.
+                <div class="facility-promise">
+                    <div class="facility-promise__item">
+                        <span class="facility-promise__icon" aria-hidden="true"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-shield-halved"></use></svg></span>
+                        <span>Phòng khám và phòng nội soi đạt tiêu chuẩn quốc tế, đảm bảo vệ sinh nghiêm ngặt.</span>
+                    </div>
+                    <div class="facility-promise__item">
+                        <span class="facility-promise__icon" aria-hidden="true"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-shield-heart"></use></svg></span>
+                        <span>Không gian thoáng đãng, thoải mái giúp bạn giảm căng thẳng khi thăm khám.</span>
+                    </div>
                 </div>
 
                 <div class="mt-5 w-full flex flex-col md:flex-row items-center justify-center gap-2.5 md:gap-3">
@@ -3024,15 +3567,15 @@ footer .bg-white {
         <!-- SECTION MRI VÀ CT Scanner ĐÃ SỬA LẠI TỌA ĐỘ TRÊN MOBILE -->
         <div id="mri-ct" class="w-full bg-transparent mb-12 mt-8">
             <div class="max-w-7xl mx-auto px-4 md:px-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                    <div class="order-2 lg:order-1">
-                        <div class="grid grid-cols-2 gap-3 md:gap-5 relative">
+                <div class="mri-ct-panel grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="mri-ct-visual order-2 lg:order-1">
+                        <div class="mri-ct-visual-grid grid grid-cols-2 gap-3 md:gap-5 relative">
                             <!-- Bỏ hiệu ứng translate so le trên mobile (giữ lại trên md trở lên) để không bị đâm vào text -->
                             <img src="https://hoanglongclinic.vn/Uploads/8-copy.png?w=718" alt="Máy MRI" class="rounded-[1rem] md:rounded-[1.25rem] shadow-sm bg-white w-full object-contain p-2 h-40 md:h-[350px] transform md:translate-y-6 transition duration-500 md:hover:scale-105" decoding="async" loading="lazy" width="718" height="718">
                             <img src="https://hoanglongclinic.vn/Uploads/7-chay-like.png?w=718" alt="Máy CT Scanner" class="rounded-[1rem] md:rounded-[1.25rem] shadow-sm bg-white w-full object-contain p-2 h-40 md:h-[350px] transform md:-translate-y-4 transition duration-500 md:hover:scale-105" decoding="async" loading="lazy" width="718" height="718">
                         </div>
                     </div>
-                    <div class="order-1 lg:pl-6 text-center md:text-left">
+                    <div class="mri-ct-copy order-1 lg:pl-6 text-center md:text-left">
                         <div class="flex flex-wrap justify-center md:justify-start items-center gap-3 mb-4">
                             <div class="badge bg-primary/10 border border-primary/20 m-0">Chẩn Đoán Chính Xác</div>
                         </div>
@@ -3040,7 +3583,7 @@ footer .bg-white {
                         <p class="text-[14px] md:text-[16px] text-bodyText mb-5 font-medium leading-relaxed px-2 md:px-0">
                             Tại Hoàng Long, chẩn đoán tiêu hóa không chỉ dừng ở nội soi. Chúng tôi kết hợp MRI và CT để mang lại góc nhìn toàn diện, chính xác nhất.
                         </p>
-                        <ul class="space-y-3 mb-6 text-left px-2 md:px-0">
+                        <ul class="mri-benefit-list space-y-3 mb-6 text-left px-2 md:px-0">
                             <li class="flex items-start gap-3 text-[14px] md:text-[14.5px] font-bold text-navy font-sans">
                                 <svg class="icon text-primary mt-0.5 text-[16px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg> <div>Phát hiện, khoanh vùng chi tiết tổn thương trên toàn bộ hệ tiêu hóa.</div>
                             </li>
@@ -3073,15 +3616,18 @@ footer .bg-white {
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-8 mt-6 md:mt-8">
                     <!-- Dây 600 -->
-                    <div class="base-card group bg-white/95 text-center flex flex-col items-center border-none p-5 md:p-6 h-full shadow-lg">
-                        <div class="relative w-full h-40 md:h-48 mb-4 md:mb-5 rounded-[1rem] overflow-hidden shadow-sm shrink-0 bg-white">
+                    <div class="scope-card scope-card--standard base-card group bg-white/95 text-center flex flex-col items-center border-none p-5 md:p-6 h-full shadow-lg" data-step="01">
+                        <div class="scope-card__visual relative w-full h-40 md:h-48 mb-4 md:mb-5 rounded-[1rem] overflow-hidden shadow-sm shrink-0 bg-white">
                             <!-- Ảnh Mặc Định -->
                             <img src="assets/images/endoscopy/z8020613938987_02028f6d364cb0159ed89fe16d9bf31d.webp" alt="Dây soi 600 Mặc định" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 md:group-hover:opacity-0 z-20" decoding="async" loading="lazy" width="600" height="400">
                             <!-- Ảnh Khi Hover -->
                             <img src="assets/images/endoscopy/z8013701086573_cae7d286e1753fa35396de3cba3f5574.webp" alt="Dây soi 600 Thực tế" class="absolute inset-0 w-full h-full object-contain p-2 opacity-0 transition-opacity duration-500 md:group-hover:opacity-100 z-10 active:opacity-100" decoding="async" loading="lazy" width="600" height="400">
                         </div>
-                        <h3 class="font-black text-[17px] md:text-[19px] text-medical uppercase mb-2 md:mb-3 font-sans">DÂY SERIES 600</h3>
-                        <ul class="text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] font-medium flex-1 text-left w-full space-y-2.5">
+                        <div class="scope-card__heading">
+                            <span class="scope-card__number">01</span>
+                            <h3 class="font-black text-[17px] md:text-[19px] text-medical uppercase font-sans">DÂY SERIES 600</h3>
+                        </div>
+                        <ul class="scope-card__benefits text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] font-medium flex-1 text-left w-full space-y-2.5">
                             <li class="flex items-start gap-2.5"><svg class="icon text-primary mt-1 text-[13px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg><span>Phù hợp bệnh nhân trẻ, ít bệnh nền</span></li>
                             <li class="flex items-start gap-2.5"><svg class="icon text-primary mt-1 text-[13px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg><span>Dùng kiểm tra sức khỏe định kỳ</span></li>
                             <li class="flex items-start gap-2.5"><svg class="icon text-primary mt-1 text-[13px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg><span>Kiểm tra lại sau điều trị bệnh lý tiêu hóa thông thường</span></li>
@@ -3091,8 +3637,8 @@ footer .bg-white {
                     </div>
 
                     <!-- Dây Laser -->
-                    <div class="base-card group bg-white/95 text-center flex flex-col items-center border-none shadow-xl border border-primary/20 p-5 md:p-6 h-full relative">
-                        <div class="relative w-full h-40 md:h-48 mb-4 md:mb-5 rounded-[1rem] overflow-hidden shadow-sm border border-primary/10 shrink-0 bg-white">
+                    <div class="scope-card scope-card--advanced base-card group bg-white/95 text-center flex flex-col items-center border-none shadow-xl border border-primary/20 p-5 md:p-6 h-full relative" data-step="02">
+                        <div class="scope-card__visual relative w-full h-40 md:h-48 mb-4 md:mb-5 rounded-[1rem] overflow-hidden shadow-sm border border-primary/10 shrink-0 bg-white">
                             <!-- Ảnh Mặc Định (Chớp tắt BLI/LCI) -->
                             <div class="absolute inset-0 w-full h-full transition-opacity duration-500 md:group-hover:opacity-0 z-20">
                                 <img src="assets/images/endoscopy/z8020618232769_6bc90d6b48651be33c66ee3df3d761d6.webp" alt="Dây soi LCI" class="absolute inset-0 w-full h-full object-cover" decoding="async" loading="lazy" width="600" height="400">
@@ -3104,8 +3650,11 @@ footer .bg-white {
                             <!-- Ảnh Khi Hover -->
                             <img src="assets/images/endoscopy/z8013714412558_60683ffdda4edf6f0f2de284b6d68a69.webp" alt="Dây soi Laser Thực tế" class="absolute inset-0 w-full h-full object-contain p-2 opacity-0 transition-opacity duration-500 md:group-hover:opacity-100 z-10 active:opacity-100" decoding="async" loading="lazy" width="600" height="400">
                         </div>
-                        <h3 class="font-black text-[17px] md:text-[19px] text-medical uppercase mb-2 md:mb-3 font-sans">DÂY SERIE 700</h3>
-                        <ul class="text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] font-medium flex-1 text-left w-full space-y-2.5">
+                        <div class="scope-card__heading">
+                            <span class="scope-card__number">02</span>
+                            <h3 class="font-black text-[17px] md:text-[19px] text-medical uppercase font-sans">DÂY SERIE 700</h3>
+                        </div>
+                        <ul class="scope-card__benefits text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] font-medium flex-1 text-left w-full space-y-2.5">
                             <li class="flex items-start gap-2.5"><svg class="icon text-primary mt-1 text-[13px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg><span>Kiểm tra kỹ ống tiêu hóa, tầm soát ung thư sớm</span></li>
                             <li class="flex items-start gap-2.5"><svg class="icon text-primary mt-1 text-[13px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg><span>Phát hiện polyp đại tràng, phù hợp bệnh lý tiêu hóa phức tạp</span></li>
                             <li class="flex items-start gap-2.5"><svg class="icon text-primary mt-1 text-[13px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg><span>Hiệu quả cao cho bệnh nhân trên 50 tuổi hoặc chưa từng nội soi, chi phí hợp lý</span></li>
@@ -3114,15 +3663,18 @@ footer .bg-white {
                     </div>
 
                     <!-- Dây Zoom -->
-                    <div class="base-card group bg-white/95 text-center flex flex-col items-center border-none p-5 md:p-6 h-full shadow-lg">
-                        <div class="relative w-full h-40 md:h-48 mb-4 md:mb-5 rounded-[1rem] overflow-hidden shadow-sm shrink-0 bg-white">
+                    <div class="scope-card scope-card--zoom base-card group bg-white/95 text-center flex flex-col items-center border-none p-5 md:p-6 h-full shadow-lg" data-step="03">
+                        <div class="scope-card__visual relative w-full h-40 md:h-48 mb-4 md:mb-5 rounded-[1rem] overflow-hidden shadow-sm shrink-0 bg-white">
                             <!-- Ảnh Mặc Định -->
                             <img src="assets/images/endoscopy/z8020618827689_0cfbf76e91e3da362491900ba5f015e8.webp" alt="Dây soi Zoom Mặc định" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 md:group-hover:opacity-0 z-20" decoding="async" loading="lazy" width="600" height="400">
                             <!-- Ảnh Khi Hover -->
                             <img src="assets/images/endoscopy/z8013714412558_60683ffdda4edf6f0f2de284b6d68a69.webp" alt="Dây soi Zoom Thực tế" class="absolute inset-0 w-full h-full object-contain p-2 opacity-0 transition-opacity duration-500 md:group-hover:opacity-100 z-10 active:opacity-100" decoding="async" loading="lazy" width="600" height="400">
                         </div>
-                        <h3 class="font-black text-[17px] md:text-[19px] text-medical uppercase mb-2 md:mb-3 font-sans">DÂY SERIE 700 ZOOM</h3>
-                        <ul class="text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] font-medium flex-1 text-left w-full space-y-2.5">
+                        <div class="scope-card__heading">
+                            <span class="scope-card__number">03</span>
+                            <h3 class="font-black text-[17px] md:text-[19px] text-medical uppercase font-sans">DÂY SERIE 700 ZOOM</h3>
+                        </div>
+                        <ul class="scope-card__benefits text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] font-medium flex-1 text-left w-full space-y-2.5">
                             <li class="flex items-start gap-2.5"><svg class="icon text-primary mt-1 text-[13px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg><span>Phóng đại hình ảnh lên đến 300 lần</span></li>
                             <li class="flex items-start gap-2.5"><svg class="icon text-primary mt-1 text-[13px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg><span>Kết hợp công nghệ AI hỗ trợ bác sĩ phát hiện sớm tổn thương</span></li>
                             <li class="flex items-start gap-2.5"><svg class="icon text-primary mt-1 text-[13px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg><span>Tăng khả năng phát hiện nguy cơ ung thư tiêu hóa từ sớm</span></li>
@@ -3899,6 +4451,7 @@ footer .bg-white {
         // Hiệu ứng pop-up dùng một observer chung, chạy một lần rồi ngừng theo dõi từng khối.
         const revealTargets = document.querySelectorAll(
             '.difference-grid > div, .risk-stats, #thuc-trang .base-card, ' +
+            '.facility-promise__item, #mri-ct .mri-ct-panel, #he-thong-day-soi .scope-card, ' +
             '#trang-thiet-bi .uk-slider-items > li, #chuyen-gia .grid > div, #faq details'
         );
         if (!prefersReducedMotion && 'IntersectionObserver' in window && revealTargets.length) {
