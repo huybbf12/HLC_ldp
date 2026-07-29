@@ -1285,6 +1285,8 @@ section h2 {
 #chuyen-gia .grid > div img { transform: none !important; }
 .doctor-profile-image { object-position: center center !important; }
 .doctor-profile-image--phan { object-position: center 34% !important; }
+.doctor-profile-image--nang,
+.doctor-profile-image--tung { object-position: center 32% !important; }
 .doctor-card-copy {
     position: relative;
     z-index: 3;
@@ -1308,6 +1310,99 @@ section h2 {
     font-weight: 900;
     letter-spacing: .065em;
     line-height: 1;
+}
+.doctor-position {
+    display: flex;
+    width: 100%;
+    min-height: 72px;
+    margin: 0 0 14px;
+    padding: 11px 12px;
+    align-items: flex-start;
+    gap: 9px;
+    border: 1px solid rgba(8,76,122,.12);
+    border-radius: 13px;
+    color: #123f5f;
+    background: linear-gradient(135deg, rgba(238,247,232,.96), rgba(245,250,252,.96));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.92);
+    font-family: 'Nunito', sans-serif;
+    font-size: 12.5px;
+    font-weight: 800;
+    line-height: 1.42;
+    text-align: left;
+}
+.doctor-position__icon {
+    display: grid;
+    width: 30px;
+    height: 30px;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: 9px;
+    color: #fff;
+    background: linear-gradient(145deg, #7eb73d, #578b24);
+    box-shadow: 0 7px 16px rgba(82,124,37,.24);
+}
+.doctor-position__icon .icon {
+    width: 12px;
+    height: 12px;
+}
+.doctor-experience {
+    margin-bottom: 16px !important;
+}
+.doctor-placeholder {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #fff;
+    background:
+        radial-gradient(circle at 77% 18%, rgba(150,203,91,.4), transparent 24%),
+        linear-gradient(145deg, #123f5f, #084c7a 62%, #0b6d72);
+}
+.doctor-placeholder::before {
+    content: "";
+    position: absolute;
+    inset: 20px;
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 50%;
+}
+.doctor-placeholder__mark {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: 72px;
+    height: 72px;
+    margin-bottom: 12px;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.24);
+    border-radius: 50%;
+    background: rgba(255,255,255,.12);
+    box-shadow: 0 16px 34px rgba(1,31,51,.26);
+    backdrop-filter: blur(4px);
+}
+.doctor-placeholder__mark .icon {
+    width: 31px;
+    height: 31px;
+}
+.doctor-placeholder strong,
+.doctor-placeholder small {
+    position: relative;
+    z-index: 1;
+    font-family: 'Nunito', sans-serif;
+}
+.doctor-placeholder strong {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: .12em;
+}
+.doctor-placeholder small {
+    margin-top: 4px;
+    color: rgba(255,255,255,.76);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
 }
 
 #review-registration {
@@ -3220,7 +3315,7 @@ footer .bg-white {
     }
 }
 
-/* Carousel đội ngũ bác sĩ: 3 thẻ desktop, 2 thẻ tablet và 1 thẻ mobile. */
+/* Carousel đội ngũ bác sĩ: 4 thẻ desktop, 2 thẻ tablet và 1 thẻ mobile. */
 .doctor-carousel {
     position: relative;
 }
@@ -3240,7 +3335,7 @@ footer .bg-white {
     display: none;
 }
 #chuyen-gia .doctor-carousel__track > .doctor-card {
-    flex: 0 0 calc((100% - 40px) / 3);
+    flex: 0 0 calc((100% - 60px) / 4);
     width: auto !important;
     max-width: none !important;
     margin: 0 !important;
@@ -3549,7 +3644,7 @@ footer .bg-white {
                                 <div class="hero-trust-metric">
                                     <span class="hero-trust-metric__icon" aria-hidden="true"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-user-doctor"></use></svg></span>
                                     <div>
-                                        <strong><span class="counter" data-target="110" data-duration="2500">0</span>+</strong>
+                                        <strong><span class="counter" data-target="100" data-duration="2500">0</span>+</strong>
                                         <span>Y bác sĩ &amp; nhân viên</span>
                                     </div>
                                 </div>
@@ -3941,7 +4036,7 @@ footer .bg-white {
             <div class="text-center max-w-4xl mx-auto mb-10 md:mb-12">
                 <div class="badge mb-4">Bảo Chứng Chuyên Môn</div>
                 <h2 class="text-[26px] md:text-[38px] font-black text-medical uppercase mt-2 mb-4 leading-tight">Đội ngũ chuyên gia đầu ngành</h2>
-                <p class="text-[14.5px] md:text-[17px] text-bodyText font-semibold mt-2 px-2 md:px-0">Quy tụ các bác sĩ, chuyên gia với hơn 30 năm kinh nghiệm nghiên cứu và điều trị lâm sàng chuyên sâu trong lĩnh vực Tiêu hóa – Gan mật</p>
+                <p class="text-[14.5px] md:text-[17px] text-bodyText font-semibold mt-2 px-2 md:px-0">Quy tụ chuyên gia đầu ngành cùng đội ngũ bác sĩ chuyên khoa đang công tác tại hai cơ sở Hoàng Long, đồng hành thăm khám chuyên sâu và toàn diện.</p>
             </div>
 
             <div class="doctor-carousel" data-doctor-carousel>
@@ -3949,7 +4044,7 @@ footer .bg-white {
                     <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-angle-right"></use></svg>
                 </button>
 
-                <div id="doctorCarouselTrack" class="doctor-carousel__track grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" tabindex="0" aria-label="Danh sách 6 chuyên gia và bác sĩ">
+                <div id="doctorCarouselTrack" class="doctor-carousel__track grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" tabindex="0" aria-label="Danh sách 10 chuyên gia và bác sĩ">
                 <!-- Bác sĩ 1 -->
                 <div class="doctor-card bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 overflow-hidden md:hover:scale-105 transition-transform duration-300 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] flex flex-col h-full group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
                     <div class="relative h-[250px] overflow-hidden bg-gray-50 shrink-0">
@@ -3960,7 +4055,11 @@ footer .bg-white {
                             <span class="doctor-title-badge">GS.TS.BS.</span>
                             <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">ĐÀO VĂN LONG</span>
                         </div>
-                        <p class="text-[13.5px] md:text-[14px] text-bodyText font-medium mb-6 flex-1">Hơn 40 năm kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật.</p>
+                        <div class="doctor-position">
+                            <span class="doctor-position__icon"><svg class="icon" aria-hidden="true"><use href="#icon-location-dot"></use></svg></span>
+                            <span>Phó Chủ tịch Hội Khoa học Tiêu hóa Việt Nam</span>
+                        </div>
+                        <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Hơn 40 năm kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật.</p>
                         <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với chuyên gia</a>
                     </div>
                 </div>
@@ -3975,7 +4074,11 @@ footer .bg-white {
                             <span class="doctor-title-badge">PGS.TS.BS.</span>
                             <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">NGHIÊM ĐÌNH PHÀN</span>
                         </div>
-                        <p class="text-[13.5px] md:text-[14px] text-bodyText font-medium mb-6 flex-1">Với gần 50 năm kinh nghiệm trong nghiên cứu các phương pháp điều trị bệnh lý tiêu hóa - gan mật.</p>
+                        <div class="doctor-position">
+                            <span class="doctor-position__icon"><svg class="icon" aria-hidden="true"><use href="#icon-location-dot"></use></svg></span>
+                            <span>Giám đốc chuyên môn Phòng khám Đa khoa Hoàng Long CS1</span>
+                        </div>
+                        <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Với gần 50 năm kinh nghiệm trong nghiên cứu các phương pháp điều trị bệnh lý tiêu hóa - gan mật.</p>
                         <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với chuyên gia</a>
                     </div>
                 </div>
@@ -3990,12 +4093,36 @@ footer .bg-white {
                             <span class="doctor-title-badge">PGS.TS.BS.</span>
                             <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">NGUYỄN DUY THẮNG</span>
                         </div>
-                        <p class="text-[13.5px] md:text-[14px] text-bodyText font-medium mb-6 flex-1">Gần 30 năm kinh nghiệm nghiên cứu và phát triển các kỹ thuật mới trong điều trị các bệnh lý tiêu hóa.</p>
+                        <div class="doctor-position">
+                            <span class="doctor-position__icon"><svg class="icon" aria-hidden="true"><use href="#icon-location-dot"></use></svg></span>
+                            <span>Viện trưởng Viện Nghiên cứu và Đào tạo Tiêu hóa, Gan mật</span>
+                        </div>
+                        <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Gần 30 năm kinh nghiệm nghiên cứu và phát triển các kỹ thuật mới trong điều trị các bệnh lý tiêu hóa.</p>
                         <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với chuyên gia</a>
                     </div>
                 </div>
 
                 <!-- Bác sĩ 4 -->
+                <div class="doctor-card bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] transition-all duration-300 md:hover:scale-105 h-full flex flex-col overflow-hidden group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
+                    <div class="h-[250px] doctor-placeholder shrink-0">
+                        <span class="doctor-placeholder__mark"><svg class="icon" aria-hidden="true"><use href="#icon-user-doctor"></use></svg></span>
+                        <strong>NBK</strong>
+                        <small>Hoàng Long Clinic</small>
+                    </div>
+                    <div class="p-6 text-center flex flex-col flex-1 items-center">
+                        <div class="doctor-card-copy mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
+                            <span class="doctor-title-badge">BSCKII.</span>
+                            <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">NGUYỄN BÁ KINH</span>
+                        </div>
+                        <div class="doctor-position">
+                            <span class="doctor-position__icon"><svg class="icon" aria-hidden="true"><use href="#icon-location-dot"></use></svg></span>
+                            <span>Giám đốc chuyên môn Phòng khám Đa khoa Hoàng Long CS2</span>
+                        </div>
+                        <a href="#registration-form" class="btn-outline w-full mt-auto shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với bác sĩ</a>
+                    </div>
+                </div>
+
+                <!-- Bác sĩ 5 -->
                 <div class="doctor-card bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] transition-all duration-300 md:hover:scale-105 h-full flex flex-col overflow-hidden group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
                     <div class="h-[250px] relative overflow-hidden shrink-0 bg-gray-50">
                         <img src="assets/images/doctors/pham-thi-lan-huong.webp" class="doctor-profile-image w-full h-full object-cover md:group-hover:scale-110 transition-transform duration-700" alt="BSCKII. Phạm Thị Lan Hương" decoding="async" loading="lazy" width="900" height="1350">
@@ -4005,38 +4132,108 @@ footer .bg-white {
                             <span class="doctor-title-badge">BSCKII.</span>
                             <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">PHẠM THỊ LAN HƯƠNG</span>
                         </div>
-                        <p class="text-[13.5px] md:text-[14px] text-bodyText font-medium mb-6 flex-1">Thầy thuốc ưu tú, hơn 30 năm kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật.</p>
-                        <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với chuyên gia</a>
-                    </div>
-                </div>
-
-                <!-- Bác sĩ 5 -->
-                <div class="doctor-card bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] transition-all duration-300 md:hover:scale-105 h-full flex flex-col overflow-hidden group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
-                    <div class="h-[250px] relative overflow-hidden shrink-0 bg-gray-50">
-                        <img src="assets/images/doctors/dinh-duy-hai.webp" class="doctor-profile-image w-full h-full object-cover md:group-hover:scale-110 transition-transform duration-700" alt="BS. Đinh Duy Hải" decoding="async" loading="lazy" width="1200" height="1800">
-                    </div>
-                    <div class="p-6 text-center flex flex-col flex-1 items-center">
-                        <div class="doctor-card-copy mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
-                            <span class="doctor-title-badge">BS.</span>
-                            <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">ĐINH DUY HẢI</span>
+                        <div class="doctor-position">
+                            <span class="doctor-position__icon"><svg class="icon" aria-hidden="true"><use href="#icon-location-dot"></use></svg></span>
+                            <span>Chuyên khoa Nội tiêu hóa</span>
                         </div>
-                        <p class="text-[13.5px] md:text-[14px] text-bodyText font-medium mb-6 flex-1">Bác sĩ chuyên sâu nội soi tiêu hóa, tham gia thực hiện các kỹ thuật can thiệp qua nội soi ống mềm.</p>
-                        <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với bác sĩ</a>
+                        <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Thầy thuốc ưu tú, hơn 30 năm kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật.</p>
+                        <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với chuyên gia</a>
                     </div>
                 </div>
 
                 <!-- Bác sĩ 6 -->
                 <div class="doctor-card bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] transition-all duration-300 md:hover:scale-105 h-full flex flex-col overflow-hidden group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
-                    <div class="h-[250px] relative overflow-hidden shrink-0 bg-gray-50">
-                        <img src="assets/images/doctors/bs-chi.webp" class="doctor-profile-image w-full h-full object-cover md:group-hover:scale-110 transition-transform duration-700" alt="BS. Chi tại Hoàng Long Clinic" decoding="async" loading="lazy" width="900" height="1350">
+                    <div class="h-[250px] doctor-placeholder shrink-0">
+                        <span class="doctor-placeholder__mark"><svg class="icon" aria-hidden="true"><use href="#icon-user-doctor"></use></svg></span>
+                        <strong>NTP</strong>
+                        <small>Hoàng Long Clinic</small>
                     </div>
                     <div class="p-6 text-center flex flex-col flex-1 items-center">
                         <div class="doctor-card-copy mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
-                            <span class="doctor-title-badge">BS.</span>
-                            <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">BÁC SĨ CHI</span>
+                            <span class="doctor-title-badge">THS.BS.</span>
+                            <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">NGUYỄN THỊ PHÍP</span>
                         </div>
-                        <p class="text-[13.5px] md:text-[14px] text-bodyText font-medium mb-6 flex-1">Bác sĩ tại Hoàng Long Clinic, đồng hành thăm khám và tư vấn sức khỏe cho người bệnh.</p>
-                        <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với bác sĩ</a>
+                        <div class="doctor-position">
+                            <span class="doctor-position__icon"><svg class="icon" aria-hidden="true"><use href="#icon-location-dot"></use></svg></span>
+                            <span>Chuyên khoa Nội tổng hợp</span>
+                        </div>
+                        <a href="#registration-form" class="btn-outline w-full mt-auto shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với bác sĩ</a>
+                    </div>
+                </div>
+
+                <!-- Bác sĩ 7 -->
+                <div class="doctor-card bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] transition-all duration-300 md:hover:scale-105 h-full flex flex-col overflow-hidden group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
+                    <div class="h-[250px] relative overflow-hidden shrink-0 bg-gray-50">
+                        <img src="assets/images/doctors/duong-thi-phuong-nang.webp" class="doctor-profile-image doctor-profile-image--nang w-full h-full object-cover md:group-hover:scale-110 transition-transform duration-700" alt="ThS.BS. Dương Thị Phương Năng" decoding="async" loading="lazy" width="900" height="1350">
+                    </div>
+                    <div class="p-6 text-center flex flex-col flex-1 items-center">
+                        <div class="doctor-card-copy mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
+                            <span class="doctor-title-badge">THS.BS.</span>
+                            <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">DƯƠNG THỊ PHƯƠNG NĂNG</span>
+                        </div>
+                        <div class="doctor-position">
+                            <span class="doctor-position__icon"><svg class="icon" aria-hidden="true"><use href="#icon-location-dot"></use></svg></span>
+                            <span>Chuyên khoa Nội tiêu hóa</span>
+                        </div>
+                        <a href="#registration-form" class="btn-outline w-full mt-auto shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với bác sĩ</a>
+                    </div>
+                </div>
+
+                <!-- Bác sĩ 8 -->
+                <div class="doctor-card bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] transition-all duration-300 md:hover:scale-105 h-full flex flex-col overflow-hidden group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
+                    <div class="h-[250px] doctor-placeholder shrink-0">
+                        <span class="doctor-placeholder__mark"><svg class="icon" aria-hidden="true"><use href="#icon-user-doctor"></use></svg></span>
+                        <strong>NVN</strong>
+                        <small>Hoàng Long Clinic</small>
+                    </div>
+                    <div class="p-6 text-center flex flex-col flex-1 items-center">
+                        <div class="doctor-card-copy mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
+                            <span class="doctor-title-badge">THS.BS.</span>
+                            <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">NGUYỄN VIẾT NAM</span>
+                        </div>
+                        <div class="doctor-position">
+                            <span class="doctor-position__icon"><svg class="icon" aria-hidden="true"><use href="#icon-location-dot"></use></svg></span>
+                            <span>Chuyên khoa Truyền nhiễm</span>
+                        </div>
+                        <a href="#registration-form" class="btn-outline w-full mt-auto shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với bác sĩ</a>
+                    </div>
+                </div>
+
+                <!-- Bác sĩ 9 -->
+                <div class="doctor-card bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] transition-all duration-300 md:hover:scale-105 h-full flex flex-col overflow-hidden group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
+                    <div class="h-[250px] relative overflow-hidden shrink-0 bg-gray-50">
+                        <img src="assets/images/doctors/nguyen-thanh-tung.webp" class="doctor-profile-image doctor-profile-image--tung w-full h-full object-cover md:group-hover:scale-110 transition-transform duration-700" alt="ThS.BS. Nguyễn Thanh Tùng" decoding="async" loading="lazy" width="900" height="1350">
+                    </div>
+                    <div class="p-6 text-center flex flex-col flex-1 items-center">
+                        <div class="doctor-card-copy mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
+                            <span class="doctor-title-badge">THS.BS.</span>
+                            <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">NGUYỄN THANH TÙNG</span>
+                        </div>
+                        <div class="doctor-position">
+                            <span class="doctor-position__icon"><svg class="icon" aria-hidden="true"><use href="#icon-location-dot"></use></svg></span>
+                            <span>Chuyên khoa Nội khoa</span>
+                        </div>
+                        <a href="#registration-form" class="btn-outline w-full mt-auto shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với bác sĩ</a>
+                    </div>
+                </div>
+
+                <!-- Bác sĩ 10 -->
+                <div class="doctor-card bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] transition-all duration-300 md:hover:scale-105 h-full flex flex-col overflow-hidden group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
+                    <div class="h-[250px] doctor-placeholder shrink-0">
+                        <span class="doctor-placeholder__mark"><svg class="icon" aria-hidden="true"><use href="#icon-user-doctor"></use></svg></span>
+                        <strong>NVA</strong>
+                        <small>Hoàng Long Clinic</small>
+                    </div>
+                    <div class="p-6 text-center flex flex-col flex-1 items-center">
+                        <div class="doctor-card-copy mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
+                            <span class="doctor-title-badge">THS.BS.CKI.</span>
+                            <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">NGUYỄN VÂN ANH</span>
+                        </div>
+                        <div class="doctor-position">
+                            <span class="doctor-position__icon"><svg class="icon" aria-hidden="true"><use href="#icon-location-dot"></use></svg></span>
+                            <span>Chuyên khoa Chẩn đoán hình ảnh</span>
+                        </div>
+                        <a href="#registration-form" class="btn-outline w-full mt-auto shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với bác sĩ</a>
                     </div>
                 </div>
 
@@ -4045,7 +4242,7 @@ footer .bg-white {
                 <button type="button" class="doctor-carousel__nav doctor-carousel__nav--next" aria-label="Xem bác sĩ tiếp theo" aria-controls="doctorCarouselTrack">
                     <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-angle-right"></use></svg>
                 </button>
-                <div class="doctor-carousel__status" aria-live="polite">Hiển thị bác sĩ 1–3 / 6</div>
+                <div class="doctor-carousel__status" aria-live="polite">Hiển thị bác sĩ 1–4 / 10</div>
             </div>
         </div>
     </section>
@@ -4542,7 +4739,7 @@ footer .bg-white {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-8 mb-8 md:mb-12 text-center md:text-left">
 
                 <div class="lg:col-span-4 flex flex-col items-center md:items-start">
-                    <img src="assets/images/brand/logo-footer-hoang-long.png" alt="Logo Phòng khám Đa khoa Hoàng Long" class="h-10 md:h-12 w-auto mb-4 object-contain" decoding="async" loading="lazy" width="508" height="61">
+                    <img src="assets/images/brand/logo-footer-hoang-long.png" alt="Logo Phòng khám Đa khoa Hoàng Long" class="h-10 md:h-12 w-auto mb-4 object-contain" decoding="async" loading="lazy" width="1800" height="220">
                     <p class="text-[13px] font-semibold text-bodyText leading-relaxed mb-5 md:pr-4">Phòng khám đa khoa Hoàng Long chuyên Nội soi - Chẩn đoán hình ảnh tích hợp Trí tuệ nhân tạo AI hỗ trợ phát hiện bệnh lý Tiêu hóa - Gan mật.</p>
 
                     <div class="flex items-center gap-4 mb-5">

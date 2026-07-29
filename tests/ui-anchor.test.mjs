@@ -7,7 +7,7 @@ const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 test('all appointment and consultation CTAs target the registration card', () => {
   const registrationLinks = html.match(/href="#registration-form"/g) ?? [];
 
-  assert.equal(registrationLinks.length, 10);
+  assert.equal(registrationLinks.length, 14);
   assert.doesNotMatch(html, /href="#review-registration"/);
 });
 
@@ -42,17 +42,35 @@ test('MRI gallery crops images cleanly and uses the updated doctor portrait', ()
   assert.doesNotMatch(html, /Ảnh tạm thời: dùng ảnh BS\. Hải/);
 });
 
-test('doctor section contains six cards with lightweight carousel controls', () => {
+test('doctor section contains ten cards, four-up desktop layout and lightweight carousel controls', () => {
   const doctorCards = html.match(/class="doctor-card /g) ?? [];
   const carouselButtons = html.match(/class="doctor-carousel__nav doctor-carousel__nav--(?:prev|next)"/g) ?? [];
 
-  assert.equal(doctorCards.length, 6);
+  assert.equal(doctorCards.length, 10);
   assert.equal(carouselButtons.length, 2);
   assert.match(html, /data-doctor-carousel/);
-  assert.match(html, /src="assets\/images\/doctors\/dinh-duy-hai\.webp"/);
-  assert.match(html, /src="assets\/images\/doctors\/bs-chi\.webp"/);
+  assert.match(html, /flex:\s*0 0 calc\(\(100% - 60px\) \/ 4\)/);
+  assert.match(html, /src="assets\/images\/doctors\/duong-thi-phuong-nang\.webp"/);
+  assert.match(html, /src="assets\/images\/doctors\/nguyen-thanh-tung\.webp"/);
+  assert.doesNotMatch(html, /ĐINH DUY HẢI|BÁC SĨ CHI/);
   assert.match(html, /moveDoctorCarousel/);
   assert.match(html, /Với gần 50 năm kinh nghiệm trong nghiên cứu các phương pháp điều trị bệnh lý tiêu hóa - gan mật\./);
+  assert.match(html, /Phó Chủ tịch Hội Khoa học Tiêu hóa Việt Nam/);
+  assert.match(html, /Giám đốc chuyên môn Phòng khám Đa khoa Hoàng Long CS2/);
+  assert.match(html, /Chuyên khoa Chẩn đoán hình ảnh/);
+});
+
+test('13+ and 100+ trust metrics count up from zero', () => {
+  assert.match(html, /class="counter" data-target="13" data-duration="1500">0<\/span>\+/);
+  assert.match(html, /class="counter" data-target="100" data-duration="2500">0<\/span>\+/);
+  assert.doesNotMatch(html, /data-target="110"/);
+});
+
+test('footer uses the refreshed wide logo asset', () => {
+  assert.match(
+    html,
+    /src="assets\/images\/brand\/logo-footer-hoang-long\.png"[^>]*width="1800" height="220"/,
+  );
 });
 
 test('updated Series 700 Zoom benefit copy is present', () => {
