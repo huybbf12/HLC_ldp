@@ -7,7 +7,7 @@ const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 test('all appointment and consultation CTAs target the registration card', () => {
   const registrationLinks = html.match(/href="#registration-form"/g) ?? [];
 
-  assert.equal(registrationLinks.length, 8);
+  assert.equal(registrationLinks.length, 10);
   assert.doesNotMatch(html, /href="#review-registration"/);
 });
 
@@ -40,4 +40,22 @@ test('MRI gallery crops images cleanly and uses the updated doctor portrait', ()
   );
   assert.match(html, /src="assets\/images\/doctors\/nghiem-dinh-phan\.webp"/);
   assert.doesNotMatch(html, /Ảnh tạm thời: dùng ảnh BS\. Hải/);
+});
+
+test('doctor section contains six cards with lightweight carousel controls', () => {
+  const doctorCards = html.match(/class="doctor-card /g) ?? [];
+  const carouselButtons = html.match(/class="doctor-carousel__nav doctor-carousel__nav--(?:prev|next)"/g) ?? [];
+
+  assert.equal(doctorCards.length, 6);
+  assert.equal(carouselButtons.length, 2);
+  assert.match(html, /data-doctor-carousel/);
+  assert.match(html, /src="assets\/images\/doctors\/dinh-duy-hai\.webp"/);
+  assert.match(html, /src="assets\/images\/doctors\/bs-chi\.webp"/);
+  assert.match(html, /moveDoctorCarousel/);
+  assert.match(html, /Với gần 50 năm kinh nghiệm trong nghiên cứu các phương pháp điều trị bệnh lý tiêu hóa - gan mật\./);
+});
+
+test('updated Series 700 Zoom benefit copy is present', () => {
+  assert.match(html, /Tăng khả năng phát hiện sớm các dấu hiệu ung thư tiêu hóa/);
+  assert.doesNotMatch(html, /Tăng khả năng phát hiện nguy cơ ung thư tiêu hóa từ sớm/);
 });

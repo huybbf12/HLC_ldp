@@ -3220,6 +3220,129 @@ footer .bg-white {
     }
 }
 
+/* Carousel đội ngũ bác sĩ: 3 thẻ desktop, 2 thẻ tablet và 1 thẻ mobile. */
+.doctor-carousel {
+    position: relative;
+}
+#chuyen-gia .doctor-carousel__track {
+    display: flex !important;
+    width: 100%;
+    margin: 0;
+    padding: 8px 4px 22px;
+    gap: 20px !important;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+}
+#chuyen-gia .doctor-carousel__track::-webkit-scrollbar {
+    display: none;
+}
+#chuyen-gia .doctor-carousel__track > .doctor-card {
+    flex: 0 0 calc((100% - 40px) / 3);
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    scroll-snap-align: start;
+}
+#chuyen-gia .doctor-carousel__track > .doctor-card > div:first-child {
+    height: 280px;
+}
+.doctor-carousel__nav {
+    position: absolute;
+    top: 40%;
+    z-index: 20;
+    display: grid;
+    width: 48px;
+    height: 48px;
+    place-items: center;
+    border: 1px solid rgba(8,76,122,.14);
+    border-radius: 50%;
+    color: #084c7a;
+    background: rgba(255,255,255,.96);
+    box-shadow: 0 12px 28px rgba(18,63,95,.2);
+    transform: translateY(-50%);
+    transition: color .2s ease, background .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.doctor-carousel__nav:hover {
+    color: #ffffff;
+    background: #6ea52f;
+    box-shadow: 0 14px 30px rgba(82,124,37,.3);
+    transform: translateY(-50%) scale(1.06);
+}
+.doctor-carousel__nav:focus-visible {
+    outline: 3px solid rgba(110,165,47,.3);
+    outline-offset: 3px;
+}
+.doctor-carousel__nav .icon {
+    width: 17px;
+    height: 17px;
+}
+.doctor-carousel__nav--prev {
+    left: -22px;
+}
+.doctor-carousel__nav--prev .icon {
+    transform: rotate(180deg);
+}
+.doctor-carousel__nav--next {
+    right: -22px;
+}
+.doctor-carousel__status {
+    min-height: 20px;
+    margin-top: 2px;
+    color: #64748b;
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-align: center;
+}
+@media (max-width: 1023px) {
+    #chuyen-gia .doctor-carousel__track > .doctor-card {
+        flex-basis: calc((100% - 18px) / 2);
+    }
+    .doctor-carousel__nav--prev {
+        left: -10px;
+    }
+    .doctor-carousel__nav--next {
+        right: -10px;
+    }
+}
+@media (max-width: 767px) {
+    #chuyen-gia .doctor-carousel__track {
+        width: auto;
+        margin-right: -16px;
+        margin-left: -16px;
+        padding: 6px 26px 18px;
+        gap: 14px !important;
+        scroll-padding-inline: 26px;
+    }
+    #chuyen-gia .doctor-carousel__track > .doctor-card {
+        flex: 0 0 min(82vw, 310px);
+        width: auto !important;
+        max-width: none !important;
+    }
+    #chuyen-gia .doctor-carousel__track > .doctor-card > div:first-child {
+        height: 260px;
+    }
+    .doctor-carousel__nav {
+        top: 39%;
+        width: 42px;
+        height: 42px;
+    }
+    .doctor-carousel__nav--prev {
+        left: 0;
+    }
+    .doctor-carousel__nav--next {
+        right: 0;
+    }
+    .doctor-carousel__status {
+        margin-top: 0;
+        font-size: 11px;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -3803,7 +3926,7 @@ footer .bg-white {
                         <ul class="scope-card__benefits text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] font-medium flex-1 text-left w-full space-y-2.5">
                             <li class="flex items-start gap-2.5"><svg class="icon text-primary mt-1 text-[13px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg><span>Phóng đại hình ảnh lên đến 300 lần</span></li>
                             <li class="flex items-start gap-2.5"><svg class="icon text-primary mt-1 text-[13px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg><span>Kết hợp công nghệ AI hỗ trợ bác sĩ phát hiện sớm tổn thương</span></li>
-                            <li class="flex items-start gap-2.5"><svg class="icon text-primary mt-1 text-[13px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg><span>Tăng khả năng phát hiện nguy cơ ung thư tiêu hóa từ sớm</span></li>
+                            <li class="flex items-start gap-2.5"><svg class="icon text-primary mt-1 text-[13px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg><span>Tăng khả năng phát hiện sớm các dấu hiệu ung thư tiêu hóa</span></li>
                         </ul>
                         <span class="md:hidden text-accent/80 text-[12px] italic mt-3 block">*(Chạm vào ảnh để xem thực tế)</span>
                     </div>
@@ -3821,9 +3944,14 @@ footer .bg-white {
                 <p class="text-[14.5px] md:text-[17px] text-bodyText font-semibold mt-2 px-2 md:px-0">Quy tụ các bác sĩ, chuyên gia với hơn 30 năm kinh nghiệm nghiên cứu và điều trị lâm sàng chuyên sâu trong lĩnh vực Tiêu hóa – Gan mật</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="doctor-carousel" data-doctor-carousel>
+                <button type="button" class="doctor-carousel__nav doctor-carousel__nav--prev" aria-label="Xem bác sĩ trước" aria-controls="doctorCarouselTrack">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-angle-right"></use></svg>
+                </button>
+
+                <div id="doctorCarouselTrack" class="doctor-carousel__track grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" tabindex="0" aria-label="Danh sách 6 chuyên gia và bác sĩ">
                 <!-- Bác sĩ 1 -->
-                <div class="bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 overflow-hidden md:hover:scale-105 transition-transform duration-300 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] flex flex-col h-full group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
+                <div class="doctor-card bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 overflow-hidden md:hover:scale-105 transition-transform duration-300 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] flex flex-col h-full group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
                     <div class="relative h-[250px] overflow-hidden bg-gray-50 shrink-0">
                         <img src="assets/images/doctors/dao-van-long.webp" class="doctor-profile-image w-full h-full object-cover transition-transform duration-700 md:group-hover:scale-110" alt="GS.TS.BS. Đào Văn Long" decoding="async" loading="lazy" width="900" height="1350">
                     </div>
@@ -3838,7 +3966,7 @@ footer .bg-white {
                 </div>
 
                 <!-- Bác sĩ 2 -->
-                <div class="bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 overflow-hidden md:hover:scale-105 transition-transform duration-300 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] flex flex-col h-full group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
+                <div class="doctor-card bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 overflow-hidden md:hover:scale-105 transition-transform duration-300 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] flex flex-col h-full group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
                     <div class="relative h-[250px] overflow-hidden bg-gray-50 shrink-0">
                         <img src="assets/images/doctors/nghiem-dinh-phan.webp" class="doctor-profile-image doctor-profile-image--phan w-full h-full object-cover transition-transform duration-700 md:group-hover:scale-110" alt="PGS.TS.BS. Nghiêm Đình Phàn" decoding="async" loading="lazy" width="1023" height="1537">
                     </div>
@@ -3847,13 +3975,13 @@ footer .bg-white {
                             <span class="doctor-title-badge">PGS.TS.BS.</span>
                             <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">NGHIÊM ĐÌNH PHÀN</span>
                         </div>
-                        <p class="text-[13.5px] md:text-[14px] text-bodyText font-medium mb-6 flex-1">Đồng hành cùng phòng khám nâng cao chuyên môn khám và điều trị các bệnh tiêu hóa hơn 10 năm qua.</p>
+                        <p class="text-[13.5px] md:text-[14px] text-bodyText font-medium mb-6 flex-1">Với gần 50 năm kinh nghiệm trong nghiên cứu các phương pháp điều trị bệnh lý tiêu hóa - gan mật.</p>
                         <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với chuyên gia</a>
                     </div>
                 </div>
 
                 <!-- Bác sĩ 3 -->
-                <div class="bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] transition-all duration-300 md:hover:scale-105 h-full flex flex-col overflow-hidden group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
+                <div class="doctor-card bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] transition-all duration-300 md:hover:scale-105 h-full flex flex-col overflow-hidden group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
                     <div class="h-[250px] relative overflow-hidden shrink-0 bg-gray-50">
                         <img src="assets/images/doctors/nguyen-duy-thang.webp" class="doctor-profile-image w-full h-full object-cover md:group-hover:scale-110 transition-transform duration-700" alt="PGS.TS.BS. Nguyễn Duy Thắng" decoding="async" loading="lazy" width="900" height="1350">
                     </div>
@@ -3868,7 +3996,7 @@ footer .bg-white {
                 </div>
 
                 <!-- Bác sĩ 4 -->
-                <div class="bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] transition-all duration-300 md:hover:scale-105 h-full flex flex-col overflow-hidden group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
+                <div class="doctor-card bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] transition-all duration-300 md:hover:scale-105 h-full flex flex-col overflow-hidden group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
                     <div class="h-[250px] relative overflow-hidden shrink-0 bg-gray-50">
                         <img src="assets/images/doctors/pham-thi-lan-huong.webp" class="doctor-profile-image w-full h-full object-cover md:group-hover:scale-110 transition-transform duration-700" alt="BSCKII. Phạm Thị Lan Hương" decoding="async" loading="lazy" width="900" height="1350">
                     </div>
@@ -3882,6 +4010,42 @@ footer .bg-white {
                     </div>
                 </div>
 
+                <!-- Bác sĩ 5 -->
+                <div class="doctor-card bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] transition-all duration-300 md:hover:scale-105 h-full flex flex-col overflow-hidden group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
+                    <div class="h-[250px] relative overflow-hidden shrink-0 bg-gray-50">
+                        <img src="assets/images/doctors/dinh-duy-hai.webp" class="doctor-profile-image w-full h-full object-cover md:group-hover:scale-110 transition-transform duration-700" alt="BS. Đinh Duy Hải" decoding="async" loading="lazy" width="1200" height="1800">
+                    </div>
+                    <div class="p-6 text-center flex flex-col flex-1 items-center">
+                        <div class="doctor-card-copy mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
+                            <span class="doctor-title-badge">BS.</span>
+                            <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">ĐINH DUY HẢI</span>
+                        </div>
+                        <p class="text-[13.5px] md:text-[14px] text-bodyText font-medium mb-6 flex-1">Bác sĩ chuyên sâu nội soi tiêu hóa, tham gia thực hiện các kỹ thuật can thiệp qua nội soi ống mềm.</p>
+                        <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với bác sĩ</a>
+                    </div>
+                </div>
+
+                <!-- Bác sĩ 6 -->
+                <div class="doctor-card bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] transition-all duration-300 md:hover:scale-105 h-full flex flex-col overflow-hidden group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
+                    <div class="h-[250px] relative overflow-hidden shrink-0 bg-gray-50">
+                        <img src="assets/images/doctors/bs-chi.webp" class="doctor-profile-image w-full h-full object-cover md:group-hover:scale-110 transition-transform duration-700" alt="BS. Chi tại Hoàng Long Clinic" decoding="async" loading="lazy" width="900" height="1350">
+                    </div>
+                    <div class="p-6 text-center flex flex-col flex-1 items-center">
+                        <div class="doctor-card-copy mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
+                            <span class="doctor-title-badge">BS.</span>
+                            <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">BÁC SĨ CHI</span>
+                        </div>
+                        <p class="text-[13.5px] md:text-[14px] text-bodyText font-medium mb-6 flex-1">Bác sĩ tại Hoàng Long Clinic, đồng hành thăm khám và tư vấn sức khỏe cho người bệnh.</p>
+                        <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với bác sĩ</a>
+                    </div>
+                </div>
+
+                </div>
+
+                <button type="button" class="doctor-carousel__nav doctor-carousel__nav--next" aria-label="Xem bác sĩ tiếp theo" aria-controls="doctorCarouselTrack">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-angle-right"></use></svg>
+                </button>
+                <div class="doctor-carousel__status" aria-live="polite">Hiển thị bác sĩ 1–3 / 6</div>
             </div>
         </div>
     </section>
@@ -4714,6 +4878,62 @@ footer .bg-white {
                 clinicSlider.addEventListener('focusout', resumeSlider);
                 document.addEventListener('visibilitychange', () => document.hidden ? pauseSlider() : resumeSlider());
             }
+        }
+
+        // Carousel chuyên gia: dùng cuộn ngang native để nhẹ, hỗ trợ nút, vuốt và bàn phím.
+        const doctorCarousel = document.querySelector('[data-doctor-carousel]');
+        if (doctorCarousel) {
+            const doctorTrack = doctorCarousel.querySelector('.doctor-carousel__track');
+            const doctorCards = Array.from(doctorTrack.querySelectorAll('.doctor-card'));
+            const doctorPrevious = doctorCarousel.querySelector('.doctor-carousel__nav--prev');
+            const doctorNext = doctorCarousel.querySelector('.doctor-carousel__nav--next');
+            const doctorStatus = doctorCarousel.querySelector('.doctor-carousel__status');
+            let doctorScrollTicking = false;
+
+            const getDoctorMetrics = () => {
+                const firstCard = doctorCards[0];
+                const gap = parseFloat(window.getComputedStyle(doctorTrack).columnGap) || 0;
+                const step = firstCard ? firstCard.getBoundingClientRect().width + gap : doctorTrack.clientWidth;
+                const visible = Math.max(1, Math.min(doctorCards.length, Math.round((doctorTrack.clientWidth + gap) / step)));
+                const maxStart = Math.max(0, doctorCards.length - visible);
+                const current = Math.max(0, Math.min(maxStart, Math.round(doctorTrack.scrollLeft / step)));
+                return { step, visible, maxStart, current };
+            };
+
+            const updateDoctorStatus = () => {
+                const { current, visible } = getDoctorMetrics();
+                const firstVisible = current + 1;
+                const lastVisible = Math.min(doctorCards.length, current + visible);
+                doctorStatus.textContent = `Hiển thị bác sĩ ${firstVisible}–${lastVisible} / ${doctorCards.length}`;
+                doctorScrollTicking = false;
+            };
+
+            const moveDoctorCarousel = direction => {
+                const { step, maxStart, current } = getDoctorMetrics();
+                const target = direction > 0
+                    ? (current >= maxStart ? 0 : Math.min(maxStart, current + 1))
+                    : (current <= 0 ? maxStart : Math.max(0, current - 1));
+                doctorTrack.scrollTo({ left: target * step, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+            };
+
+            doctorPrevious.addEventListener('click', () => moveDoctorCarousel(-1));
+            doctorNext.addEventListener('click', () => moveDoctorCarousel(1));
+            doctorTrack.addEventListener('keydown', event => {
+                if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+                event.preventDefault();
+                moveDoctorCarousel(event.key === 'ArrowLeft' ? -1 : 1);
+            });
+            doctorTrack.addEventListener('scroll', () => {
+                if (doctorScrollTicking) return;
+                doctorScrollTicking = true;
+                window.requestAnimationFrame(updateDoctorStatus);
+            }, { passive: true });
+            window.addEventListener('resize', () => {
+                if (doctorScrollTicking) return;
+                doctorScrollTicking = true;
+                window.requestAnimationFrame(updateDoctorStatus);
+            }, { passive: true });
+            updateDoctorStatus();
         }
 
         // Trên thiết bị cảm ứng, cho phép chạm để chuyển qua lại giữa ảnh minh hoạ và ảnh thực tế.
