@@ -22,3 +22,22 @@ test('registration anchor is unique, contains the lead form and clears the fixed
   assert.match(html, /#registration-form\s*\{[^}]*scroll-margin-top:\s*96px;/s);
   assert.match(html, /@media \(max-width:\s*767px\)\s*\{[\s\S]*?#registration-form\s*\{[^}]*scroll-margin-top:\s*76px;/);
 });
+
+test('mobile hero keeps “sớm tích hợp AI” together', () => {
+  assert.match(
+    html,
+    /Tầm soát <span class="hero-mobile-cluster">sớm <span class="hero-ai-break">tích hợp AI<\/span><\/span>/,
+  );
+  assert.match(html, /\.hero-mobile-cluster\s*\{[^}]*display:\s*inline-block;[^}]*white-space:\s*nowrap;/s);
+  assert.match(html, /\.hero-mobile-cluster \.hero-ai-break\s*\{[^}]*display:\s*inline;/s);
+});
+
+test('MRI gallery crops images cleanly and uses the updated doctor portrait', () => {
+  assert.match(html, /\.mri-gallery-item\s*\{[^}]*background:\s*#0b3044;/s);
+  assert.match(
+    html,
+    /\.mri-gallery-item--equipment img\s*\{[^}]*padding:\s*0\s*!important;[^}]*object-fit:\s*cover;[^}]*transform:\s*scale\(1\.08\)\s*!important;/s,
+  );
+  assert.match(html, /src="assets\/images\/doctors\/nghiem-dinh-phan\.webp"/);
+  assert.doesNotMatch(html, /Ảnh tạm thời: dùng ảnh BS\. Hải/);
+});

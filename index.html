@@ -1284,6 +1284,7 @@ section h2 {
 #chuyen-gia .grid > div > div:first-child { height: 280px; }
 #chuyen-gia .grid > div img { transform: none !important; }
 .doctor-profile-image { object-position: center center !important; }
+.doctor-profile-image--phan { object-position: center 34% !important; }
 .doctor-card-copy {
     position: relative;
     z-index: 3;
@@ -2673,6 +2674,19 @@ footer .bg-white {
     display: block;
     margin-top: 2px;
 }
+.hero-mobile-cluster {
+    display: contents;
+}
+@media (max-width: 767px) {
+    .hero-mobile-cluster {
+        display: inline-block;
+        white-space: nowrap;
+    }
+    .hero-mobile-cluster .hero-ai-break {
+        display: inline;
+        margin-top: 0;
+    }
+}
 
 .difference-card {
     --card-tone: #3b7dad;
@@ -2888,7 +2902,7 @@ footer .bg-white {
     overflow: hidden;
     border: 1px solid rgba(255,255,255,.2);
     border-radius: 16px;
-    background: #ffffff;
+    background: #0b3044;
     box-shadow: 0 16px 34px rgba(0,0,0,.19);
 }
 #mri-ct .mri-ct-visual .mri-gallery-item img {
@@ -2900,12 +2914,13 @@ footer .bg-white {
     border: 0 !important;
     border-radius: 0 !important;
     object-fit: cover;
-    transform: none !important;
+    transform: scale(1.015) !important;
     box-shadow: none !important;
 }
 #mri-ct .mri-ct-visual .mri-gallery-item--equipment img {
-    padding: 12px 12px 27px !important;
-    object-fit: contain;
+    padding: 0 !important;
+    object-fit: cover;
+    transform: scale(1.08) !important;
 }
 .mri-gallery-item figcaption {
     position: absolute;
@@ -3176,9 +3191,6 @@ footer .bg-white {
         height: 128px;
         border-radius: 12px;
     }
-    #mri-ct .mri-ct-visual .mri-gallery-item--equipment img {
-        padding: 9px 9px 24px !important;
-    }
     .mri-gallery-item figcaption {
         inset: auto 6px 6px;
         padding: 5px 7px;
@@ -3365,7 +3377,7 @@ footer .bg-white {
                                 <span class="hero-title-health">khỏe mạnh</span>
                             </span>
                             <span class="block text-[18px] md:text-[24px] lg:text-[28px] font-extrabold mt-3 md:mt-4 leading-[1.4] text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-medical uppercase">
-                                Khám tiêu hóa chuyên sâu – Tầm soát sớm <span class="hero-ai-break">tích hợp AI</span>
+                                Khám tiêu hóa chuyên sâu – Tầm soát <span class="hero-mobile-cluster">sớm <span class="hero-ai-break">tích hợp AI</span></span>
                             </span>
                         </h1>
 
@@ -3828,8 +3840,7 @@ footer .bg-white {
                 <!-- Bác sĩ 2 -->
                 <div class="bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 overflow-hidden md:hover:scale-105 transition-transform duration-300 md:hover:shadow-[0_20px_40px_rgba(8,76,122,0.15)] flex flex-col h-full group relative z-0 md:hover:z-10 md:hover:border-medical max-w-[320px] mx-auto md:max-w-full">
                     <div class="relative h-[250px] overflow-hidden bg-gray-50 shrink-0">
-                        <!-- Ảnh tạm thời: dùng ảnh BS. Hải theo yêu cầu, chờ ảnh chính thức của bác Phàn. -->
-                        <img src="assets/images/doctors/bs-hai.webp" class="doctor-profile-image w-full h-full object-cover transition-transform duration-700 md:group-hover:scale-110" alt="Ảnh đại diện tạm thời của PGS.TS.BS. Nghiêm Đình Phàn" decoding="async" loading="lazy" width="900" height="1350">
+                        <img src="assets/images/doctors/nghiem-dinh-phan.webp" class="doctor-profile-image doctor-profile-image--phan w-full h-full object-cover transition-transform duration-700 md:group-hover:scale-110" alt="PGS.TS.BS. Nghiêm Đình Phàn" decoding="async" loading="lazy" width="1023" height="1537">
                     </div>
                     <div class="p-6 flex flex-col flex-1 text-center items-center">
                         <div class="doctor-card-copy mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
