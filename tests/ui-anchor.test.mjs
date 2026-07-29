@@ -45,6 +45,9 @@ test('MRI gallery crops images cleanly and uses the updated doctor portrait', ()
 test('doctor section contains ten cards, four-up desktop layout and lightweight carousel controls', () => {
   const doctorCards = html.match(/class="doctor-card /g) ?? [];
   const carouselButtons = html.match(/class="doctor-carousel__nav doctor-carousel__nav--(?:prev|next)"/g) ?? [];
+  const doctorScriptStart = html.indexOf('// Carousel chuyên gia');
+  const doctorScriptEnd = html.indexOf('// Trên thiết bị cảm ứng', doctorScriptStart);
+  const doctorScript = html.slice(doctorScriptStart, doctorScriptEnd);
 
   assert.equal(doctorCards.length, 10);
   assert.equal(carouselButtons.length, 2);
@@ -55,9 +58,14 @@ test('doctor section contains ten cards, four-up desktop layout and lightweight 
   assert.doesNotMatch(html, /ĐINH DUY HẢI|BÁC SĨ CHI/);
   assert.match(html, /moveDoctorCarousel/);
   assert.match(html, /Với gần 50 năm kinh nghiệm trong nghiên cứu các phương pháp điều trị bệnh lý tiêu hóa - gan mật\./);
-  assert.match(html, /Phó Chủ tịch Hội Khoa học Tiêu hóa Việt Nam/);
-  assert.match(html, /Giám đốc chuyên môn Phòng khám Đa khoa Hoàng Long CS2/);
+  assert.match(html, /Phó Chủ tịch · Hội Khoa học Tiêu hóa Việt Nam/);
+  assert.match(html, /Giám đốc chuyên môn · Hoàng Long CS2/);
   assert.match(html, /Chuyên khoa Chẩn đoán hình ảnh/);
+  assert.match(html, /\.doctor-position\s*\{[^}]*min-height:\s*52px;[^}]*max-height:\s*52px;/s);
+  assert.match(html, /\.doctor-position > span\s*\{[^}]*-webkit-line-clamp:\s*2;/s);
+  assert.doesNotMatch(html, /doctor-position__icon/);
+  assert.match(html, /#chuyen-gia \.doctor-carousel__track\s*\{[^}]*overflow-x:\s*hidden;[^}]*touch-action:\s*pan-y;/s);
+  assert.doesNotMatch(doctorScript, /setInterval|setTimeout|autoplay|keydown/);
 });
 
 test('13+ and 100+ trust metrics count up from zero', () => {
