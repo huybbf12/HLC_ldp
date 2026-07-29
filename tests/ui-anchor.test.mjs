@@ -59,7 +59,10 @@ test('doctor section contains ten cards, four-up desktop layout and lightweight 
   assert.match(html, /moveDoctorCarousel/);
   assert.match(html, /Với gần 50 năm kinh nghiệm trong nghiên cứu các phương pháp điều trị bệnh lý tiêu hóa - gan mật\./);
   assert.match(html, /Phó Chủ tịch · Hội Khoa học Tiêu hóa Việt Nam/);
-  assert.match(html, /Giám đốc chuyên môn · Hoàng Long CS2/);
+  assert.equal(
+    (html.match(/Giám đốc chuyên môn - Phòng khám Đa Khoa Hoàng Long/g) ?? []).length,
+    2,
+  );
   assert.match(html, /Chuyên khoa Chẩn đoán hình ảnh/);
   assert.match(html, /\.doctor-position\s*\{[^}]*min-height:\s*52px;[^}]*max-height:\s*52px;/s);
   assert.match(html, /\.doctor-position > span\s*\{[^}]*-webkit-line-clamp:\s*2;/s);
