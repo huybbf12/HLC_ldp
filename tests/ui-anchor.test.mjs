@@ -88,3 +88,51 @@ test('updated Series 700 Zoom benefit copy is present', () => {
   assert.match(html, /Tăng khả năng phát hiện sớm các dấu hiệu ung thư tiêu hóa/);
   assert.doesNotMatch(html, /Tăng khả năng phát hiện nguy cơ ung thư tiêu hóa từ sớm/);
 });
+
+test('FAQ follows a coherent endoscopy-to-aftercare-to-condition sequence', () => {
+  const faqStart = html.indexOf('<section id="faq"');
+  const faqEnd = html.indexOf('<!-- FOOTER -->', faqStart);
+  const faq = html.slice(faqStart, faqEnd);
+  const expectedQuestions = [
+    '1. Nội soi dạ dày phát hiện những bệnh gì?',
+    '2. Nội soi dạ dày mất bao lâu?',
+    '3. Bao lâu nên nội soi dạ dày một lần?',
+    '4. Triệu chứng sau khi nội soi dạ dày là gì?',
+    '5. Sau khi cắt polyp dạ dày nên ăn gì?',
+    '6. Thăm dò chức năng là gì?',
+    '7. Triệu chứng đau thượng vị dạ dày là gì?',
+    '8. Trào ngược dạ dày thực quản là gì?',
+    '9. Trào ngược dạ dày thực quản nên ăn gì?',
+    '10. Dấu hiệu bệnh trĩ là gì?',
+    '11. Bệnh trĩ nội có nguy hiểm không?',
+    '12. Bị trĩ nên ăn gì?',
+  ];
+  let previousPosition = -1;
+
+  for (const question of expectedQuestions) {
+    const position = faq.indexOf(question);
+    assert.ok(position > previousPosition, `${question} phải nằm đúng thứ tự`);
+    previousPosition = position;
+  }
+
+  assert.equal((faq.match(/class="faq-group-label"/g) ?? []).length, 3);
+  assert.match(faq, /Nội soi dạ dày & chăm sóc sau can thiệp/);
+  assert.match(faq, /Thăm dò & bệnh lý dạ dày – thực quản/);
+  assert.match(faq, /Bệnh lý hậu môn – trực tràng/);
+});
+
+test('FAQ uses the refreshed medical copy supplied for this version', () => {
+  const faqStart = html.indexOf('<section id="faq"');
+  const faqEnd = html.indexOf('<!-- FOOTER -->', faqStart);
+  const faq = html.slice(faqStart, faqEnd);
+
+  assert.match(faq, /toàn bộ buổi thăm khám dao động trong khoảng 30 – 45 phút/);
+  assert.match(faq, /<strong>3 - 5 năm\/lần:<\/strong>/);
+  assert.match(faq, /<strong>6 tháng - 1 năm\/lần:<\/strong>/);
+  assert.match(faq, /Mỗi đợt đau kéo dài 15–20 phút/);
+  assert.match(faq, /dịch dạ dày \(chứa axit và enzym tiêu hóa\)/);
+  assert.match(faq, /<strong>Sa nghẹt, tắc mạch:<\/strong>/);
+  assert.match(faq, /táo, dưa hấu, chuối, bơ, đu đủ, thanh long/);
+  assert.doesNotMatch(faq, /là là các kỹ thuật/);
+  assert.doesNotMatch(faq, /làm sạch ruột đến khi kết thúc nội soi/);
+});

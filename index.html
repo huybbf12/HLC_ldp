@@ -1442,6 +1442,28 @@ section h2 {
 #faq details + details { margin-top: 10px; }
 #faq summary { padding: 18px 20px !important; }
 #faq details[open] { border-color: rgba(110,165,47,.5) !important; }
+.faq-group-label {
+    display: flex;
+    margin: 16px 4px 10px;
+    align-items: center;
+    gap: 9px;
+    color: #084c7a;
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .07em;
+    line-height: 1.35;
+    text-transform: uppercase;
+}
+.faq-group-label:first-child { margin-top: 4px; }
+.faq-group-label::before {
+    content: "";
+    width: 20px;
+    height: 3px;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: #6ea52f;
+}
 
 footer { background: #ffffff !important; }
 
@@ -4527,106 +4549,78 @@ footer .bg-white {
         </div>
     </section>
 
-    <!-- KHU VỰC CÂU HỎI THƯỜNG GẶP (FAQ) ĐÃ CẬP NHẬT 12 CÂU CHUẨN SEO SEMRUSH -->
+    <!-- FAQ được sắp xếp theo hành trình thăm khám, nội soi và chăm sóc sau can thiệp -->
     <section id="faq" class="py-10 md:py-12 bg-white/80 relative overflow-hidden z-10 backdrop-blur-md">
         <div class="max-w-4xl mx-auto px-4 md:px-6 relative z-10">
             <div class="text-center mb-8">
                 <h2 class="text-[26px] md:text-[38px] font-black text-medical uppercase mb-3 md:mb-4 leading-tight">Câu hỏi thường gặp (FAQ)</h2>
-                <p class="text-[14.5px] md:text-[17px] text-bodyText font-medium px-2 md:px-0">Giải đáp nhanh những thắc mắc phổ biến nhất của bệnh nhân trước khi thăm khám.</p>
+                <p class="text-[14.5px] md:text-[17px] text-bodyText font-medium px-2 md:px-0">Giải đáp nhanh những thắc mắc phổ biến trước và sau khi thăm khám, nội soi.</p>
             </div>
 
             <!-- Nới rộng max-h-[550px] để phù hợp với 12 câu hỏi -->
             <div class="bg-white/80 rounded-[1.5rem] md:rounded-[2rem] p-2 md:p-3 shadow-inner border border-gray-100">
                 <div class="overflow-y-auto max-h-[450px] md:max-h-[550px] pr-2 md:pr-3 review-scroll space-y-2.5 md:space-y-3">
 
-                    <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
-                        <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
-                            <span class="font-sans pr-4">1. Nội soi dạ dày mất bao lâu?</span>
-                            <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
-                        </summary>
-                        <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
-                            Thời gian của quy trình nội soi dạ dày còn phụ thuộc vào phương pháp nội soi được áp dụng. Thông thường, quy trình nội soi dạ dày chỉ mất khoảng 15 - 30 phút. Nhưng việc chuẩn bị cho công cuộc nội soi từ lúc xét nghiệm, làm sạch ruột đến khi kết thúc nội soi mất khoảng 3 - 4 tiếng. Ngoài ra, nếu bệnh nhân có nhu cầu được nội soi dạ dày gây mê, bệnh nhân cần thêm 1 tiếng ở lại bệnh viện để bác sĩ quan sát các phản ứng của cơ thể cũng như để người bệnh tỉnh táo hoàn toàn.
-                        </div>
-                    </details>
+                    <div class="faq-group-label">Nội soi dạ dày & chăm sóc sau can thiệp</div>
 
                     <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
                         <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
-                            <span class="font-sans pr-4">2. Bao lâu nên nội soi dạ dày một lần?</span>
+                            <span class="font-sans pr-4">1. Nội soi dạ dày phát hiện những bệnh gì?</span>
                             <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
                         </summary>
                         <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
-                            Bao lâu thì nên nội soi dạ dày 1 lần sẽ do bác sĩ quyết định dựa vào tình trạng bệnh của từng bệnh nhân. Các trường hợp bệnh nhân mắc các bệnh lý sau cần phải tham khảo ý kiến bác sĩ về tần suất tái khám bằng phương pháp nội soi: trào ngược dạ dày thực quản, barrett thực quản, nhiễm vi khuẩn hp, bệnh đa polyp tuyến gia đình.
-                        </div>
-                    </details>
-
-                    <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
-                        <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
-                            <span class="font-sans pr-4">3. Thăm dò chức năng là gì?</span>
-                            <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
-                        </summary>
-                        <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
-                            Thăm dò chức năng là các kỹ thuật y tế cận lâm sàng sử dụng máy móc chuyên dụng để đánh giá hoạt động, tình trạng sinh lý và phát hiện bất thường của các cơ quan bên trong cơ thể (như tim, phổi, não, dạ dày), giúp bác sĩ chẩn đoán bệnh chính xác.
-                        </div>
-                    </details>
-
-                    <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
-                        <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
-                            <span class="font-sans pr-4">4. Triệu chứng đau thượng vị dạ dày là gì?</span>
-                            <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
-                        </summary>
-                        <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
-                            Những cơn đau ở vùng thượng vị dạ dày thường sẽ đi kèm với một số triệu chứng điển hình như:
+                            Thông qua nội soi có thể phát hiện được những nguy cơ bệnh lý sau:
                             <ul class="list-disc pl-5 mt-2 space-y-1.5">
-                                <li><strong>Đau từng cơn:</strong> Những cơn đau thường đột ngột và xuất hiện trong khoảng thời gian ngắn, có thể lặp đi lặp lại nhiều lần trong ngày. Cơn đau co thắt có thể lan từ vùng rốn đến phía sau lưng, gây khó chịu cho người bệnh.</li>
-                                <li><strong>Buồn nôn và ợ hơi:</strong> Khi dạ dày tiết axit liên tục sẽ gây áp lực ở vùng ổ bụng, khiến người bệnh cảm thấy buồn nôn và ợ hơi.</li>
-                                <li><strong>Đau âm ỉ kéo dài:</strong> Các cơn đau thượng vị dạ dày có thể kéo dài từ 15 - 20 phút và thường xuyên bị lặp lại. Đặc biệt, sẽ đau hơn khi người bệnh quá đói, quá no hoặc vận động mạnh.</li>
-                                <li><strong>Nóng rát vùng thượng vị:</strong> Quá trình tiêu hoá thức ăn và tiết dịch vị dạ dày có thể làm cho vùng thượng vị cảm thấy nóng rát.</li>
-                                <li><strong>Đau nhói và đau quặn:</strong> Cảm giác đau nhói và đau quặn thường xuyên xuất hiện ở vùng bụng dưới. Tuy nhiên, các cơn đau thường không kéo dài quá lâu, điều này có thể khiến người bệnh chủ quan không điều trị sớm.</li>
-                                <li><strong>Chướng bụng, khó tiêu, đi ngoài liên tục:</strong> Tình trạng rối loạn tiêu hóa thường gây ra các triệu chứng như tức bụng, đầy hơi và thường xuyên phải đi ngoài.</li>
+                                <li>Bệnh viêm loét dạ dày.</li>
+                                <li>Trào ngược dạ dày.</li>
+                                <li>Phát hiện vi khuẩn HP trong dạ dày.</li>
+                                <li>Polyp dạ dày.</li>
+                                <li>Ung thư dạ dày.</li>
                             </ul>
                         </div>
                     </details>
 
                     <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
                         <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
-                            <span class="font-sans pr-4">5. Bị trĩ nên ăn gì?</span>
+                            <span class="font-sans pr-4">2. Nội soi dạ dày mất bao lâu?</span>
                             <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
                         </summary>
                         <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
-                            Lời khuyên dinh dưỡng từ các chuyên gia tại phòng khám Đa khoa Hoàng Long cho các bệnh nhân mắc bệnh trĩ:
+                            <p>Thời gian của quy trình nội soi dạ dày còn phụ thuộc vào phương pháp nội soi được áp dụng. Sau khi hoàn tất các bước chuẩn bị cần thiết, quá trình nội soi thực tế (tính từ lúc bác sĩ bắt đầu thao tác đến khi bệnh nhân hồi tỉnh) chỉ diễn ra trong khoảng 15 phút.</p>
+                            <p class="mt-3">Tính tổng thể, toàn bộ buổi thăm khám dao động trong khoảng 30 – 45 phút, giúp bạn hoàn toàn an tâm và không ảnh hưởng đến lịch trình cá nhân.</p>
+                        </div>
+                    </details>
+
+                    <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
+                        <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
+                            <span class="font-sans pr-4">3. Bao lâu nên nội soi dạ dày một lần?</span>
+                            <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
+                        </summary>
+                        <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
+                            <p>Tần suất tầm soát phụ thuộc vào độ tuổi, triệu chứng và tiền sử bệnh lý.</p>
                             <ul class="list-disc pl-5 mt-2 space-y-1.5">
-                                <li>Uống nhiều nước (2 - 2,5 lít/ngày).</li>
-                                <li>Tăng cường chất xơ và thực phẩm nhuận tràng: Bổ sung các loại rau xanh (rau mồng tơi, rau đay..), khoai lang, đậu phụ và các loại hạt (hướng dương, vừng..).</li>
-                                <li>Thực phẩm giàu sắt như gan động vật, hải sản (ăn lượng vừa phải) để giúp tái tạo máu cho cơ thể.</li>
-                                <li>Các loại dầu tốt cho hệ tiêu hóa như dầu ô liu, dầu hạt lanh.</li>
+                                <li><strong>3 - 5 năm/lần:</strong> Người trên 30 tuổi, khỏe mạnh, không có tiền sử bệnh gia đình.</li>
+                                <li><strong>1 - 3 năm/lần:</strong> Người bắt đầu có triệu chứng tiêu hóa hoặc tiền sử nhiễm HP.</li>
+                                <li><strong>6 tháng - 1 năm/lần:</strong> Người có gia đình mắc ung thư tiêu hóa hoặc có dấu hiệu nguy hiểm (sụt cân nhanh, thiếu máu, đi ngoài ra máu...).</li>
                             </ul>
+                            <p class="mt-3"><strong>Lưu ý:</strong> Nên thăm khám trực tiếp để bác sĩ đưa ra lộ trình tầm soát phù hợp nhất với thể trạng cá nhân.</p>
                         </div>
                     </details>
 
                     <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
                         <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
-                            <span class="font-sans pr-4">6. Bệnh trĩ nội có nguy hiểm không?</span>
+                            <span class="font-sans pr-4">4. Triệu chứng sau khi nội soi dạ dày là gì?</span>
                             <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
                         </summary>
                         <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
-                            Trĩ nội là bệnh trĩ với các búi trĩ hình thành bên trong trực tràng. Các đặc điểm để nhận biết là vị trí mọc búi trĩ nằm ở trong ống hậu môn, không gây đau do không có thần kinh cảm giác, ban đầu thường chưa nhìn thấy búi trĩ mà chỉ thấy các dấu hiệu như chảy máu khi đi cầu, đau rát hoặc chảy dịch và cảm giác nặng ở hậu môn, sau đó mới thấy có sa búi trĩ. Bệnh phát triển theo các cấp độ từ 1 đến 4.
-                        </div>
-                    </details>
-
-                    <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
-                        <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
-                            <span class="font-sans pr-4">7. Triệu chứng sau khi nội soi dạ dày là gì?</span>
-                            <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
-                        </summary>
-                        <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
-                            Sau khi nội soi dạ dày, một số triệu chứng nhẹ là hoàn toàn bình thường và thường tự khỏi trong vòng vài giờ hoặc vài ngày. Các triệu chứng thường gặp bao gồm:
+                            Sau khi nội soi dạ dày, một số triệu chứng nhẹ là hoàn toàn bình thường và thường tự khỏi trong vòng vài giờ hoặc vài ngày. Các triệu chứng sau khi nội soi dạ dày thường gặp bao gồm:
                             <ul class="list-disc pl-5 mt-2 mb-3 space-y-1.5">
                                 <li>Đau họng hoặc khó nuốt.</li>
                                 <li>Đầy hơi, chướng bụng.</li>
                                 <li>Buồn nôn nhẹ.</li>
                                 <li>Khàn giọng.</li>
                             </ul>
-                            Mặc dù hầu hết các triệu chứng thường nhẹ, tuy nhiên có một số triệu chứng sau đây cần được theo dõi chặt chẽ và báo ngay cho bác sĩ:
+                            Mặc dù hầu hết các triệu chứng sau khi nội soi dạ dày thường nhẹ và có thể tự khỏi, tuy nhiên có một số triệu chứng sau đây cần được theo dõi chặt chẽ và báo ngay cho bác sĩ:
                             <ul class="list-disc pl-5 mt-2 space-y-1.5 text-red-600">
                                 <li><strong>Đau bụng dữ dội hoặc kéo dài:</strong> Đau bụng dữ dội và không giảm sau vài giờ có thể là dấu hiệu của biến chứng nghiêm trọng như thủng dạ dày.</li>
                                 <li><strong>Nôn ra máu hoặc đi ngoài phân đen:</strong> Đây là dấu hiệu của chảy máu trong đường tiêu hóa và cần được cấp cứu ngay lập tức.</li>
@@ -4638,28 +4632,11 @@ footer .bg-white {
 
                     <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
                         <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
-                            <span class="font-sans pr-4">8. Nội soi dạ dày phát hiện những bệnh gì?</span>
+                            <span class="font-sans pr-4">5. Sau khi cắt polyp dạ dày nên ăn gì?</span>
                             <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
                         </summary>
                         <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
-                            Thông qua nội soi có thể phát hiện được những nguy cơ bệnh lý sau:
-                            <ul class="list-disc pl-5 mt-2 space-y-1.5">
-                                <li>Bệnh viêm loét dạ dày.</li>
-                                <li>Trào ngược dạ dày.</li>
-                                <li>Phát hiện vi khuẩn hp trong dạ dày.</li>
-                                <li>Polyp dạ dày.</li>
-                                <li>Ung thư dạ dày.</li>
-                            </ul>
-                        </div>
-                    </details>
-
-                    <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
-                        <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
-                            <span class="font-sans pr-4">9. Cắt polyp dạ dày nên ăn gì?</span>
-                            <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
-                        </summary>
-                        <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
-                            Chế độ ăn uống hợp lý, khoa học sau cắt polyp dạ dày là vô cùng quan trọng, không chỉ giúp chân vết cắt nhanh hồi phục mà còn hạn chế tối đa các biến chứng chảy máu. Theo khuyến cáo của các chuyên gia, sau khi cắt polyp dạ dày, người bệnh nên ăn:
+                            Sau khi cắt polyp dạ dày, người bệnh nên ưu tiên chế độ ăn giúp chân vết cắt nhanh hồi phục và hạn chế chảy máu:
                             <ul class="list-disc pl-5 mt-2 space-y-1.5">
                                 <li>Thức ăn lỏng, mềm, dễ tiêu hóa (cháo, súp, đồ ăn xay nhuyễn).</li>
                                 <li>Để thức ăn nguội hoặc ấm nhẹ trước khi ăn, tránh ăn đồ quá nóng.</li>
@@ -4667,19 +4644,49 @@ footer .bg-white {
                         </div>
                     </details>
 
+                    <div class="faq-group-label">Thăm dò & bệnh lý dạ dày – thực quản</div>
+
                     <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
                         <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
-                            <span class="font-sans pr-4">10. Trào ngược dạ dày thực quản là gì?</span>
+                            <span class="font-sans pr-4">6. Thăm dò chức năng là gì?</span>
                             <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
                         </summary>
                         <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
-                            Trào ngược dạ dày thực quản (GERD) là tình trạng thường gặp do axit trào ngược lên thực quản. Bệnh xảy ra khi dịch tiêu hóa từ dạ dày thường xuyên trào ngược lên thực quản, ống nối từ miệng xuống dạ dày. Do có tính axit nên dịch này có thể gây kích ứng hoặc viêm niêm mạc thực quản.
+                            Thăm dò chức năng là các kỹ thuật y tế cận lâm sàng sử dụng máy móc chuyên dụng để đánh giá hoạt động, tình trạng sinh lý và phát hiện bất thường của các cơ quan bên trong cơ thể (như tim, phổi, não, dạ dày), giúp bác sĩ chẩn đoán bệnh chính xác.
                         </div>
                     </details>
 
                     <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
                         <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
-                            <span class="font-sans pr-4">11. Trào ngược dạ dày thực quản nên ăn gì?</span>
+                            <span class="font-sans pr-4">7. Triệu chứng đau thượng vị dạ dày là gì?</span>
+                            <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
+                        </summary>
+                        <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
+                            Những cơn đau ở vùng thượng vị dạ dày thường sẽ đi kèm với một số triệu chứng điển hình như:
+                            <ul class="list-disc pl-5 mt-2 space-y-1.5">
+                                <li><strong>Đau từng cơn:</strong> Cơn đau xuất hiện đột ngột, kéo dài ngắn nhưng lặp lại nhiều lần trong ngày; có thể co thắt và lan từ vùng rốn ra sau lưng.</li>
+                                <li><strong>Buồn nôn và ợ hơi:</strong> Axit dạ dày tiết liên tục làm tăng áp lực ổ bụng, gây buồn nôn, ợ hơi.</li>
+                                <li><strong>Đau âm ỉ kéo dài:</strong> Mỗi đợt đau kéo dài 15–20 phút và dễ bùng phát hơn khi quá đói, quá no hoặc vận động mạnh.</li>
+                                <li><strong>Nóng rát thượng vị:</strong> Dịch vị dạ dày tăng tiết trong quá trình tiêu hóa gây cảm giác nóng rát vùng trên rốn.</li>
+                                <li><strong>Đau nhói, đau quặn:</strong> Thường xuất hiện ở vùng bụng, diễn ra nhanh khiến người bệnh dễ chủ quan bỏ qua.</li>
+                                <li><strong>Chướng bụng, khó tiêu, đi ngoài:</strong> Rối loạn tiêu hóa gây tức bụng, đầy hơi và đi ngoài liên tục.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
+                        <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
+                            <span class="font-sans pr-4">8. Trào ngược dạ dày thực quản là gì?</span>
+                            <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
+                        </summary>
+                        <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
+                            Trào ngược dạ dày thực quản (GERD) là tình trạng dịch dạ dày (chứa axit và enzym tiêu hóa) thường xuyên trào ngược lên thực quản — ống dẫn thức ăn từ miệng xuống dạ dày. Tình trạng này kéo dài sẽ gây kích ứng, tổn thương và viêm niêm mạc thực quản.
+                        </div>
+                    </details>
+
+                    <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
+                        <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
+                            <span class="font-sans pr-4">9. Trào ngược dạ dày thực quản nên ăn gì?</span>
                             <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
                         </summary>
                         <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
@@ -4695,19 +4702,52 @@ footer .bg-white {
                         </div>
                     </details>
 
+                    <div class="faq-group-label">Bệnh lý hậu môn – trực tràng</div>
+
                     <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
                         <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
-                            <span class="font-sans pr-4">12. Dấu hiệu bệnh trĩ là gì?</span>
+                            <span class="font-sans pr-4">10. Dấu hiệu bệnh trĩ là gì?</span>
                             <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
                         </summary>
                         <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
                             Các dấu hiệu và triệu chứng của bệnh trĩ có thể bao gồm:
                             <ul class="list-disc pl-5 mt-2 space-y-1.5">
-                                <li>Chảy máu không đau khi đi tiêu là triệu chứng sớm nhất và thường gặp nhất. Ban đầu, người bệnh trĩ có thể thấy máu đỏ tươi trên giấy vệ sinh hoặc dưới bồn cầu. Khi tình trạng nặng hơn, máu có thể chảy thành giọt hoặc tia, thậm chí chảy máu cả khi ngồi xổm.</li>
+                                <li>Chảy máu không đau khi đi tiêu là triệu chứng sớm nhất và thường gặp nhất. Ban đầu, người bệnh có thể thấy máu đỏ tươi trên giấy vệ sinh hoặc bồn cầu; khi nặng hơn sẽ nhỏ giọt, phun thành tia hoặc chảy cả khi ngồi xổm.</li>
                                 <li>Ngứa hoặc cảm giác kích thích tại vùng hậu môn, thường do dịch nhầy tiết ra từ niêm mạc hậu môn.</li>
                                 <li>Người bị bệnh trĩ thường có cảm giác đau hoặc khó chịu, có thể dao động từ nhẹ đến nghiêm trọng, do nứt hậu môn hoặc bị tắc, nghẹt.</li>
                                 <li>Sưng quanh vùng hậu môn.</li>
                                 <li>Có thể nhận thấy một khối u lồi ra gần hậu môn, đôi khi là huyết khối tại búi trĩ, gây đau và rát.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
+                        <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
+                            <span class="font-sans pr-4">11. Bệnh trĩ nội có nguy hiểm không?</span>
+                            <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
+                        </summary>
+                        <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
+                            <p>Trĩ nội là tình trạng búi trĩ hình thành bên trong ống hậu môn. Ở giai đoạn nhẹ, bệnh ít gây đau, chỉ xuất hiện chảy máu hoặc tiết dịch ẩm ướt.</p>
+                            <p class="mt-3">Bệnh chỉ thực sự nguy hiểm khi tiến triển sang độ 3, độ 4 do nguy cơ:</p>
+                            <ul class="list-disc pl-5 mt-2 space-y-1.5">
+                                <li><strong>Sa nghẹt, tắc mạch:</strong> Búi trĩ sa ra ngoài không co lên được, gây đau dữ dội hoặc hoại tử.</li>
+                                <li><strong>Biến chứng khác:</strong> Mất máu kéo dài gây thiếu máu, nhiễm trùng và viêm loét hậu môn.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="bg-white rounded-xl shadow-sm border border-gray-100 group [&_summary::-webkit-details-marker]:hidden">
+                        <summary class="flex items-center justify-between cursor-pointer p-4 md:p-5 font-bold text-[14.5px] md:text-[16.5px] text-navy focus:outline-none">
+                            <span class="font-sans pr-4">12. Bị trĩ nên ăn gì?</span>
+                            <span class="transition group-open:rotate-180 text-primary shrink-0"><svg fill="none" height="20" md:height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" md:width="24"><path d="M6 9l6 6 6-6"></path></svg></span>
+                        </summary>
+                        <div class="px-4 md:px-5 pb-4 md:pb-5 text-bodyText text-[13.5px] md:text-[14.5px] leading-relaxed font-medium border-t border-gray-50 mt-2 pt-3 md:pt-4">
+                            Lời khuyên dinh dưỡng từ các chuyên gia tại phòng khám Đa khoa Hoàng Long cho các bệnh nhân mắc bệnh trĩ:
+                            <ul class="list-disc pl-5 mt-2 space-y-1.5">
+                                <li>Uống nhiều nước (2 - 2,5 lít/ngày).</li>
+                                <li>Tăng cường chất xơ và thực phẩm nhuận tràng: Bổ sung các loại rau xanh (rau mồng tơi, rau đay..), khoai lang, đậu phụ và các loại hạt (hướng dương, vừng..).</li>
+                                <li>Thực phẩm giàu sắt như gan động vật, hải sản (ăn lượng vừa phải) để giúp tái tạo máu cho cơ thể.</li>
+                                <li>Các loại dầu tốt cho hệ tiêu hóa như dầu ô liu, dầu hạt lanh.</li>
                             </ul>
                         </div>
                     </details>
