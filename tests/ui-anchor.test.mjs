@@ -1,8 +1,16 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import test from 'node:test';
 
 const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+
+test('page uses the Hoàng Long favicon for browser tabs and saved-page icons', async () => {
+  assert.match(html, /<link rel="icon" type="image\/png" href="favicon\.png">/);
+  assert.match(html, /<link rel="apple-touch-icon" href="favicon\.png">/);
+
+  const favicon = await stat(new URL('../favicon.png', import.meta.url));
+  assert.ok(favicon.size > 0);
+});
 
 test('all appointment and consultation CTAs target the registration card', () => {
   const registrationLinks = html.match(/href="#registration-form"/g) ?? [];
@@ -94,7 +102,8 @@ test('all ten doctor cards use the latest vertical portraits and supplied experi
   expectedImages.forEach(image => {
     assert.match(html, new RegExp(`src="assets/images/doctors/${image.replace('.', '\\.')}"`));
   });
-  assert.match(html, /data-photo-temporary="bs-hai"/);
+  assert.doesNotMatch(html, /data-photo-temporary="bs-hai"/);
+  assert.match(html, /alt="BSCKII\. Nguyễn Bá Kinh"/);
   assert.match(html, /Hơn 6 năm công tác tại Phòng khám Đa khoa Hoàng Long\./);
   assert.match(html, /Hơn 5 năm công tác tại Phòng khám Đa khoa Hoàng Long\./);
   assert.match(html, /Hơn 10 năm công tác tại Phòng khám Đa khoa Hoàng Long\./);
@@ -210,8 +219,11 @@ test('FAQ uses the refreshed medical copy supplied for this version', () => {
   assert.match(faq, /<strong>Sa nghẹt, tắc mạch:<\/strong>/);
   assert.match(faq, /táo, dưa hấu, chuối, bơ, đu đủ, thanh long/);
   assert.match(faq, /Nội soi dạ dày thường không gây đau rõ rệt/);
+  assert.match(faq, /nội soi đại tràng có thể gây tức hoặc quặn bụng nhẹ/);
   assert.match(faq, /thuốc an thần hoặc thuốc mê tác dụng ngắn qua đường tĩnh mạch/);
-  assert.match(faq, /không tự lái xe trong ngày/);
+  assert.match(faq, /loại bỏ hoàn toàn cảm giác đau hay lo lắng/);
+  assert.match(faq, /bác sĩ và điều dưỡng sẽ theo dõi liên tục các chỉ số mạch, huyết áp, nhịp thở, nồng độ oxy máu/);
+  assert.match(faq, /tuyệt đối không tự lái xe trong ngày/);
   assert.doesNotMatch(faq, /là là các kỹ thuật/);
   assert.doesNotMatch(faq, /làm sạch ruột đến khi kết thúc nội soi/);
 });
