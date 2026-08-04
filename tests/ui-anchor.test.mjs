@@ -103,7 +103,7 @@ test('mobile difference heading stays intact and Dr Kinh shows his experience', 
 });
 
 test('all appointment and consultation CTAs target the registration card', () => {
-  const registrationLinks = html.match(/href="#registration-form"/g) ?? [];
+  const registrationLinks = html.match(/<a\b[^>]*href="#registration-form"[^>]*>/g) ?? [];
 
   assert.equal(registrationLinks.length, 14);
   assert.doesNotMatch(html, /href="#review-registration"/);
@@ -119,6 +119,22 @@ test('registration anchor is unique, contains the lead form and clears the fixed
   assert.ok(formPosition > targetPosition);
   assert.match(html, /#registration-form\s*\{[^}]*scroll-margin-top:\s*96px;/s);
   assert.match(html, /@media \(max-width:\s*767px\)\s*\{[\s\S]*?#registration-form\s*\{[^}]*scroll-margin-top:\s*76px;/);
+});
+
+test('appointment CTAs use one first-click-safe scroll handler on desktop and mobile', () => {
+  const handlerStart = html.indexOf("const registrationTarget = document.getElementById('registration-form')");
+  const handlerEnd = html.indexOf('// Ảnh nền trang trí ngoài website', handlerStart);
+  const handler = html.slice(handlerStart, handlerEnd);
+
+  assert.ok(handlerStart > -1 && handlerEnd > handlerStart);
+  assert.match(handler, /closest\('a\[href="#registration-form"\]'\)/);
+  assert.match(handler, /event\.preventDefault\(\)/);
+  assert.match(handler, /mobileNav\?\.classList\.remove\('is-open'\)/);
+  assert.match(handler, /window\.requestAnimationFrame\(\(\) => \{[\s\S]*?window\.requestAnimationFrame\(\(\) => \{/);
+  assert.match(handler, /targetDocumentTop - navbarHeight - 12/);
+  assert.match(handler, /window\.scrollTo\(\{\s*top: getRegistrationScrollTop\(\),\s*behavior/s);
+  assert.match(handler, /Math\.abs\(currentViewportTop - expectedViewportTop\) > 24/);
+  assert.match(handler, /}, 850\);/);
 });
 
 test('mobile hero keeps “sớm tích hợp AI” together', () => {

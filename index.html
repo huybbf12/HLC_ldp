@@ -5082,6 +5082,52 @@ footer .bg-white {
 
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+        // Chủ động cuộn mọi CTA đặt lịch tới đúng form ngay từ lần bấm đầu tiên.
+        // Đợi menu mobile đóng và bố cục ổn định rồi mới tính vị trí; kiểm tra lại sau khi cuộn
+        // để bù cho ảnh/font tải muộn có thể làm form dịch chuyển.
+        const registrationTarget = document.getElementById('registration-form');
+        if (registrationTarget) {
+            const getRegistrationScrollTop = () => {
+                const navbarHeight = navbar?.getBoundingClientRect().height || 0;
+                const targetDocumentTop = window.scrollY + registrationTarget.getBoundingClientRect().top;
+                return Math.max(0, Math.round(targetDocumentTop - navbarHeight - 12));
+            };
+
+            const scrollToRegistration = behavior => {
+                window.scrollTo({
+                    top: getRegistrationScrollTop(),
+                    behavior
+                });
+            };
+
+            document.addEventListener('click', event => {
+                const target = event.target instanceof Element ? event.target : null;
+                const appointmentLink = target?.closest('a[href="#registration-form"]');
+                if (!appointmentLink) return;
+
+                event.preventDefault();
+                mobileNav?.classList.remove('is-open');
+                mobileMenuToggle?.setAttribute('aria-expanded', 'false');
+                mobileMenuToggle?.setAttribute('aria-label', 'Mở menu');
+
+                const scrollBehavior = prefersReducedMotion ? 'auto' : 'smooth';
+                window.requestAnimationFrame(() => {
+                    window.requestAnimationFrame(() => {
+                        scrollToRegistration(scrollBehavior);
+
+                        window.setTimeout(() => {
+                            const navbarHeight = navbar?.getBoundingClientRect().height || 0;
+                            const expectedViewportTop = navbarHeight + 12;
+                            const currentViewportTop = registrationTarget.getBoundingClientRect().top;
+                            if (Math.abs(currentViewportTop - expectedViewportTop) > 24) {
+                                scrollToRegistration(scrollBehavior);
+                            }
+                        }, 850);
+                    });
+                });
+            });
+        }
+
         // Ảnh nền trang trí ngoài website chỉ tải sau nội dung chính hoặc khi sắp đi vào vùng nhìn.
         const pageBackground = document.querySelector('.body-bg-img');
         const loadPageBackground = () => pageBackground?.classList.add('is-background-ready');
