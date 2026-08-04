@@ -1,0 +1,11 @@
+{
+  "name": "hlc-ldp",
+  "version": "1.0.0",
+  "description": "Hoang Long Clinic Landing Page",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'No build step required for static site'",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "devDependencies": {}
+}
