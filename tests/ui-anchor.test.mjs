@@ -4,12 +4,26 @@ import test from 'node:test';
 
 const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
-test('page uses the Hoàng Long favicon for browser tabs and saved-page icons', async () => {
-  assert.match(html, /<link rel="icon" type="image\/png" href="favicon\.png">/);
-  assert.match(html, /<link rel="apple-touch-icon" href="favicon\.png">/);
+test('page uses lightweight Hoàng Long icons for browser tabs and saved-page icons', async () => {
+  assert.match(html, /<link rel="icon" type="image\/png" sizes="64x64" href="favicon\.png">/);
+  assert.match(html, /<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon\.png">/);
 
   const favicon = await stat(new URL('../favicon.png', import.meta.url));
-  assert.ok(favicon.size > 0);
+  const touchIcon = await stat(new URL('../apple-touch-icon.png', import.meta.url));
+  assert.ok(favicon.size > 0 && favicon.size < 10_000);
+  assert.ok(touchIcon.size > 0 && touchIcon.size < 20_000);
+});
+
+test('mobile critical path uses a smaller hero and avoids competing font preloads', async () => {
+  assert.match(html, /href="assets\/images\/hero\/hero-doctor-examination-mobile\.webp"[^>]*media="\(max-width: 767px\)"[^>]*fetchpriority="high"/);
+  assert.match(html, /<source media="\(max-width: 767px\)" srcset="assets\/images\/hero\/hero-doctor-examination-mobile\.webp" type="image\/webp">/);
+  assert.doesNotMatch(html, /rel="preload" as="font"/);
+  assert.match(html, /logo-hoang-long\.png"[^>]*fetchpriority="low"/);
+  assert.match(html, /\.hero-decor-orb \{ display: none !important; \}/);
+  assert.match(html, /\.hero-section \.btn-primary,[\s\S]*?animation: none !important;/);
+
+  const mobileHero = await stat(new URL('../assets/images/hero/hero-doctor-examination-mobile.webp', import.meta.url));
+  assert.ok(mobileHero.size > 0 && mobileHero.size < 60_000);
 });
 
 test('all appointment and consultation CTAs target the registration card', () => {
