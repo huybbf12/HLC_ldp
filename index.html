@@ -4921,6 +4921,72 @@ footer .bg-white {
 
     <!-- SCRIPT GIAO DIỆN -->
     <script>
+        const GA4_MEASUREMENT_ID = 'G-GLBFPTHWG6';
+
+        // Chỉ gửi hành vi tổng hợp tới GA4; không đưa dữ liệu người bệnh hoặc nội dung form vào Analytics.
+        const trackGa4Event = (eventName, eventParameters = {}) => {
+            if (typeof window.gtag !== 'function') return;
+            window.gtag('event', eventName, {
+                send_to: GA4_MEASUREMENT_ID,
+                ...eventParameters
+            });
+        };
+
+        const getAnalyticsLocation = element => {
+            if (element.closest('.floating-zalo, .floating-hotline')) return 'floating_action';
+            if (element.closest('#navbar')) return 'navbar';
+            if (element.closest('.hero-content')) return 'hero_primary';
+            if (element.closest('.hero-result-ribbon')) return 'hero_process';
+            if (element.closest('#thuc-trang')) return 'situation_section';
+            if (element.closest('#trang-thiet-bi')) return 'facility_section';
+            if (element.closest('#chuyen-gia')) return 'doctor_section';
+            if (element.closest('#review-registration')) return 'review_registration';
+            if (element.closest('footer')) return 'footer';
+            return 'page';
+        };
+
+        // Đo các điểm chuyển đổi mà không đọc text người dùng nhập trong form.
+        document.addEventListener('click', event => {
+            const target = event.target instanceof Element ? event.target : null;
+            const link = target?.closest('a');
+            if (!link) return;
+
+            const href = link.getAttribute('href') || '';
+            const ctaLocation = getAnalyticsLocation(link);
+
+            if (href === '#registration-form') {
+                let ctaName = 'appointment';
+                if (link.matches('.btn-nav-cta')) ctaName = 'navbar_appointment';
+                else if (link.closest('.hero-content')) ctaName = 'hero_appointment';
+                else if (link.matches('.hero-result-ribbon')) ctaName = 'hero_process';
+                else if (link.closest('#chuyen-gia')) ctaName = 'doctor_appointment';
+                else if (link.closest('#thuc-trang')) ctaName = 'free_consultation';
+
+                trackGa4Event('cta_click', {
+                    cta_name: ctaName,
+                    cta_location: ctaLocation
+                });
+                return;
+            }
+
+            if (href.startsWith('tel:')) {
+                trackGa4Event('click_to_call', { cta_location: ctaLocation });
+                return;
+            }
+
+            if (href.includes('zalo.me')) {
+                trackGa4Event('zalo_click', { cta_location: ctaLocation });
+                return;
+            }
+
+            if (link.matches('.clinic-directions-cta') || href.includes('google.com/maps')) {
+                trackGa4Event('directions_click', {
+                    cta_location: ctaLocation,
+                    direction_type: link.matches('.clinic-directions-cta') ? 'video_guide' : 'clinic_map'
+                });
+            }
+        }, { capture: true });
+
         const scrollProgress = document.getElementById('scroll-progress');
         const navbar = document.getElementById('navbar');
         const backToTopButton = document.getElementById('backToTop');
@@ -5260,6 +5326,17 @@ footer .bg-white {
             const formStatus = document.getElementById('lead-form-status');
             const startedAtInput = leadForm.elements.namedItem('formStartedAt');
             const defaultButtonHtml = submitButton.innerHTML;
+            let hasTrackedFormStart = false;
+            let validationErrorQueued = false;
+
+            const trackLeadFormStart = () => {
+                if (hasTrackedFormStart) return;
+                hasTrackedFormStart = true;
+                trackGa4Event('lead_form_start', {
+                    form_id: 'lead-form',
+                    form_location: 'review_registration'
+                });
+            };
 
             const resetStartedAt = () => {
                 startedAtInput.value = String(Date.now());
@@ -5284,10 +5361,31 @@ footer .bg-white {
             };
 
             resetStartedAt();
+            leadForm.addEventListener('focusin', trackLeadFormStart, { once: true });
+            leadForm.addEventListener('input', trackLeadFormStart, { once: true });
+            leadForm.addEventListener('invalid', () => {
+                if (validationErrorQueued) return;
+                validationErrorQueued = true;
+                trackGa4Event('lead_form_error', {
+                    form_id: 'lead-form',
+                    error_type: 'validation'
+                });
+                window.setTimeout(() => {
+                    validationErrorQueued = false;
+                }, 500);
+            }, true);
 
             leadForm.addEventListener('submit', async event => {
                 event.preventDefault();
-                if (submitButton.disabled || !leadForm.reportValidity()) return;
+                if (submitButton.disabled) return;
+                if (!leadForm.reportValidity()) {
+                    trackGa4Event('lead_form_error', {
+                        form_id: 'lead-form',
+                        error_type: 'validation'
+                    });
+                    return;
+                }
+                trackLeadFormStart();
 
                 const formData = new FormData(leadForm);
                 const urlParameters = new URLSearchParams(window.location.search);
@@ -5333,6 +5431,10 @@ footer .bg-white {
                         throw submissionError;
                     }
 
+                    trackGa4Event('generate_lead', {
+                        form_id: 'lead-form',
+                        lead_source: 'landing_page_noi_soi'
+                    });
                     leadForm.reset();
                     resetStartedAt();
                     showFormStatus(
@@ -5340,6 +5442,13 @@ footer .bg-white {
                         'is-success'
                     );
                 } catch (error) {
+                    const errorType = error.name === 'AbortError'
+                        ? 'timeout'
+                        : (error.field ? 'server_validation' : 'upstream');
+                    trackGa4Event('lead_form_error', {
+                        form_id: 'lead-form',
+                        error_type: errorType
+                    });
                     const message = error.name === 'AbortError'
                         ? 'Kết nối mất nhiều thời gian hơn dự kiến. Vui lòng thử lại hoặc gọi hotline.'
                         : (error.message || 'Chưa thể gửi đăng ký lúc này. Vui lòng thử lại hoặc gọi hotline.');

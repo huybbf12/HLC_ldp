@@ -3,6 +3,11 @@ import { readFile, stat } from 'node:fs/promises';
 import test from 'node:test';
 
 const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+const vercelConfig = JSON.parse(await readFile(new URL('../vercel.json', import.meta.url), 'utf8'));
+
+test('Vercel serves the static landing page from the project root', () => {
+  assert.equal(vercelConfig.outputDirectory, '.');
+});
 
 test('Google Ads and GA4 share one loader and use the supplied account IDs', () => {
   assert.equal((html.match(/googletagmanager\.com\/gtag\/js\?id=AW-16914582158/g) ?? []).length, 1);
@@ -13,6 +18,38 @@ test('Google Ads and GA4 share one loader and use the supplied account IDs', () 
     html,
     /<script async src="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=AW-16914582158"><\/script>/,
   );
+});
+
+test('GA4 tracks CTA actions and successful leads without sending form values', () => {
+  assert.match(html, /const GA4_MEASUREMENT_ID = 'G-GLBFPTHWG6';/);
+  assert.match(
+    html,
+    /window\.gtag\('event', eventName, \{\s*send_to: GA4_MEASUREMENT_ID,/s,
+  );
+
+  [
+    'cta_click',
+    'click_to_call',
+    'zalo_click',
+    'directions_click',
+    'lead_form_start',
+    'lead_form_error',
+    'generate_lead',
+  ].forEach(eventName => {
+    assert.match(html, new RegExp(`trackGa4Event\\('${eventName}'`));
+  });
+
+  const successCheck = html.indexOf('if (!response.ok || !result.ok)');
+  const leadEvent = html.indexOf("trackGa4Event('generate_lead'", successCheck);
+  const formReset = html.indexOf('leadForm.reset()', successCheck);
+  const analyticsBlockStart = html.indexOf('const trackGa4Event');
+  const analyticsBlockEnd = html.indexOf('const scrollProgress', analyticsBlockStart);
+  const analyticsBlock = html.slice(analyticsBlockStart, analyticsBlockEnd);
+
+  assert.ok(successCheck > -1 && leadEvent > successCheck && formReset > leadEvent);
+  assert.match(html, /leadForm\.addEventListener\('invalid',[\s\S]*?error_type: 'validation'[\s\S]*?}, true\);/);
+  assert.doesNotMatch(analyticsBlock, /formData|get\('name'\)|get\('phone'\)|get\('service'\)|get\('note'\)/);
+  assert.doesNotMatch(html, /trackGa4Event\([^)]*(?:referenceCode|leadId|phone|service|note)/s);
 });
 
 test('page uses lightweight Hoàng Long icons for browser tabs and saved-page icons', async () => {
