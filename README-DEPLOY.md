@@ -5,7 +5,7 @@ Landing page đã có luồng nhận đăng ký:
 `Form trên website → Vercel Function /api/lead → Google Apps Script → Google Sheet + Gmail`
 
 - Google Sheet đích: `1KgKKoN4qwxw4qmRHp6wMxUY0ZxNgkCUoVQYwOfwAPug`
-- Email nhận thông báo: `hoanglongclinic.news@gmail.com`
+- Email nhận thông báo: `pkdk.hoanglong10@gmail.com`
 - Tab dữ liệu được tự tạo: `Lead Landing Page`
 - Mã tham chiếu dễ theo dõi: `HLC-NS-YYYYMMDD-001`
 
@@ -97,7 +97,7 @@ Hai biến này chỉ tồn tại phía máy chủ; không đổi tên thành bi
 4. Kiểm tra:
 
    - Tab `Lead Landing Page` trong Google Sheet có một dòng mới.
-   - `hoanglongclinic.news@gmail.com` nhận được email thông báo.
+   - `pkdk.hoanglong10@gmail.com` nhận được email thông báo.
    - Cột `Mã tham chiếu` có dạng `HLC-NS-20260724-001`.
    - Form hiển thị thông báo thành công kèm biểu tượng tích; mã tham chiếu chỉ xuất hiện trong Sheet và email.
    - Cột `Thông báo email` hiển thị `Đã gửi`.

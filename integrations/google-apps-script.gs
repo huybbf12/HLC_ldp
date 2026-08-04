@@ -8,7 +8,7 @@
 
 const SPREADSHEET_ID = '1KgKKoN4qwxw4qmRHp6wMxUY0ZxNgkCUoVQYwOfwAPug';
 const SHEET_NAME = 'Lead Landing Page';
-const NOTIFICATION_EMAIL = 'hoanglongclinic.news@gmail.com';
+const NOTIFICATION_EMAIL = 'pkdk.hoanglong10@gmail.com';
 const REFERENCE_PREFIX = 'HLC-NS';
 const REFERENCE_TIME_ZONE = 'Asia/Ho_Chi_Minh';
 const LEAD_SCHEMA_VERSION = '2';

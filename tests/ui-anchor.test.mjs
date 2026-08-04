@@ -23,7 +23,25 @@ test('mobile critical path uses a smaller hero and avoids competing font preload
   assert.match(html, /\.hero-section \.btn-primary,[\s\S]*?animation: none !important;/);
 
   const mobileHero = await stat(new URL('../assets/images/hero/hero-doctor-examination-mobile.webp', import.meta.url));
-  assert.ok(mobileHero.size > 0 && mobileHero.size < 60_000);
+  assert.ok(mobileHero.size > 45_000 && mobileHero.size < 60_000);
+});
+
+test('mobile difference heading stays intact and Dr Kinh shows his experience', () => {
+  assert.match(
+    html,
+    /<span class="difference-title-clinic text-medical">Phòng khám Đa khoa Hoàng Long<\/span>/,
+  );
+  assert.match(
+    html,
+    /\.difference-title-clinic\s*\{[^}]*white-space:\s*nowrap;[^}]*font-size:\s*clamp\(16\.5px,\s*5\.2vw,\s*20\.5px\)\s*!important;/s,
+  );
+
+  const kinhStart = html.indexOf('NGUYỄN BÁ KINH');
+  const kinhEnd = html.indexOf('<!-- Bác sĩ 5 -->', kinhStart);
+  const kinhCard = html.slice(kinhStart, kinhEnd);
+
+  assert.ok(kinhStart > -1 && kinhEnd > kinhStart);
+  assert.match(kinhCard, /Hơn 30 năm kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật\./);
 });
 
 test('all appointment and consultation CTAs target the registration card', () => {

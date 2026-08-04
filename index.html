@@ -2201,7 +2201,18 @@ footer .bg-white {
 
     .difference-block { margin-top: 38px !important; }
     .difference-block > .text-center { margin-bottom: 22px !important; }
-    .difference-block h2 { font-size: 28px !important; line-height: 1.23 !important; }
+    .difference-block h2 {
+        width: 100%;
+        padding-inline: 0 !important;
+        font-size: 28px !important;
+        line-height: 1.23 !important;
+    }
+    .difference-title-clinic {
+        display: block;
+        white-space: nowrap;
+        font-size: clamp(16.5px, 5.2vw, 20.5px) !important;
+        letter-spacing: -.045em;
+    }
     .difference-grid {
         gap: 13px;
         padding-left: 0 !important;
@@ -3712,7 +3723,7 @@ footer .bg-white {
                 <div class="difference-block w-full relative z-20 mt-10 md:mt-12">
                     <div class="text-center mb-8 md:mb-10">
                         <h2 class="inline-block text-[24px] md:text-[36px] font-black uppercase tracking-tight mb-2 relative px-2">
-                            <span class="text-medical">Phòng khám Đa khoa Hoàng Long</span><br>
+                            <span class="difference-title-clinic text-medical">Phòng khám Đa khoa Hoàng Long</span>
                             <span class="text-primary">có gì khác biệt?</span>
                         </h2>
                         <div class="w-20 md:w-24 h-1.5 bg-accent mx-auto rounded-full mt-3"></div>
@@ -4163,7 +4174,8 @@ footer .bg-white {
                             <span>Giám đốc chuyên môn - Phòng khám Đa khoa Hoàng Long CS2</span>
                         </div>
                         <p class="doctor-credential">Nguyên Giám đốc Bệnh viện Thanh Nhàn</p>
-                        <a href="#registration-form" class="btn-outline w-full mt-auto shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với chuyên gia</a>
+                        <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Hơn 30 năm kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật.</p>
+                        <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với chuyên gia</a>
                     </div>
                 </div>
 

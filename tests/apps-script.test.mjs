@@ -265,5 +265,6 @@ test('new lead receives the next reference code in Sheet and email', () => {
   assert.equal(newestRow[1], 'uuid-new-3');
   assert.equal(newestRow[13], 'Đã gửi');
   assert.equal(sentEmails.length, 1);
+  assert.equal(sentEmails[0].to, 'pkdk.hoanglong10@gmail.com');
   assert.match(sentEmails[0].subject, /HLC-NS-20260724-003/);
 });
