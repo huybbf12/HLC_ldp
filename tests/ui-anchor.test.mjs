@@ -4,6 +4,17 @@ import test from 'node:test';
 
 const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
+test('Google Ads and GA4 share one loader and use the supplied account IDs', () => {
+  assert.equal((html.match(/googletagmanager\.com\/gtag\/js\?id=AW-16914582158/g) ?? []).length, 1);
+  assert.equal((html.match(/googletagmanager\.com\/gtag\/js\?id=/g) ?? []).length, 1);
+  assert.equal((html.match(/gtag\('config', 'AW-16914582158'\)/g) ?? []).length, 1);
+  assert.equal((html.match(/gtag\('config', 'G-GLBFPTHWG6'\)/g) ?? []).length, 1);
+  assert.match(
+    html,
+    /<script async src="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=AW-16914582158"><\/script>/,
+  );
+});
+
 test('page uses lightweight Hoàng Long icons for browser tabs and saved-page icons', async () => {
   assert.match(html, /<link rel="icon" type="image\/png" sizes="64x64" href="favicon\.png">/);
   assert.match(html, /<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon\.png">/);
