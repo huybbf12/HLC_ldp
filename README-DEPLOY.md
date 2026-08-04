@@ -167,14 +167,11 @@ Mỗi lần push lên GitHub, Vercel sẽ tạo deployment mới. Nếu thay đ�
 ## 9. Tối ưu hiệu suất đã áp dụng
 
 - Google Fonts và Font Awesome CDN đã được loại khỏi đường tải quan trọng.
-- Nunito và Be Vietnam Pro được phục vụ trực tiếp từ `assets/fonts/` với `font-display: optional`, tránh đổi font muộn làm kéo dài LCP.
-- CSS biên dịch được tách sang `assets/css/landing-page.css`, giúp trình duyệt tải song song và cache độc lập thay vì phân tích toàn bộ trong HTML.
+- Nunito và Be Vietnam Pro được phục vụ trực tiếp từ `assets/fonts/` với `font-display: swap`.
 - Trang chỉ nhúng 25 biểu tượng SVG thật sự sử dụng, không tải hai webfont Font Awesome dung lượng lớn.
 - Ảnh hero được preload và gắn `fetchpriority="high"`; không dùng `loading="lazy"`.
-- Google Tag vẫn xếp hàng sự kiện ngay lập tức nhưng thư viện bên thứ ba chỉ tải sau tương tác đầu tiên hoặc sau khi trang đã ổn định.
 - Hai ảnh nền trang trí bên ngoài chỉ tải sau nội dung chính hoặc khi người dùng sắp cuộn tới.
-- Bộ đếm chạy ở 30 khung hình/giây và hoàn tất trong tối đa 1,4 giây; phép đo review chỉ bắt đầu khi section sắp xuất hiện.
-- Timer slider và phép đo carousel bác sĩ chỉ kích hoạt khi người dùng cuộn gần tới section, giảm công việc main thread lúc tải đầu.
+- Bộ đếm chạy ở 30 khung hình/giây; phép đo review được gom thành một lượt đọc rồi một lượt ghi để tránh reflow lặp.
 - Chiều cao trang được lưu tạm và chỉ cập nhật khi kích thước nội dung thay đổi, không đọc lại ở mọi sự kiện cuộn.
 
 Khi đưa phiên bản này lên GitHub, phải giữ nguyên cả thư mục `assets/fonts/` và `assets/icons/`. Sau khi Vercel hoàn tất deployment mới, chạy lại PageSpeed Insights trên chính URL production để đo LCP trong điều kiện mạng thực tế.

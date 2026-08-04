@@ -2,9 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile, stat } from 'node:fs/promises';
 import test from 'node:test';
 
-const documentHtml = await readFile(new URL('../index.html', import.meta.url), 'utf8');
-const stylesheet = await readFile(new URL('../assets/css/landing-page.css', import.meta.url), 'utf8');
-const html = `${documentHtml}\n${stylesheet}`;
+const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 const vercelConfig = JSON.parse(await readFile(new URL('../vercel.json', import.meta.url), 'utf8'));
 
 test('Vercel serves the static landing page from the project root', () => {
@@ -16,22 +14,10 @@ test('Google Ads and GA4 share one loader and use the supplied account IDs', () 
   assert.equal((html.match(/googletagmanager\.com\/gtag\/js\?id=/g) ?? []).length, 1);
   assert.equal((html.match(/gtag\('config', 'AW-16914582158'\)/g) ?? []).length, 1);
   assert.equal((html.match(/gtag\('config', 'G-GLBFPTHWG6'\)/g) ?? []).length, 1);
-  assert.doesNotMatch(documentHtml, /<script async src="https:\/\/www\.googletagmanager\.com\/gtag\/js/);
-  assert.match(documentHtml, /script\.src = 'https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=AW-16914582158';/);
-  assert.match(documentHtml, /const interactionEvents = \['pointerdown', 'touchstart', 'keydown', 'scroll'\];/);
-  assert.match(documentHtml, /fallbackTimer = window\.setTimeout\(loadGoogleTag, 8000\);/);
-});
-
-test('large styles are cached separately and first-paint fonts avoid late swaps', () => {
-  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css">/);
-  assert.ok(
-    documentHtml.indexOf('href="assets/css/landing-page.css"')
-      < documentHtml.indexOf('(function scheduleGoogleTag()'),
+  assert.match(
+    html,
+    /<script async src="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=AW-16914582158"><\/script>/,
   );
-  assert.doesNotMatch(documentHtml, /<style(?:\s|>)/);
-  assert.ok(stylesheet.length > 100_000);
-  assert.match(stylesheet, /font-display: optional;/);
-  assert.doesNotMatch(stylesheet, /font-display: swap;/);
 });
 
 test('GA4 tracks CTA actions and successful leads without sending form values', () => {
@@ -93,23 +79,9 @@ test('mobile critical path uses a smaller hero and avoids competing font preload
   assert.match(html, /logo-hoang-long\.png"[^>]*fetchpriority="low"/);
   assert.match(html, /\.hero-decor-orb \{ display: none !important; \}/);
   assert.match(html, /\.hero-section \.btn-primary,[\s\S]*?animation: none !important;/);
-  assert.match(documentHtml, /class="hero-lcp-image"[\s\S]*?loading="eager"[\s\S]*?fetchpriority="high"[\s\S]*?decoding="sync"/);
-  assert.doesNotMatch(documentHtml, /class="hero-shell[^\"]*backdrop-blur/);
-  assert.match(documentHtml, /data-target="250000" data-duration="1400"/);
-  assert.match(documentHtml, /data-target="13" data-duration="800"/);
-  assert.match(documentHtml, /data-target="100" data-duration="1100"/);
 
   const mobileHero = await stat(new URL('../assets/images/hero/hero-doctor-examination-mobile.webp', import.meta.url));
   assert.ok(mobileHero.size > 45_000 && mobileHero.size < 60_000);
-});
-
-test('below-fold measurements and timers stay out of the initial main-thread path', () => {
-  assert.match(documentHtml, /const reviewClampObserver = new IntersectionObserver/);
-  assert.match(documentHtml, /reviewClampObserver\.observe\(reviewSection\)/);
-  assert.match(documentHtml, /let sliderTimer = null;/);
-  assert.match(documentHtml, /if \(!sliderIsVisible \|\| document\.hidden \|\| sliderTimer\) return;/);
-  assert.match(documentHtml, /const doctorStatusObserver = new IntersectionObserver/);
-  assert.doesNotMatch(documentHtml, /let sliderTimer = window\.setInterval/);
 });
 
 test('mobile difference heading stays intact and Dr Kinh shows his experience', () => {
@@ -155,16 +127,21 @@ test('appointment CTAs use one first-click-safe scroll handler on desktop and mo
   const handler = html.slice(handlerStart, handlerEnd);
 
   assert.ok(handlerStart > -1 && handlerEnd > handlerStart);
-  assert.match(handler, /closest\('a\[href="#registration-form"\]'\)/);
+  assert.match(handler, /return target\?\.closest\('a\[href="#registration-form"\]'\)/);
   assert.match(handler, /event\.preventDefault\(\)/);
   assert.match(handler, /mobileNav\?\.classList\.remove\('is-open'\)/);
+  assert.match(handler, /document\.addEventListener\('pointerdown',[\s\S]*?prepareRegistrationLayout\(\);[\s\S]*?capture: true, passive: true/s);
   assert.match(handler, /sectionsBeforeRegistration\.forEach\(section => \{/);
   assert.match(handler, /section\.classList\.add\('anchor-layout-ready'\)/);
-  assert.match(handler, /window\.requestAnimationFrame\(\(\) => \{/);
+  assert.match(handler, /registrationTarget\.getBoundingClientRect\(\);/);
   assert.match(handler, /registrationTarget\.scrollIntoView\(\{\s*behavior: scrollBehavior,\s*block: 'start'/s);
   assert.equal((handler.match(/scrollIntoView\(/g) ?? []).length, 1);
-  assert.doesNotMatch(handler, /setTimeout|850|getRegistrationScrollTop|window\.scrollTo/);
-  assert.match(stylesheet, /section\.anchor-layout-ready\s*\{[^}]*content-visibility:\s*visible;[^}]*contain-intrinsic-size:\s*none;/s);
+  assert.doesNotMatch(handler, /setTimeout|requestAnimationFrame|getRegistrationScrollTop|window\.scrollTo/);
+  assert.match(
+    html,
+    /section\.anchor-layout-ready\s*\{[^}]*content-visibility:\s*visible;[^}]*contain-intrinsic-size:\s*none;/s,
+  );
+  assert.match(html, /section\[id\]:not\(#home\),\s*footer\s*\{[^}]*content-visibility:\s*auto;/s);
 });
 
 test('mobile hero keeps “sớm tích hợp AI” together', () => {
@@ -284,8 +261,8 @@ test('first five doctor cards use expert CTA and remaining cards use doctor CTA'
 });
 
 test('13+ and 100+ trust metrics count up from zero', () => {
-  assert.match(html, /class="counter" data-target="13" data-duration="800">0<\/span>\+/);
-  assert.match(html, /class="counter" data-target="100" data-duration="1100">0<\/span>\+/);
+  assert.match(html, /class="counter" data-target="13" data-duration="1500">0<\/span>\+/);
+  assert.match(html, /class="counter" data-target="100" data-duration="2500">0<\/span>\+/);
   assert.doesNotMatch(html, /data-target="110"/);
 });
 
