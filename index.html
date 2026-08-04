@@ -434,14 +434,14 @@ details[open] summary ~ * { animation: sweep .3s ease-in-out; }
     transform: none;
 }
 
-section[id]:not(#home), footer {
+section[id]:not(#home):not(.anchor-layout-ready), footer {
     content-visibility: auto;
     contain-intrinsic-size: 800px;
 }
 
 /* Chỉ dựng đầy đủ hành trình tới form khi người dùng bắt đầu tương tác với CTA.
    Cách này giữ hiệu suất tải đầu trang nhưng chốt vị trí form trước khi smooth scroll. */
-section.anchor-layout-ready {
+section[id].anchor-layout-ready {
     content-visibility: visible;
     contain-intrinsic-size: none;
 }

@@ -139,9 +139,10 @@ test('appointment CTAs use one first-click-safe scroll handler on desktop and mo
   assert.doesNotMatch(handler, /setTimeout|requestAnimationFrame|getRegistrationScrollTop|window\.scrollTo/);
   assert.match(
     html,
-    /section\.anchor-layout-ready\s*\{[^}]*content-visibility:\s*visible;[^}]*contain-intrinsic-size:\s*none;/s,
+    /section\[id\]\.anchor-layout-ready\s*\{[^}]*content-visibility:\s*visible;[^}]*contain-intrinsic-size:\s*none;/s,
   );
-  assert.match(html, /section\[id\]:not\(#home\),\s*footer\s*\{[^}]*content-visibility:\s*auto;/s);
+  assert.match(html, /section\[id\]:not\(#home\):not\(\.anchor-layout-ready\),\s*footer\s*\{[^}]*content-visibility:\s*auto;/s);
+  assert.doesNotMatch(html, /section\[id\]:not\(#home\),\s*footer\s*\{/s);
 });
 
 test('mobile hero keeps “sớm tích hợp AI” together', () => {
