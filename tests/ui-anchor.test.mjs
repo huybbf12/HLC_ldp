@@ -24,8 +24,13 @@ test('GA4 tracks CTA actions and successful leads without sending form values', 
   assert.match(html, /const GA4_MEASUREMENT_ID = 'G-GLBFPTHWG6';/);
   assert.match(
     html,
-    /window\.gtag\('event', eventName, \{\s*send_to: GA4_MEASUREMENT_ID,/s,
+    /const GA4_DEBUG_MODE = new URLSearchParams\(window\.location\.search\)\.get\('ga_debug'\) === '1';/,
   );
+  assert.match(
+    html,
+    /const analyticsPayload = \{\s*send_to: GA4_MEASUREMENT_ID,[\s\S]*?window\.gtag\('event', eventName, analyticsPayload\);/,
+  );
+  assert.match(html, /if \(GA4_DEBUG_MODE\) \{\s*analyticsPayload\.debug_mode = true;/s);
 
   [
     'cta_click',
@@ -33,6 +38,7 @@ test('GA4 tracks CTA actions and successful leads without sending form values', 
     'zalo_click',
     'directions_click',
     'lead_form_start',
+    'lead_submit_attempt',
     'lead_form_error',
     'generate_lead',
   ].forEach(eventName => {
@@ -42,11 +48,15 @@ test('GA4 tracks CTA actions and successful leads without sending form values', 
   const successCheck = html.indexOf('if (!response.ok || !result.ok)');
   const leadEvent = html.indexOf("trackGa4Event('generate_lead'", successCheck);
   const formReset = html.indexOf('leadForm.reset()', successCheck);
+  const validityCheck = html.indexOf('if (!leadForm.reportValidity())');
+  const submitAttempt = html.indexOf("trackGa4Event('lead_submit_attempt'", validityCheck);
+  const leadRequest = html.indexOf("fetch('/api/lead'", submitAttempt);
   const analyticsBlockStart = html.indexOf('const trackGa4Event');
   const analyticsBlockEnd = html.indexOf('const scrollProgress', analyticsBlockStart);
   const analyticsBlock = html.slice(analyticsBlockStart, analyticsBlockEnd);
 
   assert.ok(successCheck > -1 && leadEvent > successCheck && formReset > leadEvent);
+  assert.ok(validityCheck > -1 && submitAttempt > validityCheck && leadRequest > submitAttempt);
   assert.match(html, /leadForm\.addEventListener\('invalid',[\s\S]*?error_type: 'validation'[\s\S]*?}, true\);/);
   assert.doesNotMatch(analyticsBlock, /formData|get\('name'\)|get\('phone'\)|get\('service'\)|get\('note'\)/);
   assert.doesNotMatch(html, /trackGa4Event\([^)]*(?:referenceCode|leadId|phone|service|note)/s);

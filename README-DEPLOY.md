@@ -175,3 +175,23 @@ Mỗi lần push lên GitHub, Vercel sẽ tạo deployment mới. Nếu thay đ�
 - Chiều cao trang được lưu tạm và chỉ cập nhật khi kích thước nội dung thay đổi, không đọc lại ở mọi sự kiện cuộn.
 
 Khi đưa phiên bản này lên GitHub, phải giữ nguyên cả thư mục `assets/fonts/` và `assets/icons/`. Sau khi Vercel hoàn tất deployment mới, chạy lại PageSpeed Insights trên chính URL production để đo LCP trong điều kiện mạng thực tế.
+
+## 10. Kiểm tra chuyển đổi GA4
+
+Trang gửi ba sự kiện chính của form tới GA4 `G-GLBFPTHWG6`:
+
+| Sự kiện | Thời điểm ghi nhận | Có nên đặt làm Key event? |
+|---|---|---|
+| `lead_submit_attempt` | Người dùng bấm gửi và form đã hợp lệ | Không; dùng để đo ý định gửi |
+| `generate_lead` | `/api/lead` xác nhận đã lưu lead thành công | Có; đây là chuyển đổi thực |
+| `lead_form_error` | Form sai dữ liệu, hết thời gian hoặc máy chủ lỗi | Không; dùng để chẩn đoán |
+
+Để kiểm tra tức thời sau khi triển khai:
+
+1. Mở URL production và thêm `?ga_debug=1` ở cuối, ví dụ `https://ten-mien-cua-ban/?ga_debug=1`.
+2. Trong GA4, mở **Admin → Data display → DebugView**.
+3. Điền form thử hợp lệ rồi bấm gửi.
+4. DebugView cần hiện `lead_submit_attempt`; nếu Sheet/email nhận lead thành công thì hiện thêm `generate_lead`. Nếu chỉ thấy `lead_form_error`, kiểm tra chi tiết tham số `error_type`.
+5. Trong GA4, mở **Admin → Data display → Events** và đánh dấu chính xác `generate_lead` là **Key event**. Không đánh dấu `lead_submit_attempt` để tránh tính các lượt gửi thất bại là chuyển đổi.
+
+Chế độ debug chỉ được bật trên thiết bị có tham số `ga_debug=1`; trang production thông thường không ghi log debug. Các sự kiện GA4 không chứa họ tên, số điện thoại, ghi chú hay dịch vụ người dùng đã chọn.

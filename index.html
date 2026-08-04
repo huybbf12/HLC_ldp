@@ -4922,14 +4922,23 @@ footer .bg-white {
     <!-- SCRIPT GIAO DIỆN -->
     <script>
         const GA4_MEASUREMENT_ID = 'G-GLBFPTHWG6';
+        const GA4_DEBUG_MODE = new URLSearchParams(window.location.search).get('ga_debug') === '1';
 
         // Chỉ gửi hành vi tổng hợp tới GA4; không đưa dữ liệu người bệnh hoặc nội dung form vào Analytics.
         const trackGa4Event = (eventName, eventParameters = {}) => {
             if (typeof window.gtag !== 'function') return;
-            window.gtag('event', eventName, {
+            const analyticsPayload = {
                 send_to: GA4_MEASUREMENT_ID,
                 ...eventParameters
-            });
+            };
+
+            // Chỉ bật DebugView trên thiết bị đang mở trang với ?ga_debug=1.
+            if (GA4_DEBUG_MODE) {
+                analyticsPayload.debug_mode = true;
+                console.info('[GA4 DebugView]', eventName, analyticsPayload);
+            }
+
+            window.gtag('event', eventName, analyticsPayload);
         };
 
         const getAnalyticsLocation = element => {
@@ -5386,6 +5395,10 @@ footer .bg-white {
                     return;
                 }
                 trackLeadFormStart();
+                trackGa4Event('lead_submit_attempt', {
+                    form_id: 'lead-form',
+                    form_location: 'review_registration'
+                });
 
                 const formData = new FormData(leadForm);
                 const urlParameters = new URLSearchParams(window.location.search);
@@ -5433,7 +5446,9 @@ footer .bg-white {
 
                     trackGa4Event('generate_lead', {
                         form_id: 'lead-form',
-                        lead_source: 'landing_page_noi_soi'
+                        form_location: 'review_registration',
+                        lead_source: 'landing_page_noi_soi',
+                        method: 'web_form'
                     });
                     leadForm.reset();
                     resetStartedAt();
