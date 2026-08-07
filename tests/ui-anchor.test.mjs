@@ -23,15 +23,18 @@ test('Google Ads and GA4 share one loader and use the supplied account IDs', () 
 });
 
 test('large styles are cached separately and first-paint fonts avoid late swaps', () => {
-  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css">/);
+  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=48-fontfix">/);
   assert.ok(
-    documentHtml.indexOf('href="assets/css/landing-page.css"')
+    documentHtml.indexOf('href="assets/css/landing-page.css?v=48-fontfix"')
       < documentHtml.indexOf('(function scheduleGoogleTag()'),
   );
   assert.doesNotMatch(documentHtml, /<style(?:\s|>)/);
   assert.ok(stylesheet.length > 100_000);
-  assert.match(stylesheet, /font-display: optional;/);
-  assert.doesNotMatch(stylesheet, /font-display: swap;/);
+  assert.match(stylesheet, /font-display: swap;/);
+  assert.doesNotMatch(stylesheet, /font-display: optional;/);
+  assert.match(stylesheet, /url\('\.\.\/fonts\/be-vietnam-pro-900\.woff2'\)/);
+  assert.match(stylesheet, /url\('\.\.\/fonts\/nunito-vietnamese-variable\.woff2'\)/);
+  assert.doesNotMatch(stylesheet, /url\('assets\/fonts\//);
 });
 
 test('GA4 tracks CTA actions and successful leads without sending form values', () => {
