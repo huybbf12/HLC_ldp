@@ -5,6 +5,8 @@ import { GET, POST } from '../api/lead.mjs';
 const originalFetch = globalThis.fetch;
 const originalUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
 const originalSecret = process.env.LEAD_WEBHOOK_SECRET;
+const originalTurnstileSiteKey = process.env.TURNSTILE_SITE_KEY;
+const originalTurnstileSecret = process.env.TURNSTILE_SECRET_KEY;
 
 function validBody(overrides = {}) {
   return {
@@ -15,6 +17,7 @@ function validBody(overrides = {}) {
     consent: true,
     website: '',
     formStartedAt: Date.now() - 5_000,
+    turnstileToken: '',
     sourceUrl: 'https://example.com/?utm_source=facebook',
     referrer: 'https://facebook.com/',
     utm: {
@@ -40,6 +43,8 @@ function requestFor(body, headers = {}) {
 test.beforeEach(() => {
   process.env.GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/test/exec';
   process.env.LEAD_WEBHOOK_SECRET = 'test-secret';
+  delete process.env.TURNSTILE_SITE_KEY;
+  delete process.env.TURNSTILE_SECRET_KEY;
 });
 
 test.after(() => {
@@ -50,6 +55,12 @@ test.after(() => {
 
   if (originalSecret === undefined) delete process.env.LEAD_WEBHOOK_SECRET;
   else process.env.LEAD_WEBHOOK_SECRET = originalSecret;
+
+  if (originalTurnstileSiteKey === undefined) delete process.env.TURNSTILE_SITE_KEY;
+  else process.env.TURNSTILE_SITE_KEY = originalTurnstileSiteKey;
+
+  if (originalTurnstileSecret === undefined) delete process.env.TURNSTILE_SECRET_KEY;
+  else process.env.TURNSTILE_SECRET_KEY = originalTurnstileSecret;
 });
 
 test('health check only exposes configuration status', async () => {
@@ -59,6 +70,7 @@ test('health check only exposes configuration status', async () => {
   assert.equal(response.status, 200);
   assert.equal(result.ok, true);
   assert.equal(result.configured, true);
+  assert.equal(result.turnstileConfigured, false);
   assert.equal(JSON.stringify(result).includes('test-secret'), false);
 });
 
@@ -119,6 +131,105 @@ test('honeypot submission is discarded without calling Apps Script', async () =>
   assert.equal(response.status, 200);
   assert.equal(result.ok, true);
   assert.equal(fetchWasCalled, false);
+});
+
+test('submission under two seconds is discarded without calling upstream services', async () => {
+  let fetchWasCalled = false;
+  globalThis.fetch = async () => {
+    fetchWasCalled = true;
+    return Response.json({ ok: true });
+  };
+
+  const response = await POST(requestFor(validBody({ formStartedAt: Date.now() - 1_000 })));
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(result.ok, true);
+  assert.equal(fetchWasCalled, false);
+});
+
+test('cross-origin browser submission is rejected before forwarding', async () => {
+  let fetchWasCalled = false;
+  globalThis.fetch = async () => {
+    fetchWasCalled = true;
+    return Response.json({ ok: true });
+  };
+
+  const response = await POST(requestFor(validBody(), { Origin: 'https://spam.example' }));
+  const result = await response.json();
+
+  assert.equal(response.status, 403);
+  assert.equal(result.ok, false);
+  assert.equal(fetchWasCalled, false);
+});
+
+test('Turnstile is verified server-side before a lead is forwarded', async () => {
+  process.env.TURNSTILE_SITE_KEY = 'test-site-key';
+  process.env.TURNSTILE_SECRET_KEY = 'test-turnstile-secret';
+  const calls = [];
+
+  globalThis.fetch = async (url, options) => {
+    calls.push({ url: String(url), options });
+    if (String(url).includes('challenges.cloudflare.com/turnstile')) {
+      assert.match(options.body, /secret=test-turnstile-secret/);
+      assert.match(options.body, /response=valid-token/);
+      return Response.json({ success: true, hostname: 'example.com', action: 'lead_form' });
+    }
+
+    return Response.json({
+      ok: true,
+      emailSent: true,
+      referenceCode: 'HLC-NS-20260808-001',
+    });
+  };
+
+  const response = await POST(requestFor(validBody({ turnstileToken: 'valid-token' }), {
+    Origin: 'https://example.com',
+  }));
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(result.ok, true);
+  assert.equal(calls.length, 2);
+  assert.match(calls[0].url, /challenges\.cloudflare\.com\/turnstile\/v0\/siteverify/);
+  assert.equal(calls[1].url, process.env.GOOGLE_APPS_SCRIPT_URL);
+});
+
+test('invalid Turnstile token is rejected without calling Apps Script', async () => {
+  process.env.TURNSTILE_SITE_KEY = 'test-site-key';
+  process.env.TURNSTILE_SECRET_KEY = 'test-turnstile-secret';
+  let appsScriptWasCalled = false;
+
+  globalThis.fetch = async url => {
+    if (String(url).includes('challenges.cloudflare.com/turnstile')) {
+      return Response.json({ success: false, 'error-codes': ['invalid-input-response'] });
+    }
+    appsScriptWasCalled = true;
+    return Response.json({ ok: true });
+  };
+
+  const response = await POST(requestFor(validBody({ turnstileToken: 'invalid-token' })));
+  const result = await response.json();
+
+  assert.equal(response.status, 400);
+  assert.equal(result.ok, false);
+  assert.equal(result.field, 'turnstile');
+  assert.equal(appsScriptWasCalled, false);
+});
+
+test('Apps Script duplicate status is returned so GA4 can ignore repeated leads', async () => {
+  globalThis.fetch = async () => Response.json({
+    ok: true,
+    duplicate: true,
+    referenceCode: 'HLC-NS-20260808-001',
+  });
+
+  const response = await POST(requestFor(validBody()));
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(result.ok, true);
+  assert.equal(result.duplicate, true);
 });
 
 test('upstream failure returns a retryable user-facing error', async () => {

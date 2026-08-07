@@ -268,3 +268,46 @@ test('new lead receives the next reference code in Sheet and email', () => {
   assert.equal(sentEmails[0].to, 'pkdk.hoanglong10@gmail.com');
   assert.match(sentEmails[0].subject, /HLC-NS-20260724-003/);
 });
+
+test('same phone submitted again within 24 hours is suppressed without a second row or email', () => {
+  const { context, data, sentEmails } = createHarness();
+  const submittedAt = new Date().toISOString();
+  const firstLead = {
+    secret: 'test-secret',
+    leadId: 'uuid-dedupe-first',
+    submittedAt,
+    name: 'Khách kiểm thử',
+    phone: '0933333333',
+    service: 'Nội soi',
+    note: '',
+    sourceUrl: 'https://example.com',
+    referrer: '',
+    utmSource: 'google',
+    utmMedium: 'cpc',
+    utmCampaign: 'noi-soi',
+    consent: true,
+  };
+
+  context.__event = { postData: { contents: JSON.stringify(firstLead) } };
+  const firstResult = JSON.parse(vm.runInContext('doPost(__event)', context).text);
+  const rowsAfterFirst = data.length;
+  const emailsAfterFirst = sentEmails.length;
+
+  context.__event = {
+    postData: {
+      contents: JSON.stringify({
+        ...firstLead,
+        leadId: 'uuid-dedupe-second',
+        name: 'Tên được bot đổi',
+      }),
+    },
+  };
+  const secondResult = JSON.parse(vm.runInContext('doPost(__event)', context).text);
+
+  assert.equal(firstResult.ok, true);
+  assert.equal(secondResult.ok, true);
+  assert.equal(secondResult.duplicate, true);
+  assert.equal(secondResult.referenceCode, firstResult.referenceCode);
+  assert.equal(data.length, rowsAfterFirst);
+  assert.equal(sentEmails.length, emailsAfterFirst);
+});

@@ -12,6 +12,8 @@ const NOTIFICATION_EMAIL = 'pkdk.hoanglong10@gmail.com';
 const REFERENCE_PREFIX = 'HLC-NS';
 const REFERENCE_TIME_ZONE = 'Asia/Ho_Chi_Minh';
 const LEAD_SCHEMA_VERSION = '2';
+const DUPLICATE_PHONE_WINDOW_MS = 24 * 60 * 60 * 1000;
+const DUPLICATE_PHONE_SCAN_LIMIT = 500;
 
 const HEADERS = [
   'Mã tham chiếu',
@@ -161,6 +163,31 @@ function findLeadRow_(sheet, leadId) {
   return match ? match.getRow() : null;
 }
 
+function findRecentLeadByPhone_(sheet, phone, now) {
+  var lastRow = sheet.getLastRow();
+  if (!phone || lastRow < 2) return null;
+
+  var firstRow = Math.max(2, lastRow - DUPLICATE_PHONE_SCAN_LIMIT + 1);
+  var rowCount = lastRow - firstRow + 1;
+  // Sau khi schema hiện tại được chuẩn hóa: cột 3 = thời gian, cột 5 = số điện thoại.
+  var rows = sheet.getRange(firstRow, 1, rowCount, 5).getValues();
+  var cutoff = now.getTime() - DUPLICATE_PHONE_WINDOW_MS;
+
+  for (var index = rows.length - 1; index >= 0; index -= 1) {
+    if (cleanText_(rows[index][4], 30) !== phone) continue;
+
+    var submittedAt = new Date(rows[index][2]);
+    if (isNaN(submittedAt.getTime()) || submittedAt.getTime() < cutoff) continue;
+
+    return {
+      rowNumber: firstRow + index,
+      referenceCode: cleanText_(rows[index][0], 80),
+    };
+  }
+
+  return null;
+}
+
 function sendLeadEmail_(lead) {
   var service = lead.service || 'Chưa chọn';
   var note = lead.note || 'Không có';
@@ -285,6 +312,18 @@ function doPost(event) {
         ok: true,
         leadId: lead.leadId,
         referenceCode: cleanText_(sheet.getRange(existingRow, 1).getValue(), 80),
+        duplicate: true,
+      });
+    }
+
+    // Không tạo thêm dòng/email nếu cùng số điện thoại vừa gửi trong 24 giờ.
+    // Việc kiểm tra nằm trong lock để hai request đồng thời không lọt qua cùng lúc.
+    var recentPhoneLead = findRecentLeadByPhone_(sheet, lead.phone, new Date());
+    if (recentPhoneLead) {
+      return jsonResponse_({
+        ok: true,
+        leadId: lead.leadId,
+        referenceCode: recentPhoneLead.referenceCode,
         duplicate: true,
       });
     }

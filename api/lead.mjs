@@ -4,6 +4,9 @@ const JSON_HEADERS = {
 };
 
 const MAX_BODY_LENGTH = 20_000;
+const MIN_FORM_FILL_TIME_MS = 2_000;
+const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+const TURNSTILE_ACTION = 'lead_form';
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -44,10 +47,84 @@ function wasSubmittedTooQuickly(value) {
   if (!Number.isFinite(startedAt) || startedAt <= 0) return false;
 
   const elapsed = Date.now() - startedAt;
-  return elapsed >= 0 && elapsed < 750;
+  return elapsed >= 0 && elapsed < MIN_FORM_FILL_TIME_MS;
+}
+
+function getRequestHost(request) {
+  const forwardedHost = request.headers.get('x-forwarded-host');
+  const host = forwardedHost || request.headers.get('host');
+  if (host) return host.split(',')[0].trim().toLowerCase();
+
+  try {
+    return new URL(request.url).host.toLowerCase();
+  } catch {
+    return '';
+  }
+}
+
+function hasInvalidOrigin(request) {
+  const origin = request.headers.get('origin');
+  if (!origin) return false;
+
+  try {
+    return new URL(origin).host.toLowerCase() !== getRequestHost(request);
+  } catch {
+    return true;
+  }
+}
+
+function getClientIp(request) {
+  const forwardedFor = request.headers.get('x-forwarded-for');
+  if (forwardedFor) return forwardedFor.split(',')[0].trim().slice(0, 80);
+  return cleanText(request.headers.get('x-real-ip') || '', 80);
+}
+
+async function verifyTurnstile(request, token, secret) {
+  const formData = new URLSearchParams({
+    secret,
+    response: token,
+  });
+  const remoteIp = getClientIp(request);
+  if (remoteIp) formData.set('remoteip', remoteIp);
+
+  let response;
+  try {
+    response = await fetch(TURNSTILE_VERIFY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData.toString(),
+      signal: AbortSignal.timeout(6_000),
+    });
+  } catch {
+    return { ok: false, unavailable: true };
+  }
+
+  let result;
+  try {
+    result = await response.json();
+  } catch {
+    return { ok: false, unavailable: true };
+  }
+
+  if (!response.ok || result?.success !== true) return { ok: false, unavailable: false };
+
+  const requestHost = getRequestHost(request);
+  const verifiedHost = cleanText(result.hostname, 255).toLowerCase();
+  if (verifiedHost && requestHost && verifiedHost !== requestHost) {
+    return { ok: false, unavailable: false };
+  }
+
+  const verifiedAction = cleanText(result.action, 100);
+  if (verifiedAction && verifiedAction !== TURNSTILE_ACTION) {
+    return { ok: false, unavailable: false };
+  }
+
+  return { ok: true, unavailable: false };
 }
 
 export async function GET() {
+  const turnstileSiteKey = cleanText(process.env.TURNSTILE_SITE_KEY, 500);
+  const turnstileSecret = cleanText(process.env.TURNSTILE_SECRET_KEY, 500);
   return json({
     ok: true,
     service: 'Hoang Long lead endpoint',
@@ -55,6 +132,7 @@ export async function GET() {
       process.env.GOOGLE_APPS_SCRIPT_URL &&
       process.env.LEAD_WEBHOOK_SECRET
     ),
+    turnstileConfigured: Boolean(turnstileSiteKey && turnstileSecret),
   });
 }
 
@@ -67,6 +145,10 @@ export async function POST(request) {
   const declaredLength = Number(request.headers.get('content-length') || 0);
   if (declaredLength > MAX_BODY_LENGTH) {
     return json({ ok: false, message: 'Dữ liệu gửi lên quá lớn.' }, 413);
+  }
+
+  if (hasInvalidOrigin(request)) {
+    return json({ ok: false, message: 'Yêu cầu không hợp lệ.' }, 403);
   }
 
   let rawBody;
@@ -128,6 +210,39 @@ export async function POST(request) {
     return json({ ok: false, message: 'Hệ thống nhận đăng ký chưa được cấu hình.' }, 503);
   }
 
+  const turnstileSiteKey = cleanText(process.env.TURNSTILE_SITE_KEY, 500);
+  const turnstileSecret = cleanText(process.env.TURNSTILE_SECRET_KEY, 500);
+  const turnstilePartiallyConfigured = Boolean(turnstileSiteKey) !== Boolean(turnstileSecret);
+  if (turnstilePartiallyConfigured) {
+    return json({
+      ok: false,
+      field: 'turnstile',
+      message: 'Hệ thống chống spam chưa được cấu hình đầy đủ. Vui lòng gọi hotline để được hỗ trợ.',
+    }, 503);
+  }
+
+  if (turnstileSiteKey && turnstileSecret) {
+    const turnstileToken = cleanText(body.turnstileToken, 4_096);
+    if (!turnstileToken) {
+      return json({
+        ok: false,
+        field: 'turnstile',
+        message: 'Vui lòng hoàn tất bước xác minh chống spam rồi gửi lại.',
+      }, 400);
+    }
+
+    const verification = await verifyTurnstile(request, turnstileToken, turnstileSecret);
+    if (!verification.ok) {
+      return json({
+        ok: false,
+        field: 'turnstile',
+        message: verification.unavailable
+          ? 'Chưa thể xác minh chống spam lúc này. Vui lòng thử lại hoặc gọi hotline.'
+          : 'Xác minh chống spam chưa thành công. Vui lòng thử lại.',
+      }, verification.unavailable ? 503 : 400);
+    }
+  }
+
   const utm = body.utm && typeof body.utm === 'object' ? body.utm : {};
   const lead = {
     leadId: crypto.randomUUID(),
@@ -181,6 +296,7 @@ export async function POST(request) {
     ok: true,
     leadId: lead.leadId,
     referenceCode,
+    duplicate: result.duplicate === true,
     message: 'Đăng ký thành công. Hoàng Long Clinic sẽ sớm liên hệ.',
   });
 }

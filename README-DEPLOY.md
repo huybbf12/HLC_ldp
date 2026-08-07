@@ -75,10 +75,34 @@ Trong Vercel, mở project → **Settings → Environment Variables** và thêm:
 |---|---|
 | `GOOGLE_APPS_SCRIPT_URL` | URL Web App `/exec` vừa sao chép |
 | `LEAD_WEBHOOK_SECRET` | Chuỗi secret giống hệt trong Script Properties |
+| `TURNSTILE_SITE_KEY` | Site key của Cloudflare Turnstile cho domain landing page |
+| `TURNSTILE_SECRET_KEY` | Secret key của Cloudflare Turnstile; chỉ lưu phía server |
 
 Chọn **Production**. Nếu cần thử trên deployment Preview, chọn thêm **Preview**. Sau khi lưu biến, vào **Deployments** và Redeploy bản mới nhất.
 
-Hai biến này chỉ tồn tại phía máy chủ; không đổi tên thành biến có tiền tố public và không commit file `.env` lên GitHub.
+`LEAD_WEBHOOK_SECRET` và `TURNSTILE_SECRET_KEY` là secret phía máy chủ; không nhúng chúng vào HTML/JavaScript và không commit file `.env` lên GitHub. `TURNSTILE_SITE_KEY` là khóa công khai dùng để hiển thị widget.
+
+### Bật lớp chống spam Turnstile
+
+1. Trong Cloudflare Dashboard, tạo một **Turnstile widget** và thêm domain production của landing page vào danh sách hostname được phép.
+2. Chọn chế độ **Managed** để Cloudflare tự quyết định khi nào cần tương tác xác minh.
+3. Sao chép **Site key** và **Secret key** vào hai biến Vercel ở bảng trên, sau đó Redeploy.
+4. Mở `https://ten-mien-cua-ban/api/lead` và kiểm tra `turnstileConfigured` phải là `true`.
+5. Cuộn tới form: widget chỉ được tải khi form sắp đi vào vùng nhìn hoặc người dùng bắt đầu tương tác, vì vậy không chen thêm script Turnstile vào critical path của hero/LCP.
+
+Nếu cả hai biến Turnstile chưa được khai báo, form vẫn chạy theo cơ chế cũ để không làm gián đoạn website khi bạn đang cấu hình. Nếu chỉ khai báo một trong hai biến, API sẽ fail-closed và yêu cầu hoàn tất cấu hình thay vì âm thầm tắt chống spam.
+
+### Các lớp chống spam đã áp dụng
+
+- Turnstile được **xác minh lại tại `/api/lead`** trước khi dữ liệu đi tới Apps Script; token phía trình duyệt không được tin cậy trực tiếp.
+- Honeypot và ngưỡng điền form tối thiểu 2 giây loại bot đơn giản mà không thêm bước cho người dùng thật.
+- API từ chối POST có `Origin` khác domain hiện tại khi trình duyệt gửi header này.
+- Google Apps Script bỏ qua số điện thoại đã được tiếp nhận trong **24 giờ gần nhất** (tối đa 500 lead gần nhất), không tạo thêm dòng Sheet hoặc email trùng.
+- Lead trùng hoặc submission bị honeypot loại không phát sự kiện GA4 `generate_lead`, giúp số chuyển đổi sạch hơn.
+
+### Rate limit ở Vercel Firewall
+
+Sau khi bản mới chạy ổn định, nên bổ sung một rule rate limit cho đường dẫn `/api/lead` trong Vercel Firewall, ví dụ chỉ áp dụng cho request `POST` và giới hạn khoảng 5–10 lần/10 phút/IP. Không đặt ngưỡng quá thấp vì mạng cơ quan hoặc 4G có thể dùng chung IP. Đây là lớp bổ sung; Turnstile và chống trùng vẫn là lớp chính của form.
 
 ## 3. Kiểm tra sau khi triển khai
 
@@ -89,7 +113,8 @@ Hai biến này chỉ tồn tại phía máy chủ; không đổi tên thành bi
    {
      "ok": true,
      "service": "Hoang Long lead endpoint",
-     "configured": true
+     "configured": true,
+     "turnstileConfigured": true
    }
    ```
 
@@ -138,6 +163,7 @@ Mỗi lần push lên GitHub, Vercel sẽ tạo deployment mới. Nếu thay đ�
 ## 6. Xử lý sự cố
 
 - `/api/lead` trả `"configured": false`: thiếu một hoặc cả hai biến môi trường trên Vercel, hoặc deployment chưa được tạo lại sau khi thêm biến.
+- `/api/lead` trả `"turnstileConfigured": false`: kiểm tra `TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` và Redeploy. Nếu form báo lỗi xác minh, kiểm tra thêm hostname đã khai báo trong Turnstile.
 - Form báo chưa thể gửi: kiểm tra URL Apps Script có kết thúc bằng `/exec`, deployment đang cho phép **Anyone**, và hai secret giống hệt nhau.
 - Sheet có lead nhưng không có email: kiểm tra cột `Thông báo email`, quyền Gmail của Apps Script và hạn mức gửi email của tài khoản triển khai.
 - Đã sửa Apps Script: chọn **Deploy → Manage deployments → Edit → New version → Deploy**. Lưu code thôi chưa cập nhật bản Web App đang chạy.
@@ -167,11 +193,14 @@ Mỗi lần push lên GitHub, Vercel sẽ tạo deployment mới. Nếu thay đ�
 ## 9. Tối ưu hiệu suất đã áp dụng
 
 - Google Fonts và Font Awesome CDN đã được loại khỏi đường tải quan trọng.
-- Nunito và Be Vietnam Pro được phục vụ trực tiếp từ `assets/fonts/` với `font-display: swap`.
+- Nunito và Be Vietnam Pro được phục vụ trực tiếp từ `assets/fonts/` với `font-display: optional`, tránh đổi font muộn làm kéo dài LCP.
+- CSS biên dịch được tách sang `assets/css/landing-page.css`, giúp trình duyệt tải song song và cache độc lập thay vì phân tích toàn bộ trong HTML.
 - Trang chỉ nhúng 25 biểu tượng SVG thật sự sử dụng, không tải hai webfont Font Awesome dung lượng lớn.
 - Ảnh hero được preload và gắn `fetchpriority="high"`; không dùng `loading="lazy"`.
+- Google Tag vẫn xếp hàng sự kiện ngay lập tức nhưng thư viện bên thứ ba chỉ tải sau tương tác đầu tiên hoặc sau khi trang đã ổn định.
 - Hai ảnh nền trang trí bên ngoài chỉ tải sau nội dung chính hoặc khi người dùng sắp cuộn tới.
-- Bộ đếm chạy ở 30 khung hình/giây; phép đo review được gom thành một lượt đọc rồi một lượt ghi để tránh reflow lặp.
+- Bộ đếm chạy ở 30 khung hình/giây và hoàn tất trong tối đa 1,4 giây; phép đo review chỉ bắt đầu khi section sắp xuất hiện.
+- Timer slider và phép đo carousel bác sĩ chỉ kích hoạt khi người dùng cuộn gần tới section, giảm công việc main thread lúc tải đầu.
 - Chiều cao trang được lưu tạm và chỉ cập nhật khi kích thước nội dung thay đổi, không đọc lại ở mọi sự kiện cuộn.
 
 Khi đưa phiên bản này lên GitHub, phải giữ nguyên cả thư mục `assets/fonts/` và `assets/icons/`. Sau khi Vercel hoàn tất deployment mới, chạy lại PageSpeed Insights trên chính URL production để đo LCP trong điều kiện mạng thực tế.
