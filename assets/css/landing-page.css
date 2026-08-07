@@ -409,14 +409,19 @@ details[open] summary ~ * { animation: sweep .3s ease-in-out; }
     transform: none;
 }
 
-section[id]:not(#home), footer {
+section[id]:not(#home):not(.anchor-layout-ready), footer {
     content-visibility: auto;
     contain-intrinsic-size: 800px;
 }
 
-section.anchor-layout-ready {
-    content-visibility: visible;
-    contain-intrinsic-size: none;
+section[id].anchor-layout-ready {
+    /*
+       Bắt buộc thắng selector tối ưu `section[id]:not(#home)` ở phía trên.
+       Nếu không có !important, :not(#home) mang specificity của #home nên
+       section vẫn giữ content-visibility:auto trong lần click CTA đầu tiên.
+    */
+    content-visibility: visible !important;
+    contain-intrinsic-size: none !important;
 }
 
 /* Slider CSS thuần, thay cho UIkit */

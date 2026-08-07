@@ -23,9 +23,9 @@ test('Google Ads and GA4 share one loader and use the supplied account IDs', () 
 });
 
 test('large styles are cached separately and first-paint fonts avoid late swaps', () => {
-  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=48-fontfix">/);
+  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=50-cta-coldload-fix">/);
   assert.ok(
-    documentHtml.indexOf('href="assets/css/landing-page.css?v=48-fontfix"')
+    documentHtml.indexOf('href="assets/css/landing-page.css?v=50-cta-coldload-fix"')
       < documentHtml.indexOf('(function scheduleGoogleTag()'),
   );
   assert.doesNotMatch(documentHtml, /<style(?:\s|>)/);
@@ -174,11 +174,22 @@ test('appointment CTAs use one first-click-safe scroll handler on desktop and mo
   assert.match(handler, /mobileNav\?\.classList\.remove\('is-open'\)/);
   assert.match(handler, /sectionsBeforeRegistration\.forEach\(section => \{/);
   assert.match(handler, /section\.classList\.add\('anchor-layout-ready'\)/);
-  assert.match(handler, /window\.requestAnimationFrame\(\(\) => \{/);
+  assert.match(handler, /registrationTarget\.getBoundingClientRect\(\);/);
+  assert.match(handler, /await document\.fonts\.ready;/);
+  assert.match(handler, /window\.requestAnimationFrame\(\(\) => \{\s*window\.requestAnimationFrame\(resolve\);/s);
+  assert.match(handler, /await stabilizeRegistrationLayout\(\);/);
+  assert.match(handler, /registrationScrollPending/);
   assert.match(handler, /registrationTarget\.scrollIntoView\(\{\s*behavior: scrollBehavior,\s*block: 'start'/s);
   assert.equal((handler.match(/scrollIntoView\(/g) ?? []).length, 1);
   assert.doesNotMatch(handler, /setTimeout|850|getRegistrationScrollTop|window\.scrollTo/);
-  assert.match(stylesheet, /section\.anchor-layout-ready\s*\{[^}]*content-visibility:\s*visible;[^}]*contain-intrinsic-size:\s*none;/s);
+  assert.match(
+    stylesheet,
+    /section\[id\]\.anchor-layout-ready\s*\{[^}]*content-visibility:\s*visible\s*!important;[^}]*contain-intrinsic-size:\s*none\s*!important;/s,
+  );
+  assert.match(
+    stylesheet,
+    /section\[id\]:not\(#home\):not\(\.anchor-layout-ready\), footer\s*\{[^}]*content-visibility:\s*auto;/s,
+  );
 });
 
 test('mobile hero keeps “sớm tích hợp AI” together', () => {

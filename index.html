@@ -12,7 +12,7 @@
 <!-- Tài nguyên quan trọng nằm cùng website: không còn chuỗi tải Google Fonts / Font Awesome CDN -->
 <link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination-mobile.webp" type="image/webp" media="(max-width: 767px)" fetchpriority="high">
 <link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high">
-<link rel="stylesheet" href="assets/css/landing-page.css?v=48-fontfix">
+<link rel="stylesheet" href="assets/css/landing-page.css?v=50-cta-coldload-fix">
 
 <!-- Google tag: xếp hàng dữ liệu ngay, chỉ tải thư viện sau tương tác đầu tiên hoặc khi trang đã ổn định. -->
 <script>
@@ -1649,8 +1649,38 @@
             const sectionsBeforeRegistration = Array.from(document.querySelectorAll('section[id]'))
                 .filter(section => section !== document.getElementById('home'))
                 .filter(section => section.compareDocumentPosition(registrationSection) & Node.DOCUMENT_POSITION_FOLLOWING);
+            let registrationScrollPending = false;
 
-            document.addEventListener('click', event => {
+            const stabilizeRegistrationLayout = async () => {
+                sectionsBeforeRegistration.forEach(section => {
+                    section.classList.add('anchor-layout-ready');
+                });
+                registrationSection?.classList.add('anchor-layout-ready');
+
+                // Buộc trình duyệt dựng kích thước thật thay cho contain-intrinsic-size ước lượng.
+                registrationTarget.getBoundingClientRect();
+
+                // Font local có thể đổi line-wrap/chiều cao section ở lần tải đầu tiên.
+                // Chờ font hoàn tất trước khi lấy tọa độ cuộn để CTA không dừng ở section bác sĩ.
+                if (document.fonts?.ready) {
+                    try {
+                        await document.fonts.ready;
+                    } catch {
+                        // Nếu Font Loading API lỗi, vẫn tiếp tục với layout hiện có.
+                    }
+                }
+
+                await new Promise(resolve => {
+                    window.requestAnimationFrame(() => {
+                        window.requestAnimationFrame(resolve);
+                    });
+                });
+
+                // Đọc lại một lần sau khi style/font đã ổn định để flush layout cuối cùng.
+                registrationTarget.getBoundingClientRect();
+            };
+
+            document.addEventListener('click', async event => {
                 const target = event.target instanceof Element ? event.target : null;
                 const appointmentLink = target?.closest('a[href="#registration-form"]');
                 if (!appointmentLink) return;
@@ -1660,18 +1690,19 @@
                 mobileMenuToggle?.setAttribute('aria-expanded', 'false');
                 mobileMenuToggle?.setAttribute('aria-label', 'Mở menu');
 
-                sectionsBeforeRegistration.forEach(section => {
-                    section.classList.add('anchor-layout-ready');
-                });
-                registrationSection?.classList.add('anchor-layout-ready');
+                if (registrationScrollPending) return;
+                registrationScrollPending = true;
 
-                const scrollBehavior = prefersReducedMotion ? 'auto' : 'smooth';
-                window.requestAnimationFrame(() => {
+                try {
+                    await stabilizeRegistrationLayout();
+                    const scrollBehavior = prefersReducedMotion ? 'auto' : 'smooth';
                     registrationTarget.scrollIntoView({
                         behavior: scrollBehavior,
                         block: 'start'
                     });
-                });
+                } finally {
+                    registrationScrollPending = false;
+                }
             });
         }
 
