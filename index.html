@@ -1111,9 +1111,9 @@
                         </div>
 
                         <form id="lead-form" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                            <div class="lead-honeypot" aria-hidden="true">
-                                <label>Không điền trường này
-                                    <input type="text" name="website" tabindex="-1" autocomplete="off">
+                            <div class="lead-contact-field" aria-hidden="true">
+                                <label for="lead-contact-website">Website
+                                    <input id="lead-contact-website" type="text" name="website" tabindex="-1" autocomplete="off" inputmode="none" autocapitalize="none" spellcheck="false" aria-hidden="true" data-1p-ignore data-lpignore="true">
                                 </label>
                             </div>
                             <input type="hidden" name="formStartedAt" value="">
@@ -2004,8 +2004,16 @@
                 });
             };
 
-            const resetStartedAt = () => {
+            let hasMarkedFormStart = false;
+            const markFormStarted = () => {
+                if (hasMarkedFormStart) return;
+                hasMarkedFormStart = true;
                 startedAtInput.value = String(Date.now());
+            };
+
+            const resetFormTiming = () => {
+                hasMarkedFormStart = false;
+                startedAtInput.value = '';
             };
 
             const showFormStatus = (message, type) => {
@@ -2103,11 +2111,19 @@
                 ensureTurnstile().catch(() => {});
             };
 
-            resetStartedAt();
+            resetFormTiming();
+            leadForm.addEventListener('focusin', markFormStarted);
             leadForm.addEventListener('focusin', trackLeadFormStart, { once: true });
             leadForm.addEventListener('input', trackLeadFormStart, { once: true });
             leadForm.addEventListener('focusin', primeTurnstile);
             if ('IntersectionObserver' in window) {
+                const formTimingObserver = new IntersectionObserver((entries, observer) => {
+                    if (!entries.some(entry => entry.isIntersecting)) return;
+                    observer.disconnect();
+                    markFormStarted();
+                }, { threshold: 0.2 });
+                formTimingObserver.observe(leadForm);
+
                 const turnstileObserver = new IntersectionObserver((entries, observer) => {
                     if (!entries.some(entry => entry.isIntersecting)) return;
                     observer.disconnect();
@@ -2225,7 +2241,7 @@
                         });
                     }
                     leadForm.reset();
-                    resetStartedAt();
+                    resetFormTiming();
                     resetTurnstile();
                     showFormStatus(
                         result.message || 'Đăng ký thành công. Hoàng Long Clinic sẽ sớm liên hệ.',

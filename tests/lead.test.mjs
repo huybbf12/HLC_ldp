@@ -120,12 +120,71 @@ test('consent is required', async () => {
 
 test('honeypot submission is discarded without calling Apps Script', async () => {
   let fetchWasCalled = false;
+  let honeypotLog = '';
+  const originalConsoleInfo = console.info;
+  globalThis.fetch = async () => {
+    fetchWasCalled = true;
+    return Response.json({ ok: true });
+  };
+  console.info = message => {
+    honeypotLog = String(message);
+  };
+
+  try {
+    const response = await POST(requestFor(validBody({ website: 'spam.example' }), {
+      'User-Agent': 'SpamBot/1.0',
+      'x-vercel-ip-country': 'VN',
+    }));
+    const result = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(result.ok, true);
+    assert.equal(fetchWasCalled, false);
+
+    const parsedLog = JSON.parse(honeypotLog);
+    assert.equal(parsedLog.event, 'hlc_honeypot_filtered');
+    assert.equal(parsedLog.reason, 'honeypot');
+    assert.equal(parsedLog.country, 'VN');
+    assert.equal(parsedLog.userAgent, 'SpamBot/1.0');
+    assert.equal(parsedLog.sourceHost, 'example.com');
+    assert.equal(parsedLog.utmSource, 'facebook');
+    assert.equal(honeypotLog.includes('Nguyễn Văn An'), false);
+    assert.equal(honeypotLog.includes('0912 345 678'), false);
+    assert.equal(honeypotLog.includes('spam.example'), false);
+  } finally {
+    console.info = originalConsoleInfo;
+  }
+});
+
+test('non-string honeypot value is also discarded without calling Apps Script', async () => {
+  let fetchWasCalled = false;
+  const originalConsoleInfo = console.info;
+  globalThis.fetch = async () => {
+    fetchWasCalled = true;
+    return Response.json({ ok: true });
+  };
+  console.info = () => {};
+
+  try {
+    const response = await POST(requestFor(validBody({ website: { url: 'spam.example' } })));
+    const result = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(result.ok, true);
+    assert.equal(fetchWasCalled, false);
+  } finally {
+    console.info = originalConsoleInfo;
+  }
+});
+
+test('submission under four seconds is discarded without calling upstream services', async () => {
+  let fetchWasCalled = false;
   globalThis.fetch = async () => {
     fetchWasCalled = true;
     return Response.json({ ok: true });
   };
 
-  const response = await POST(requestFor(validBody({ website: 'spam.example' })));
+  const response = await POST(requestFor(validBody({ formStartedAt: Date.now() - 3_000 })));
   const result = await response.json();
 
   assert.equal(response.status, 200);
@@ -133,14 +192,14 @@ test('honeypot submission is discarded without calling Apps Script', async () =>
   assert.equal(fetchWasCalled, false);
 });
 
-test('submission under two seconds is discarded without calling upstream services', async () => {
+test('missing or invalid form timing is discarded without calling upstream services', async () => {
   let fetchWasCalled = false;
   globalThis.fetch = async () => {
     fetchWasCalled = true;
     return Response.json({ ok: true });
   };
 
-  const response = await POST(requestFor(validBody({ formStartedAt: Date.now() - 1_000 })));
+  const response = await POST(requestFor(validBody({ formStartedAt: '' })));
   const result = await response.json();
 
   assert.equal(response.status, 200);

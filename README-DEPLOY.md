@@ -95,7 +95,7 @@ Nếu cả hai biến Turnstile chưa được khai báo, form vẫn chạy theo
 ### Các lớp chống spam đã áp dụng
 
 - Turnstile được **xác minh lại tại `/api/lead`** trước khi dữ liệu đi tới Apps Script; token phía trình duyệt không được tin cậy trực tiếp.
-- Honeypot và ngưỡng điền form tối thiểu 2 giây loại bot đơn giản mà không thêm bước cho người dùng thật.
+- Honeypot khó nhận diện hơn và ngưỡng điền form tối thiểu 4 giây được tính từ lúc form xuất hiện hoặc người dùng bắt đầu tương tác, giúp loại bot đơn giản mà không thêm bước hiển thị cho người dùng thật.
 - API từ chối POST có `Origin` khác domain hiện tại khi trình duyệt gửi header này.
 - Google Apps Script bỏ qua số điện thoại đã được tiếp nhận trong **24 giờ gần nhất** (tối đa 500 lead gần nhất), không tạo thêm dòng Sheet hoặc email trùng.
 - Lead trùng hoặc submission bị honeypot loại không phát sự kiện GA4 `generate_lead`, giúp số chuyển đổi sạch hơn.
@@ -103,6 +103,26 @@ Nếu cả hai biến Turnstile chưa được khai báo, form vẫn chạy theo
 ### Rate limit ở Vercel Firewall
 
 Sau khi bản mới chạy ổn định, nên bổ sung một rule rate limit cho đường dẫn `/api/lead` trong Vercel Firewall, ví dụ chỉ áp dụng cho request `POST` và giới hạn khoảng 5–10 lần/10 phút/IP. Không đặt ngưỡng quá thấp vì mạng cơ quan hoặc 4G có thể dùng chung IP. Đây là lớp bổ sung; Turnstile và chống trùng vẫn là lớp chính của form.
+
+### Đo riêng số lượt bị honeypot lọc
+
+Honeypot được đo bằng structured log phía server với nhãn duy nhất:
+
+```text
+hlc_honeypot_filtered
+```
+
+Log này không gửi sang GA4, Google Sheet hoặc Gmail và không thay đổi các sự kiện chuyển đổi hiện có. Mỗi log chỉ có thời điểm, quốc gia/khu vực ước tính, user agent, hostname nguồn/referrer và UTM nếu request cung cấp. Hệ thống không ghi tên, số điện thoại, ghi chú, IP đầy đủ hoặc nội dung bot đã điền vào ô bẫy.
+
+Để xem:
+
+1. Mở Vercel Dashboard và chọn project landing page nội soi.
+2. Chọn **Logs** ở thanh bên.
+3. Chọn môi trường **Production**, route `/api/lead` và method `POST`.
+4. Nhập `hlc_honeypot_filtered` vào ô tìm kiếm log.
+5. Mỗi kết quả tương ứng một request bị honeypot loại; mở dòng log để xem `timestamp`, `country`, `region`, `userAgent`, `sourceHost`, `referrerHost` và UTM.
+
+Thời gian trong Runtime Logs hiển thị theo UTC. Vercel hiện lưu Runtime Logs khoảng 1 giờ với Hobby, 1 ngày với Pro và lâu hơn khi dùng Observability Plus. Nếu cần báo cáo theo tuần/tháng, cần kết nối Log Drain hoặc một kho log riêng thay vì gửi bot vào Sheet lead chính.
 
 ## 3. Kiểm tra sau khi triển khai
 

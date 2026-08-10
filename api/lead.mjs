@@ -4,7 +4,7 @@ const JSON_HEADERS = {
 };
 
 const MAX_BODY_LENGTH = 20_000;
-const MIN_FORM_FILL_TIME_MS = 2_000;
+const MIN_FORM_FILL_TIME_MS = 4_000;
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const TURNSTILE_ACTION = 'lead_form';
 
@@ -42,12 +42,18 @@ function isValidVietnameseMobile(phone) {
   return /^0(?:3|5|7|8|9)\d{8}$/.test(phone);
 }
 
+function hasHoneypotValue(value) {
+  if (value === undefined || value === null) return false;
+  if (typeof value !== 'string') return true;
+  return value.trim().length > 0;
+}
+
 function wasSubmittedTooQuickly(value) {
   const startedAt = Number(value);
-  if (!Number.isFinite(startedAt) || startedAt <= 0) return false;
+  if (!Number.isFinite(startedAt) || startedAt <= 0) return true;
 
   const elapsed = Date.now() - startedAt;
-  return elapsed >= 0 && elapsed < MIN_FORM_FILL_TIME_MS;
+  return elapsed < MIN_FORM_FILL_TIME_MS;
 }
 
 function getRequestHost(request) {
@@ -77,6 +83,39 @@ function getClientIp(request) {
   const forwardedFor = request.headers.get('x-forwarded-for');
   if (forwardedFor) return forwardedFor.split(',')[0].trim().slice(0, 80);
   return cleanText(request.headers.get('x-real-ip') || '', 80);
+}
+
+function getUrlHost(value) {
+  const url = cleanText(value, 500);
+  if (!url) return '';
+
+  try {
+    return new URL(url).hostname.toLowerCase();
+  } catch {
+    return '';
+  }
+}
+
+function logHoneypotBlock(request, body) {
+  const utm = body.utm && typeof body.utm === 'object' && !Array.isArray(body.utm)
+    ? body.utm
+    : {};
+
+  // Không ghi tên, số điện thoại, ghi chú, IP hoặc giá trị bot đã điền.
+  console.info(JSON.stringify({
+    event: 'hlc_honeypot_filtered',
+    decision: 'blocked',
+    reason: 'honeypot',
+    timestamp: new Date().toISOString(),
+    country: cleanText(request.headers.get('x-vercel-ip-country') || '', 8),
+    region: cleanText(request.headers.get('x-vercel-ip-country-region') || '', 16),
+    userAgent: cleanText(request.headers.get('user-agent') || '', 180),
+    sourceHost: getUrlHost(body.sourceUrl),
+    referrerHost: getUrlHost(body.referrer),
+    utmSource: cleanText(utm.source, 120),
+    utmMedium: cleanText(utm.medium, 120),
+    utmCampaign: cleanText(utm.campaign, 160),
+  }));
 }
 
 async function verifyTurnstile(request, token, secret) {
@@ -167,9 +206,14 @@ export async function POST(request) {
     return json({ ok: false, message: 'Dữ liệu gửi lên không hợp lệ.' }, 400);
   }
 
-  // Trường ẩn và thời gian điền form giúp loại bỏ phần lớn bot đơn giản.
-  // Trả về thành công giả để bot không thử lại liên tục.
-  if (cleanText(body.website, 200) || wasSubmittedTooQuickly(body.formStartedAt)) {
+  // Trả về thành công giả để bot không thử lại liên tục. Chỉ honeypot được ghi
+  // thành một luồng đo riêng; không gửi GA4, email hoặc dữ liệu sang Sheet.
+  if (hasHoneypotValue(body.website)) {
+    logHoneypotBlock(request, body);
+    return json({ ok: true, message: 'Đã tiếp nhận yêu cầu tư vấn.' });
+  }
+
+  if (wasSubmittedTooQuickly(body.formStartedAt)) {
     return json({ ok: true, message: 'Đã tiếp nhận yêu cầu tư vấn.' });
   }
 
