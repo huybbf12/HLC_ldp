@@ -95,32 +95,49 @@ Nếu cả hai biến Turnstile chưa được khai báo, form vẫn chạy theo
 ### Các lớp chống spam đã áp dụng
 
 - Turnstile được **xác minh lại tại `/api/lead`** trước khi dữ liệu đi tới Apps Script; token phía trình duyệt không được tin cậy trực tiếp.
-- Honeypot khó nhận diện hơn và ngưỡng điền form tối thiểu 4 giây được tính từ lúc form xuất hiện hoặc người dùng bắt đầu tương tác, giúp loại bot đơn giản mà không thêm bước hiển thị cho người dùng thật.
+- Honeypot lọc bot tự điền trường ẩn. Ngưỡng 4 giây được tính từ lúc form xuất hiện hoặc người dùng bắt đầu tương tác.
+- Ngưỡng 4 giây là **tín hiệu mềm khi Turnstile đang hoạt động**: người dùng autofill nhanh nhưng đã được Turnstile xác minh vẫn được nhận. Nếu Turnstile chưa được cấu hình, submission thiếu thời gian hợp lệ hoặc dưới 4 giây vẫn bị lọc.
+- Kết quả Turnstile phải khớp chính xác cả hostname hiện tại và action `lead_form`; token của website hoặc tác vụ khác không được chấp nhận.
 - API từ chối POST có `Origin` khác domain hiện tại khi trình duyệt gửi header này.
 - Google Apps Script bỏ qua số điện thoại đã được tiếp nhận trong **24 giờ gần nhất** (tối đa 500 lead gần nhất), không tạo thêm dòng Sheet hoặc email trùng.
 - Lead trùng hoặc submission bị honeypot loại không phát sự kiện GA4 `generate_lead`, giúp số chuyển đổi sạch hơn.
 
+### Không chặn nhầm bot tìm kiếm hợp lệ
+
+- `robots.txt` cho phép crawl toàn bộ nội dung công khai và chỉ yêu cầu bot không truy cập `/api/`.
+- `sitemap.xml`, canonical và thẻ robots trong HTML cùng trỏ tới `https://noisoihoanglong.vercel.app/`.
+- API và cấu hình Vercel không dùng quy tắc kiểu `User-Agent chứa bot/crawler thì chặn`. Googlebot, AdsBot, Bingbot và bot tạo preview vẫn đọc được landing page.
+- `/api/` có `X-Robots-Tag: noindex` để công cụ tìm kiếm không đưa endpoint kỹ thuật vào kết quả; điều này không ảnh hưởng trang landing page.
+
+Nếu sau này đổi sang tên miền riêng, cập nhật cùng một tên miền mới tại ba nơi: `index.html` (canonical và `og:url`), `robots.txt` và `sitemap.xml`. Đồng thời thêm tên miền đó vào danh sách hostname của Turnstile.
+
 ### Rate limit ở Vercel Firewall
 
-Sau khi bản mới chạy ổn định, nên bổ sung một rule rate limit cho đường dẫn `/api/lead` trong Vercel Firewall, ví dụ chỉ áp dụng cho request `POST` và giới hạn khoảng 5–10 lần/10 phút/IP. Không đặt ngưỡng quá thấp vì mạng cơ quan hoặc 4G có thể dùng chung IP. Đây là lớp bổ sung; Turnstile và chống trùng vẫn là lớp chính của form.
+Sau khi bản mới chạy ổn định, tạo rule chỉ khớp **method `POST` + path `/api/lead`**. Bắt đầu ở chế độ **Log** với ngưỡng tham chiếu `10 request/10 phút/IP` trong ít nhất 24–48 giờ; sau khi xem dữ liệu mới chuyển sang Rate Limit hoặc Challenge. Không áp rule này lên `GET /`, ảnh, CSS, JavaScript hoặc `/api/turnstile-config`, và không dùng điều kiện rộng kiểu User-Agent chứa `bot`, `crawler`, `spider` hay `headless`. Không đặt ngưỡng quá thấp vì mạng cơ quan hoặc 4G có thể dùng chung IP. Đây là lớp bổ sung; Turnstile và chống trùng vẫn là lớp chính của form.
 
-### Đo riêng số lượt bị honeypot lọc
+### Theo dõi quyết định chống spam
 
-Honeypot được đo bằng structured log phía server với nhãn duy nhất:
+Các quyết định được ghi bằng structured log phía server:
 
-```text
-hlc_honeypot_filtered
-```
+| Nhãn log | Ý nghĩa |
+| --- | --- |
+| `hlc_honeypot_filtered` | Trường bẫy bị điền và request đã bị loại |
+| `hlc_timing_filtered` | Request quá nhanh/thiếu thời gian và không có Turnstile bảo chứng |
+| `hlc_timing_verified` | Request nhanh nhưng đã vượt Turnstile nên vẫn được nhận |
+| `hlc_turnstile_rejected` | Token thiếu, sai, hết hạn hoặc không khớp hostname/action |
+| `hlc_origin_rejected` | Trình duyệt gửi request từ một website khác |
 
-Log này không gửi sang GA4, Google Sheet hoặc Gmail và không thay đổi các sự kiện chuyển đổi hiện có. Mỗi log chỉ có thời điểm, quốc gia/khu vực ước tính, user agent, hostname nguồn/referrer và UTM nếu request cung cấp. Hệ thống không ghi tên, số điện thoại, ghi chú, IP đầy đủ hoặc nội dung bot đã điền vào ô bẫy.
+Các log này không gửi sang GA4, Google Sheet hoặc Gmail và không thay đổi các sự kiện chuyển đổi hiện có. Mỗi log chỉ có thời điểm, quốc gia/khu vực ước tính, user agent, hostname nguồn/referrer, UTM và lý do quyết định nếu request cung cấp. Hệ thống không ghi tên, số điện thoại, ghi chú, IP đầy đủ, token Turnstile hoặc nội dung bot đã điền vào ô bẫy.
 
 Để xem:
 
 1. Mở Vercel Dashboard và chọn project landing page nội soi.
 2. Chọn **Logs** ở thanh bên.
 3. Chọn môi trường **Production**, route `/api/lead` và method `POST`.
-4. Nhập `hlc_honeypot_filtered` vào ô tìm kiếm log.
-5. Mỗi kết quả tương ứng một request bị honeypot loại; mở dòng log để xem `timestamp`, `country`, `region`, `userAgent`, `sourceHost`, `referrerHost` và UTM.
+4. Nhập một trong các nhãn ở bảng trên vào ô tìm kiếm log.
+5. Mở từng dòng để xem `decision`, `reason`, `timestamp`, `country`, `region`, `userAgent`, `sourceHost`, `referrerHost` và UTM.
+
+Đặc biệt, so sánh `hlc_timing_filtered` với `hlc_timing_verified`: số thứ hai cho biết những lượt autofill nhanh mà cơ chế cũ có thể đã làm mất nhưng phiên bản này vẫn nhận nhờ Turnstile.
 
 Thời gian trong Runtime Logs hiển thị theo UTC. Vercel hiện lưu Runtime Logs khoảng 1 giờ với Hobby, 1 ngày với Pro và lâu hơn khi dùng Observability Plus. Nếu cần báo cáo theo tuần/tháng, cần kết nối Log Drain hoặc một kho log riêng thay vì gửi bot vào Sheet lead chính.
 
@@ -192,7 +209,7 @@ Mỗi lần push lên GitHub, Vercel sẽ tạo deployment mới. Nếu thay đ�
 ## 7. Bảo mật và dữ liệu
 
 - Form xác thực dữ liệu ở cả trình duyệt, Vercel Function và Apps Script.
-- Có trường honeypot, chặn gửi quá nhanh và khóa nút trong lúc gửi để giảm spam/gửi trùng cơ bản.
+- Có honeypot, tín hiệu thời gian kết hợp Turnstile và khóa nút trong lúc gửi để giảm spam/gửi trùng mà hạn chế mất lead autofill.
 - Dữ liệu bắt đầu bằng ký tự công thức được vô hiệu hóa trước khi ghi vào Sheet.
 - Secret chỉ được lưu trong Vercel Environment Variables và Apps Script Script Properties.
 - Chỉ cấp quyền Sheet/Gmail cho người phụ trách; không bật chia sẻ công khai Sheet.

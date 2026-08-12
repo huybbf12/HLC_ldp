@@ -48,12 +48,30 @@ function hasHoneypotValue(value) {
   return value.trim().length > 0;
 }
 
-function wasSubmittedTooQuickly(value) {
+function getFormTimingSignal(value) {
   const startedAt = Number(value);
-  if (!Number.isFinite(startedAt) || startedAt <= 0) return true;
+  if (!Number.isFinite(startedAt) || startedAt <= 0) {
+    return {
+      suspicious: true,
+      reason: 'timing_missing_or_invalid',
+      elapsedMs: null,
+    };
+  }
 
   const elapsed = Date.now() - startedAt;
-  return elapsed < MIN_FORM_FILL_TIME_MS;
+  if (!Number.isFinite(elapsed) || elapsed < 0) {
+    return {
+      suspicious: true,
+      reason: 'timing_invalid',
+      elapsedMs: null,
+    };
+  }
+
+  return {
+    suspicious: elapsed < MIN_FORM_FILL_TIME_MS,
+    reason: elapsed < MIN_FORM_FILL_TIME_MS ? 'submitted_too_quickly' : 'timing_ok',
+    elapsedMs: elapsed,
+  };
 }
 
 function getRequestHost(request) {
@@ -96,16 +114,12 @@ function getUrlHost(value) {
   }
 }
 
-function logHoneypotBlock(request, body) {
+function getSafeLogContext(request, body) {
   const utm = body.utm && typeof body.utm === 'object' && !Array.isArray(body.utm)
     ? body.utm
     : {};
 
-  // Không ghi tên, số điện thoại, ghi chú, IP hoặc giá trị bot đã điền.
-  console.info(JSON.stringify({
-    event: 'hlc_honeypot_filtered',
-    decision: 'blocked',
-    reason: 'honeypot',
+  return {
     timestamp: new Date().toISOString(),
     country: cleanText(request.headers.get('x-vercel-ip-country') || '', 8),
     region: cleanText(request.headers.get('x-vercel-ip-country-region') || '', 16),
@@ -115,7 +129,41 @@ function logHoneypotBlock(request, body) {
     utmSource: cleanText(utm.source, 120),
     utmMedium: cleanText(utm.medium, 120),
     utmCampaign: cleanText(utm.campaign, 160),
+  };
+}
+
+function logSecurityDecision(event, request, body, details = {}) {
+  // Không ghi tên, số điện thoại, ghi chú, IP, token Turnstile hoặc giá trị honeypot.
+  console.info(JSON.stringify({
+    event,
+    ...details,
+    ...getSafeLogContext(request, body),
   }));
+}
+
+function logHoneypotBlock(request, body) {
+  logSecurityDecision('hlc_honeypot_filtered', request, body, {
+    decision: 'blocked',
+    reason: 'honeypot',
+  });
+}
+
+function logTimingDecision(request, body, timing, decision) {
+  const elapsedMsBucket = Number.isFinite(timing.elapsedMs)
+    ? Math.min(60_000, Math.max(0, Math.round(timing.elapsedMs / 250) * 250))
+    : null;
+
+  logSecurityDecision(
+    decision === 'blocked' ? 'hlc_timing_filtered' : 'hlc_timing_verified',
+    request,
+    body,
+    {
+      decision,
+      reason: timing.reason,
+      elapsedMsBucket,
+      verification: decision === 'allowed' ? 'turnstile_passed' : 'turnstile_unavailable',
+    }
+  );
 }
 
 async function verifyTurnstile(request, token, secret) {
@@ -135,30 +183,36 @@ async function verifyTurnstile(request, token, secret) {
       signal: AbortSignal.timeout(6_000),
     });
   } catch {
-    return { ok: false, unavailable: true };
+    return { ok: false, unavailable: true, reason: 'siteverify_unavailable', errorCodes: [] };
   }
 
   let result;
   try {
     result = await response.json();
   } catch {
-    return { ok: false, unavailable: true };
+    return { ok: false, unavailable: true, reason: 'siteverify_invalid_response', errorCodes: [] };
   }
 
-  if (!response.ok || result?.success !== true) return { ok: false, unavailable: false };
+  const errorCodes = Array.isArray(result?.['error-codes'])
+    ? result['error-codes'].map(code => cleanText(code, 80)).filter(Boolean).slice(0, 6)
+    : [];
+
+  if (!response.ok || result?.success !== true) {
+    return { ok: false, unavailable: false, reason: 'siteverify_rejected', errorCodes };
+  }
 
   const requestHost = getRequestHost(request);
   const verifiedHost = cleanText(result.hostname, 255).toLowerCase();
-  if (verifiedHost && requestHost && verifiedHost !== requestHost) {
-    return { ok: false, unavailable: false };
+  if (!verifiedHost || !requestHost || verifiedHost !== requestHost) {
+    return { ok: false, unavailable: false, reason: 'hostname_mismatch', errorCodes: [] };
   }
 
   const verifiedAction = cleanText(result.action, 100);
-  if (verifiedAction && verifiedAction !== TURNSTILE_ACTION) {
-    return { ok: false, unavailable: false };
+  if (verifiedAction !== TURNSTILE_ACTION) {
+    return { ok: false, unavailable: false, reason: 'action_mismatch', errorCodes: [] };
   }
 
-  return { ok: true, unavailable: false };
+  return { ok: true, unavailable: false, reason: 'verified', errorCodes: [] };
 }
 
 export async function GET() {
@@ -187,6 +241,11 @@ export async function POST(request) {
   }
 
   if (hasInvalidOrigin(request)) {
+    logSecurityDecision('hlc_origin_rejected', request, {}, {
+      decision: 'blocked',
+      reason: 'cross_origin',
+      originHost: getUrlHost(request.headers.get('origin') || ''),
+    });
     return json({ ok: false, message: 'Yêu cầu không hợp lệ.' }, 403);
   }
 
@@ -213,9 +272,9 @@ export async function POST(request) {
     return json({ ok: true, message: 'Đã tiếp nhận yêu cầu tư vấn.' });
   }
 
-  if (wasSubmittedTooQuickly(body.formStartedAt)) {
-    return json({ ok: true, message: 'Đã tiếp nhận yêu cầu tư vấn.' });
-  }
+  // Thời gian điền form là tín hiệu mềm. Nếu Turnstile xác minh được người dùng,
+  // submission nhanh do autofill vẫn được nhận thay vì bị mất lead âm thầm.
+  const formTiming = getFormTimingSignal(body.formStartedAt);
 
   const name = cleanText(body.name, 100);
   const phone = normalizeVietnamesePhone(body.phone);
@@ -257,6 +316,7 @@ export async function POST(request) {
   const turnstileSiteKey = cleanText(process.env.TURNSTILE_SITE_KEY, 500);
   const turnstileSecret = cleanText(process.env.TURNSTILE_SECRET_KEY, 500);
   const turnstilePartiallyConfigured = Boolean(turnstileSiteKey) !== Boolean(turnstileSecret);
+  let turnstilePassed = false;
   if (turnstilePartiallyConfigured) {
     return json({
       ok: false,
@@ -268,6 +328,11 @@ export async function POST(request) {
   if (turnstileSiteKey && turnstileSecret) {
     const turnstileToken = cleanText(body.turnstileToken, 4_096);
     if (!turnstileToken) {
+      logSecurityDecision('hlc_turnstile_rejected', request, body, {
+        decision: 'blocked',
+        reason: 'missing_token',
+        errorCodes: [],
+      });
       return json({
         ok: false,
         field: 'turnstile',
@@ -277,6 +342,11 @@ export async function POST(request) {
 
     const verification = await verifyTurnstile(request, turnstileToken, turnstileSecret);
     if (!verification.ok) {
+      logSecurityDecision('hlc_turnstile_rejected', request, body, {
+        decision: 'blocked',
+        reason: verification.reason,
+        errorCodes: verification.errorCodes,
+      });
       return json({
         ok: false,
         field: 'turnstile',
@@ -284,6 +354,17 @@ export async function POST(request) {
           ? 'Chưa thể xác minh chống spam lúc này. Vui lòng thử lại hoặc gọi hotline.'
           : 'Xác minh chống spam chưa thành công. Vui lòng thử lại.',
       }, verification.unavailable ? 503 : 400);
+    }
+
+    turnstilePassed = true;
+  }
+
+  if (formTiming.suspicious) {
+    if (turnstilePassed) {
+      logTimingDecision(request, body, formTiming, 'allowed');
+    } else {
+      logTimingDecision(request, body, formTiming, 'blocked');
+      return json({ ok: true, message: 'Đã tiếp nhận yêu cầu tư vấn.' });
     }
   }
 

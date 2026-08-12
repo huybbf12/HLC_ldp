@@ -23,7 +23,7 @@ test('Google Ads and GA4 share one loader and use the supplied account IDs', () 
 });
 
 test('large styles are cached separately and first-paint fonts avoid late swaps', () => {
-  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=50-cta-coldload-fix">/);
+  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=53-goodbot-safe">/);
   assert.ok(
     documentHtml.indexOf('href="assets/css/landing-page.css?v=50-cta-coldload-fix"')
       < documentHtml.indexOf('(function scheduleGoogleTag()'),

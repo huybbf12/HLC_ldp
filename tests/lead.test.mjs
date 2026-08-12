@@ -179,47 +179,73 @@ test('non-string honeypot value is also discarded without calling Apps Script', 
 
 test('submission under four seconds is discarded without calling upstream services', async () => {
   let fetchWasCalled = false;
+  let timingLog = '';
+  const originalConsoleInfo = console.info;
   globalThis.fetch = async () => {
     fetchWasCalled = true;
     return Response.json({ ok: true });
   };
+  console.info = message => {
+    timingLog = String(message);
+  };
 
-  const response = await POST(requestFor(validBody({ formStartedAt: Date.now() - 3_000 })));
-  const result = await response.json();
+  try {
+    const response = await POST(requestFor(validBody({ formStartedAt: Date.now() - 3_000 })));
+    const result = await response.json();
 
-  assert.equal(response.status, 200);
-  assert.equal(result.ok, true);
-  assert.equal(fetchWasCalled, false);
+    assert.equal(response.status, 200);
+    assert.equal(result.ok, true);
+    assert.equal(fetchWasCalled, false);
+
+    const parsedLog = JSON.parse(timingLog);
+    assert.equal(parsedLog.event, 'hlc_timing_filtered');
+    assert.equal(parsedLog.decision, 'blocked');
+    assert.equal(parsedLog.reason, 'submitted_too_quickly');
+  } finally {
+    console.info = originalConsoleInfo;
+  }
 });
 
 test('missing or invalid form timing is discarded without calling upstream services', async () => {
   let fetchWasCalled = false;
+  const originalConsoleInfo = console.info;
   globalThis.fetch = async () => {
     fetchWasCalled = true;
     return Response.json({ ok: true });
   };
+  console.info = () => {};
 
-  const response = await POST(requestFor(validBody({ formStartedAt: '' })));
-  const result = await response.json();
+  try {
+    const response = await POST(requestFor(validBody({ formStartedAt: '' })));
+    const result = await response.json();
 
-  assert.equal(response.status, 200);
-  assert.equal(result.ok, true);
-  assert.equal(fetchWasCalled, false);
+    assert.equal(response.status, 200);
+    assert.equal(result.ok, true);
+    assert.equal(fetchWasCalled, false);
+  } finally {
+    console.info = originalConsoleInfo;
+  }
 });
 
 test('cross-origin browser submission is rejected before forwarding', async () => {
   let fetchWasCalled = false;
+  const originalConsoleInfo = console.info;
   globalThis.fetch = async () => {
     fetchWasCalled = true;
     return Response.json({ ok: true });
   };
+  console.info = () => {};
 
-  const response = await POST(requestFor(validBody(), { Origin: 'https://spam.example' }));
-  const result = await response.json();
+  try {
+    const response = await POST(requestFor(validBody(), { Origin: 'https://spam.example' }));
+    const result = await response.json();
 
-  assert.equal(response.status, 403);
-  assert.equal(result.ok, false);
-  assert.equal(fetchWasCalled, false);
+    assert.equal(response.status, 403);
+    assert.equal(result.ok, false);
+    assert.equal(fetchWasCalled, false);
+  } finally {
+    console.info = originalConsoleInfo;
+  }
 });
 
 test('Turnstile is verified server-side before a lead is forwarded', async () => {
@@ -254,10 +280,113 @@ test('Turnstile is verified server-side before a lead is forwarded', async () =>
   assert.equal(calls[1].url, process.env.GOOGLE_APPS_SCRIPT_URL);
 });
 
+test('fast autofill is accepted when Turnstile has verified the visitor', async () => {
+  process.env.TURNSTILE_SITE_KEY = 'test-site-key';
+  process.env.TURNSTILE_SECRET_KEY = 'test-turnstile-secret';
+  const calls = [];
+  let timingLog = '';
+  const originalConsoleInfo = console.info;
+
+  globalThis.fetch = async (url, options) => {
+    calls.push({ url: String(url), options });
+    if (String(url).includes('challenges.cloudflare.com/turnstile')) {
+      return Response.json({ success: true, hostname: 'example.com', action: 'lead_form' });
+    }
+    return Response.json({
+      ok: true,
+      emailSent: true,
+      referenceCode: 'HLC-NS-20260812-001',
+    });
+  };
+  console.info = message => {
+    timingLog = String(message);
+  };
+
+  try {
+    const response = await POST(requestFor(validBody({
+      formStartedAt: Date.now() - 1_000,
+      turnstileToken: 'valid-token',
+    }), { Origin: 'https://example.com' }));
+    const result = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(result.ok, true);
+    assert.equal(calls.length, 2);
+
+    const parsedLog = JSON.parse(timingLog);
+    assert.equal(parsedLog.event, 'hlc_timing_verified');
+    assert.equal(parsedLog.decision, 'allowed');
+    assert.equal(parsedLog.verification, 'turnstile_passed');
+    assert.equal(timingLog.includes('Nguyễn Văn An'), false);
+    assert.equal(timingLog.includes('0912 345 678'), false);
+  } finally {
+    console.info = originalConsoleInfo;
+  }
+});
+
+test('missing timing is accepted when Turnstile has verified the visitor', async () => {
+  process.env.TURNSTILE_SITE_KEY = 'test-site-key';
+  process.env.TURNSTILE_SECRET_KEY = 'test-turnstile-secret';
+  let appsScriptWasCalled = false;
+  const originalConsoleInfo = console.info;
+
+  globalThis.fetch = async url => {
+    if (String(url).includes('challenges.cloudflare.com/turnstile')) {
+      return Response.json({ success: true, hostname: 'example.com', action: 'lead_form' });
+    }
+    appsScriptWasCalled = true;
+    return Response.json({ ok: true, referenceCode: 'HLC-NS-20260812-002' });
+  };
+  console.info = () => {};
+
+  try {
+    const response = await POST(requestFor(validBody({
+      formStartedAt: '',
+      turnstileToken: 'valid-token',
+    })));
+    const result = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(result.ok, true);
+    assert.equal(appsScriptWasCalled, true);
+  } finally {
+    console.info = originalConsoleInfo;
+  }
+});
+
+test('Turnstile result must match both production hostname and action', async () => {
+  process.env.TURNSTILE_SITE_KEY = 'test-site-key';
+  process.env.TURNSTILE_SECRET_KEY = 'test-turnstile-secret';
+  let appsScriptWasCalled = false;
+  const originalConsoleInfo = console.info;
+
+  globalThis.fetch = async url => {
+    if (String(url).includes('challenges.cloudflare.com/turnstile')) {
+      return Response.json({ success: true, hostname: 'other.example', action: 'different_form' });
+    }
+    appsScriptWasCalled = true;
+    return Response.json({ ok: true });
+  };
+  console.info = () => {};
+
+  try {
+    const response = await POST(requestFor(validBody({ turnstileToken: 'valid-token' })));
+    const result = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(result.ok, false);
+    assert.equal(result.field, 'turnstile');
+    assert.equal(appsScriptWasCalled, false);
+  } finally {
+    console.info = originalConsoleInfo;
+  }
+});
+
 test('invalid Turnstile token is rejected without calling Apps Script', async () => {
   process.env.TURNSTILE_SITE_KEY = 'test-site-key';
   process.env.TURNSTILE_SECRET_KEY = 'test-turnstile-secret';
   let appsScriptWasCalled = false;
+  const originalConsoleInfo = console.info;
 
   globalThis.fetch = async url => {
     if (String(url).includes('challenges.cloudflare.com/turnstile')) {
@@ -266,14 +395,19 @@ test('invalid Turnstile token is rejected without calling Apps Script', async ()
     appsScriptWasCalled = true;
     return Response.json({ ok: true });
   };
+  console.info = () => {};
 
-  const response = await POST(requestFor(validBody({ turnstileToken: 'invalid-token' })));
-  const result = await response.json();
+  try {
+    const response = await POST(requestFor(validBody({ turnstileToken: 'invalid-token' })));
+    const result = await response.json();
 
-  assert.equal(response.status, 400);
-  assert.equal(result.ok, false);
-  assert.equal(result.field, 'turnstile');
-  assert.equal(appsScriptWasCalled, false);
+    assert.equal(response.status, 400);
+    assert.equal(result.ok, false);
+    assert.equal(result.field, 'turnstile');
+    assert.equal(appsScriptWasCalled, false);
+  } finally {
+    console.info = originalConsoleInfo;
+  }
 });
 
 test('Apps Script duplicate status is returned so GA4 can ignore repeated leads', async () => {

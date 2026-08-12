@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nội Soi Tiêu Hóa Không Đau - Hoàng Long Clinic</title>
 <meta name="description" content="Khám tiêu hóa và nội soi định kỳ giúp phát hiện sớm ung thư. Trải nghiệm nội soi không đau, an toàn, vô trùng tuyệt đối tại Hoàng Long Clinic.">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<link rel="canonical" href="https://noisoihoanglong.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="vi_VN">
+<meta property="og:url" content="https://noisoihoanglong.vercel.app/">
+<meta property="og:title" content="Nội Soi Tiêu Hóa Không Đau - Hoàng Long Clinic">
+<meta property="og:description" content="Khám tiêu hóa và nội soi định kỳ giúp phát hiện sớm ung thư. Trải nghiệm nội soi không đau, an toàn tại Hoàng Long Clinic.">
 
 <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -12,7 +19,7 @@
 <!-- Tài nguyên quan trọng nằm cùng website: không còn chuỗi tải Google Fonts / Font Awesome CDN -->
 <link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination-mobile.webp" type="image/webp" media="(max-width: 767px)" fetchpriority="high">
 <link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high">
-<link rel="stylesheet" href="assets/css/landing-page.css?v=50-cta-coldload-fix">
+<link rel="stylesheet" href="assets/css/landing-page.css?v=53-goodbot-safe">
 
 <!-- Google tag: xếp hàng dữ liệu ngay, chỉ tải thư viện sau tương tác đầu tiên hoặc khi trang đã ổn định. -->
 <script>
@@ -2113,6 +2120,8 @@
 
             resetFormTiming();
             leadForm.addEventListener('focusin', markFormStarted);
+            leadForm.addEventListener('input', markFormStarted);
+            leadForm.addEventListener('change', markFormStarted);
             leadForm.addEventListener('focusin', trackLeadFormStart, { once: true });
             leadForm.addEventListener('input', trackLeadFormStart, { once: true });
             leadForm.addEventListener('focusin', primeTurnstile);
