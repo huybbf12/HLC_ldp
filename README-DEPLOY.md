@@ -105,11 +105,12 @@ Nếu cả hai biến Turnstile chưa được khai báo, form vẫn chạy theo
 ### Không chặn nhầm bot tìm kiếm hợp lệ
 
 - `robots.txt` cho phép crawl toàn bộ nội dung công khai và chỉ yêu cầu bot không truy cập `/api/`.
-- `sitemap.xml`, canonical và thẻ robots trong HTML cùng trỏ tới `https://noisoihoanglong.vercel.app/`.
+- `sitemap.xml`, canonical, `og:url` và thẻ robots trong HTML cùng trỏ tới tên miền chính `https://noisoihoanglong.net/`.
+- `noisoihoanglong.vercel.app` và `www.noisoihoanglong.net` được chuyển hướng vĩnh viễn về tên miền chính; đường dẫn và tham số quảng cáo của URL gốc được giữ lại qua redirect của Vercel.
 - API và cấu hình Vercel không dùng quy tắc kiểu `User-Agent chứa bot/crawler thì chặn`. Googlebot, AdsBot, Bingbot và bot tạo preview vẫn đọc được landing page.
 - `/api/` có `X-Robots-Tag: noindex` để công cụ tìm kiếm không đưa endpoint kỹ thuật vào kết quả; điều này không ảnh hưởng trang landing page.
 
-Nếu sau này đổi sang tên miền riêng, cập nhật cùng một tên miền mới tại ba nơi: `index.html` (canonical và `og:url`), `robots.txt` và `sitemap.xml`. Đồng thời thêm tên miền đó vào danh sách hostname của Turnstile.
+Tên miền `noisoihoanglong.net` phải nằm trong danh sách hostname của Turnstile. Sau mỗi lần deploy, kiểm tra một URL quảng cáo mẫu để bảo đảm `gclid`, `gbraid`, `gad_campaignid` và các tham số UTM vẫn có mặt sau khi chuyển hướng.
 
 ### Rate limit ở Vercel Firewall
 

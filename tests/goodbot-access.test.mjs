@@ -11,17 +11,37 @@ const leadApi = readFileSync(new URL('../api/lead.mjs', import.meta.url), 'utf8'
 test('public landing page explicitly allows legitimate crawlers', () => {
   assert.match(html, /<meta name="robots" content="index, follow,[^"]+">/);
   assert.doesNotMatch(html, /noindex|nofollow/i);
-  assert.match(html, /<link rel="canonical" href="https:\/\/noisoihoanglong\.vercel\.app\/">/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/noisoihoanglong\.net\/">/);
+  assert.match(html, /<meta property="og:url" content="https:\/\/noisoihoanglong\.net\/">/);
 
   assert.match(robots, /^User-agent: \*$/m);
   assert.match(robots, /^Allow: \/$/m);
   assert.match(robots, /^Disallow: \/api\/$/m);
+  assert.match(robots, /^Sitemap: https:\/\/noisoihoanglong\.net\/sitemap\.xml$/m);
   assert.doesNotMatch(robots, /^Disallow: \/$/m);
 });
 
 test('sitemap exposes the canonical public page only', () => {
-  assert.match(sitemap, /<loc>https:\/\/noisoihoanglong\.vercel\.app\/<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/noisoihoanglong\.net\/<\/loc>/);
   assert.equal((sitemap.match(/<url>/g) || []).length, 1);
+});
+
+test('legacy and www hosts permanently redirect to the canonical domain', () => {
+  const redirects = vercelConfig.redirects || [];
+  const expectedHosts = [
+    'noisoihoanglong.vercel.app',
+    'www.noisoihoanglong.net',
+  ];
+
+  for (const host of expectedHosts) {
+    const rule = redirects.find(candidate =>
+      candidate.source === '/:path*' &&
+      candidate.has?.some(condition => condition.type === 'host' && condition.value === host)
+    );
+    assert.ok(rule, `missing canonical redirect for ${host}`);
+    assert.equal(rule.destination, 'https://noisoihoanglong.net/:path*');
+    assert.equal(rule.permanent, true);
+  }
 });
 
 test('API is kept out of search results without blocking the public page', () => {

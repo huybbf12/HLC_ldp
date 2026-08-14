@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://noisoihoanglong.vercel.app/sitemap.xml
+Sitemap: https://noisoihoanglong.net/sitemap.xml
