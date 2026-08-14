@@ -23,10 +23,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
-<!-- Tài nguyên quan trọng nằm cùng website: không còn chuỗi tải Google Fonts / Font Awesome CDN -->
-<link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination-mobile.webp" type="image/webp" media="(max-width: 767px)" fetchpriority="high">
-<link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high">
-<link rel="stylesheet" href="assets/css/landing-page.css?v=53-goodbot-safe">
+<!-- Tài nguyên LCP nằm cùng website. AVIF được ưu tiên; WebP vẫn là phương án dự phòng. -->
+<link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination-mobile-v57.avif" type="image/avif" media="(max-width: 767px)" fetchpriority="high">
+<link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination-v57.avif" type="image/avif" media="(min-width: 768px)" fetchpriority="high">
+<link rel="stylesheet" href="assets/css/landing-page.css?v=57-domain-hero">
 
 <!-- Google tag: xếp hàng dữ liệu ngay, chỉ tải thư viện sau tương tác đầu tiên hoặc khi trang đã ổn định. -->
 <script>
@@ -207,13 +207,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <!-- HERO SECTION -->
         <section class="hero-section relative w-full min-h-[85vh] flex items-center pt-[100px] md:pt-[130px] pb-10 overflow-hidden" id="home">
             <picture>
+                <source media="(max-width: 767px)" srcset="assets/images/hero/hero-doctor-examination-mobile-v57.avif" type="image/avif">
                 <source media="(max-width: 767px)" srcset="assets/images/hero/hero-doctor-examination-mobile.webp" type="image/webp">
+                <source media="(min-width: 768px)" srcset="assets/images/hero/hero-doctor-examination-v57.avif" type="image/avif">
                 <img
                     class="hero-lcp-image"
-                    src="assets/images/hero/hero-doctor-examination.webp"
+                    src="assets/images/hero/hero-doctor-examination-v57.webp"
                     alt="Bác sĩ Hoàng Long Clinic thăm khám cho người bệnh"
-                    width="4104"
-                    height="2736"
+                    width="1920"
+                    height="1280"
                     loading="eager"
                     fetchpriority="high"
                     decoding="sync">
@@ -269,7 +271,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
                             <div class="hero-trust-primary">
                                 <div class="hero-trust-number">
-                                    <span class="counter" data-target="250000" data-duration="1400">0</span><span>+</span>
+                                    <span class="counter" data-target="250000" data-duration="1400">250.000</span><span>+</span>
                                 </div>
                                 <p>Bệnh nhân đã <strong>tin tưởng thăm khám</strong> tại Phòng khám Đa khoa Hoàng Long</p>
                             </div>
@@ -278,14 +280,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <div class="hero-trust-metric">
                                     <span class="hero-trust-metric__icon" aria-hidden="true"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-calendar-check"></use></svg></span>
                                     <div>
-                                        <strong><span class="counter" data-target="13" data-duration="800">0</span>+</strong>
+                                        <strong><span class="counter" data-target="13" data-duration="800">13</span>+</strong>
                                         <span>Năm hoạt động</span>
                                     </div>
                                 </div>
                                 <div class="hero-trust-metric">
                                     <span class="hero-trust-metric__icon" aria-hidden="true"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-user-doctor"></use></svg></span>
                                     <div>
-                                        <strong><span class="counter" data-target="100" data-duration="1100">0</span>+</strong>
+                                        <strong><span class="counter" data-target="100" data-duration="1100">100</span>+</strong>
                                         <span>Y bác sĩ &amp; nhân viên</span>
                                     </div>
                                 </div>
@@ -1781,45 +1783,63 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 ? value.toLocaleString('vi-VN')
                 : String(value);
 
-            const animateCounter = (counter) => {
+            const renderCounterTarget = (counter) => {
                 const target = Number(counter.dataset.target) || 0;
-                const duration = Number(counter.dataset.duration) || 3000;
-                const frameInterval = 1000 / 30;
-                let startTime;
-                let lastPaintTime = -Infinity;
-
-                const step = (timestamp) => {
-                    if (startTime === undefined) startTime = timestamp;
-                    const progress = Math.min((timestamp - startTime) / duration, 1);
-
-                    if (progress < 1 && timestamp - lastPaintTime < frameInterval) {
-                        window.requestAnimationFrame(step);
-                        return;
-                    }
-
-                    const easedProgress = 1 - Math.pow(1 - progress, 3);
-                    counter.textContent = formatCounter(Math.floor(easedProgress * target), target);
-                    lastPaintTime = timestamp;
-
-                    if (progress < 1) {
-                        window.requestAnimationFrame(step);
-                    } else {
-                        counter.textContent = target.toLocaleString('vi-VN');
-                    }
-                };
-
-                window.requestAnimationFrame(step);
+                counter.textContent = formatCounter(target, target);
             };
 
-            const counterObserver = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (!entry.isIntersecting) return;
-                    animateCounter(entry.target);
-                    counterObserver.unobserve(entry.target);
-                });
-            }, { threshold: 0.35 });
+            // Trên mobile, khối 250.000+ nằm trong màn hình đầu và có thể trở thành LCP.
+            // Hiển thị giá trị cuối ngay để không cập nhật text liên tục trong lúc Lighthouse đo.
+            const shouldAnimateCounters = !prefersReducedMotion
+                && window.matchMedia('(min-width: 768px)').matches;
 
-            counters.forEach((counter) => counterObserver.observe(counter));
+            if (!shouldAnimateCounters) {
+                counters.forEach(renderCounterTarget);
+            } else {
+                counters.forEach((counter) => {
+                    counter.textContent = '0';
+                });
+
+                const animateCounter = (counter) => {
+                    const target = Number(counter.dataset.target) || 0;
+                    const duration = Number(counter.dataset.duration) || 3000;
+                    const frameInterval = 1000 / 30;
+                    let startTime;
+                    let lastPaintTime = -Infinity;
+
+                    const step = (timestamp) => {
+                        if (startTime === undefined) startTime = timestamp;
+                        const progress = Math.min((timestamp - startTime) / duration, 1);
+
+                        if (progress < 1 && timestamp - lastPaintTime < frameInterval) {
+                            window.requestAnimationFrame(step);
+                            return;
+                        }
+
+                        const easedProgress = 1 - Math.pow(1 - progress, 3);
+                        counter.textContent = formatCounter(Math.floor(easedProgress * target), target);
+                        lastPaintTime = timestamp;
+
+                        if (progress < 1) {
+                            window.requestAnimationFrame(step);
+                        } else {
+                            renderCounterTarget(counter);
+                        }
+                    };
+
+                    window.requestAnimationFrame(step);
+                };
+
+                const counterObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (!entry.isIntersecting) return;
+                        animateCounter(entry.target);
+                        counterObserver.unobserve(entry.target);
+                    });
+                }, { threshold: 0.35 });
+
+                counters.forEach((counter) => counterObserver.observe(counter));
+            }
         }
 
         // Chỉ đo chiều cao review khi người dùng sắp tới section, tránh forced reflow lúc tải đầu trang.

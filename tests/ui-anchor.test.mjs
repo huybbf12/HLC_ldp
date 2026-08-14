@@ -28,9 +28,9 @@ test('GTM is installed once while direct Google Ads and GA4 tracking remains act
 });
 
 test('large styles are cached separately and first-paint fonts avoid late swaps', () => {
-  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=53-goodbot-safe">/);
+  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=57-domain-hero">/);
   assert.ok(
-    documentHtml.indexOf('href="assets/css/landing-page.css?v=50-cta-coldload-fix"')
+    documentHtml.indexOf('href="assets/css/landing-page.css?v=57-domain-hero"')
       < documentHtml.indexOf('(function scheduleGoogleTag()'),
   );
   assert.doesNotMatch(documentHtml, /<style(?:\s|>)/);
@@ -105,9 +105,12 @@ test('page uses lightweight Hoàng Long icons for browser tabs and saved-page ic
   assert.ok(touchIcon.size > 0 && touchIcon.size < 20_000);
 });
 
-test('mobile critical path uses a smaller hero and avoids competing font preloads', async () => {
-  assert.match(html, /href="assets\/images\/hero\/hero-doctor-examination-mobile\.webp"[^>]*media="\(max-width: 767px\)"[^>]*fetchpriority="high"/);
+test('hero critical path uses responsive AVIF assets and avoids competing font preloads', async () => {
+  assert.match(html, /href="assets\/images\/hero\/hero-doctor-examination-mobile-v57\.avif"[^>]*type="image\/avif"[^>]*media="\(max-width: 767px\)"[^>]*fetchpriority="high"/);
+  assert.match(html, /href="assets\/images\/hero\/hero-doctor-examination-v57\.avif"[^>]*type="image\/avif"[^>]*media="\(min-width: 768px\)"[^>]*fetchpriority="high"/);
+  assert.match(html, /<source media="\(max-width: 767px\)" srcset="assets\/images\/hero\/hero-doctor-examination-mobile-v57\.avif" type="image\/avif">/);
   assert.match(html, /<source media="\(max-width: 767px\)" srcset="assets\/images\/hero\/hero-doctor-examination-mobile\.webp" type="image\/webp">/);
+  assert.match(html, /<source media="\(min-width: 768px\)" srcset="assets\/images\/hero\/hero-doctor-examination-v57\.avif" type="image\/avif">/);
   assert.doesNotMatch(html, /rel="preload" as="font"/);
   assert.match(html, /logo-hoang-long\.png"[^>]*fetchpriority="low"/);
   assert.match(html, /\.hero-decor-orb \{ display: none !important; \}/);
@@ -118,8 +121,12 @@ test('mobile critical path uses a smaller hero and avoids competing font preload
   assert.match(documentHtml, /data-target="13" data-duration="800"/);
   assert.match(documentHtml, /data-target="100" data-duration="1100"/);
 
-  const mobileHero = await stat(new URL('../assets/images/hero/hero-doctor-examination-mobile.webp', import.meta.url));
-  assert.ok(mobileHero.size > 45_000 && mobileHero.size < 60_000);
+  const mobileHero = await stat(new URL('../assets/images/hero/hero-doctor-examination-mobile-v57.avif', import.meta.url));
+  const desktopHero = await stat(new URL('../assets/images/hero/hero-doctor-examination-v57.avif', import.meta.url));
+  const desktopFallback = await stat(new URL('../assets/images/hero/hero-doctor-examination-v57.webp', import.meta.url));
+  assert.ok(mobileHero.size > 20_000 && mobileHero.size < 40_000);
+  assert.ok(desktopHero.size > 20_000 && desktopHero.size < 40_000);
+  assert.ok(desktopFallback.size > 40_000 && desktopFallback.size < 60_000);
 });
 
 test('below-fold measurements and timers stay out of the initial main-thread path', () => {
@@ -313,9 +320,13 @@ test('first five doctor cards use expert CTA and remaining cards use doctor CTA'
   cards.slice(5).forEach(card => assert.match(card, />Đặt lịch với bác sĩ<\/a>/));
 });
 
-test('13+ and 100+ trust metrics count up from zero', () => {
-  assert.match(html, /class="counter" data-target="13" data-duration="800">0<\/span>\+/);
-  assert.match(html, /class="counter" data-target="100" data-duration="1100">0<\/span>\+/);
+test('trust metrics render final values on mobile and animate only on larger screens', () => {
+  assert.match(html, /class="counter" data-target="250000" data-duration="1400">250\.000<\/span>/);
+  assert.match(html, /class="counter" data-target="13" data-duration="800">13<\/span>\+/);
+  assert.match(html, /class="counter" data-target="100" data-duration="1100">100<\/span>\+/);
+  assert.match(html, /const shouldAnimateCounters = !prefersReducedMotion\s*&& window\.matchMedia\('\(min-width: 768px\)'\)\.matches;/s);
+  assert.match(html, /if \(!shouldAnimateCounters\) \{\s*counters\.forEach\(renderCounterTarget\);/s);
+  assert.match(html, /else \{\s*counters\.forEach\(\(counter\) => \{\s*counter\.textContent = '0';/s);
   assert.doesNotMatch(html, /data-target="110"/);
 });
 
