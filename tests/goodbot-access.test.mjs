@@ -26,22 +26,10 @@ test('sitemap exposes the canonical public page only', () => {
   assert.equal((sitemap.match(/<url>/g) || []).length, 1);
 });
 
-test('legacy and www hosts permanently redirect to the canonical domain', () => {
-  const redirects = vercelConfig.redirects || [];
-  const expectedHosts = [
-    'noisoihoanglong.vercel.app',
-    'www.noisoihoanglong.net',
-  ];
-
-  for (const host of expectedHosts) {
-    const rule = redirects.find(candidate =>
-      candidate.source === '/:path*' &&
-      candidate.has?.some(condition => condition.type === 'host' && condition.value === host)
-    );
-    assert.ok(rule, `missing canonical redirect for ${host}`);
-    assert.equal(rule.destination, 'https://noisoihoanglong.net/:path*');
-    assert.equal(rule.permanent, true);
-  }
+test('source routing leaves assets and API available on the production host', () => {
+  assert.equal(vercelConfig.redirects, undefined);
+  assert.equal(vercelConfig.outputDirectory, '.');
+  assert.equal(vercelConfig.cleanUrls, true);
 });
 
 test('API is kept out of search results without blocking the public page', () => {

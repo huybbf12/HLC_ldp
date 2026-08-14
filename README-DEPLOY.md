@@ -106,7 +106,7 @@ Nếu cả hai biến Turnstile chưa được khai báo, form vẫn chạy theo
 
 - `robots.txt` cho phép crawl toàn bộ nội dung công khai và chỉ yêu cầu bot không truy cập `/api/`.
 - `sitemap.xml`, canonical, `og:url` và thẻ robots trong HTML cùng trỏ tới tên miền chính `https://noisoihoanglong.net/`.
-- `noisoihoanglong.vercel.app` và `www.noisoihoanglong.net` được chuyển hướng vĩnh viễn về tên miền chính; đường dẫn và tham số quảng cáo của URL gốc được giữ lại qua redirect của Vercel.
+- Không đặt redirect theo hostname trong mã nguồn để tránh can thiệp vào đường dẫn ảnh và `/api/`. Nếu cần chuyển `noisoihoanglong.vercel.app` hoặc bản `www`, hãy đặt **Redirect to Another Domain** tại Vercel → Project → Settings → Domains sau khi domain chính đã phục vụ ổn định.
 - API và cấu hình Vercel không dùng quy tắc kiểu `User-Agent chứa bot/crawler thì chặn`. Googlebot, AdsBot, Bingbot và bot tạo preview vẫn đọc được landing page.
 - `/api/` có `X-Robots-Tag: noindex` để công cụ tìm kiếm không đưa endpoint kỹ thuật vào kết quả; điều này không ảnh hưởng trang landing page.
 

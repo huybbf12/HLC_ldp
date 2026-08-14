@@ -3,30 +3,6 @@
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
-  "redirects": [
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "noisoihoanglong.vercel.app"
-        }
-      ],
-      "destination": "https://noisoihoanglong.net/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.noisoihoanglong.net"
-        }
-      ],
-      "destination": "https://noisoihoanglong.net/:path*",
-      "permanent": true
-    }
-  ],
   "headers": [
     {
       "source": "/assets/(.*)",
