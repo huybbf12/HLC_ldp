@@ -11,7 +11,12 @@ test('Vercel serves the static landing page from the project root', () => {
   assert.equal(vercelConfig.outputDirectory, '.');
 });
 
-test('Google Ads and GA4 share one loader and use the supplied account IDs', () => {
+test('GTM is installed once while direct Google Ads and GA4 tracking remains active', () => {
+  assert.equal((documentHtml.match(/GTM-WKCCTNBR/g) ?? []).length, 2);
+  assert.equal((documentHtml.match(/googletagmanager\.com\/gtm\.js\?id=/g) ?? []).length, 1);
+  assert.equal((documentHtml.match(/googletagmanager\.com\/ns\.html\?id=GTM-WKCCTNBR/g) ?? []).length, 1);
+  assert.match(documentHtml, /\}\)\(window,document,'script','dataLayer','GTM-WKCCTNBR'\);<\/script>/);
+  assert.match(documentHtml, /<body>\s*<!-- Google Tag Manager \(noscript\) -->\s*<noscript><iframe src="https:\/\/www\.googletagmanager\.com\/ns\.html\?id=GTM-WKCCTNBR"/);
   assert.equal((html.match(/googletagmanager\.com\/gtag\/js\?id=AW-16914582158/g) ?? []).length, 1);
   assert.equal((html.match(/googletagmanager\.com\/gtag\/js\?id=/g) ?? []).length, 1);
   assert.equal((html.match(/gtag\('config', 'AW-16914582158'\)/g) ?? []).length, 1);
