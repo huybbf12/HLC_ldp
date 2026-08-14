@@ -23,10 +23,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
-<!-- Tài nguyên LCP nằm cùng website. AVIF được ưu tiên; WebP vẫn là phương án dự phòng. -->
-<link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination-mobile-v57.avif" type="image/avif" media="(max-width: 767px)" fetchpriority="high">
-<link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination-v57.avif" type="image/avif" media="(min-width: 768px)" fetchpriority="high">
-<link rel="stylesheet" href="assets/css/landing-page.css?v=57-domain-hero">
+<!-- Ưu tiên trực tiếp ảnh WebP gốc sắc nét theo từng kích thước màn hình. -->
+<link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination-mobile.webp" type="image/webp" media="(max-width: 767px)" fetchpriority="high">
+<link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high">
+<link rel="stylesheet" href="assets/css/landing-page.css?v=60-mobile-counter">
 
 <!-- Google tag: xếp hàng dữ liệu ngay, chỉ tải thư viện sau tương tác đầu tiên hoặc khi trang đã ổn định. -->
 <script>
@@ -207,15 +207,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <!-- HERO SECTION -->
         <section class="hero-section relative w-full min-h-[85vh] flex items-center pt-[100px] md:pt-[130px] pb-10 overflow-hidden" id="home">
             <picture>
-                <source media="(max-width: 767px)" srcset="assets/images/hero/hero-doctor-examination-mobile-v57.avif" type="image/avif">
                 <source media="(max-width: 767px)" srcset="assets/images/hero/hero-doctor-examination-mobile.webp" type="image/webp">
-                <source media="(min-width: 768px)" srcset="assets/images/hero/hero-doctor-examination-v57.avif" type="image/avif">
                 <img
                     class="hero-lcp-image"
-                    src="assets/images/hero/hero-doctor-examination-v57.webp"
+                    src="assets/images/hero/hero-doctor-examination.webp"
                     alt="Bác sĩ Hoàng Long Clinic thăm khám cho người bệnh"
-                    width="1920"
-                    height="1280"
+                    width="4104"
+                    height="2736"
                     loading="eager"
                     fetchpriority="high"
                     decoding="sync">
@@ -271,7 +269,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
                             <div class="hero-trust-primary">
                                 <div class="hero-trust-number">
-                                    <span class="counter" data-target="250000" data-duration="1400">250.000</span><span>+</span>
+                                    <span class="counter" data-target="250000" data-duration="1400" data-mobile-duration="750">250.000</span><span>+</span>
                                 </div>
                                 <p>Bệnh nhân đã <strong>tin tưởng thăm khám</strong> tại Phòng khám Đa khoa Hoàng Long</p>
                             </div>
@@ -280,14 +278,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <div class="hero-trust-metric">
                                     <span class="hero-trust-metric__icon" aria-hidden="true"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-calendar-check"></use></svg></span>
                                     <div>
-                                        <strong><span class="counter" data-target="13" data-duration="800">13</span>+</strong>
+                                        <strong><span class="counter" data-target="13" data-duration="800" data-mobile-duration="550">13</span>+</strong>
                                         <span>Năm hoạt động</span>
                                     </div>
                                 </div>
                                 <div class="hero-trust-metric">
                                     <span class="hero-trust-metric__icon" aria-hidden="true"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-user-doctor"></use></svg></span>
                                     <div>
-                                        <strong><span class="counter" data-target="100" data-duration="1100">100</span>+</strong>
+                                        <strong><span class="counter" data-target="100" data-duration="1100" data-mobile-duration="650">100</span>+</strong>
                                         <span>Y bác sĩ &amp; nhân viên</span>
                                     </div>
                                 </div>
@@ -701,7 +699,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <div class="doctor-position">
                             <span>Phó Chủ tịch · Hội Khoa học Tiêu hóa Việt Nam</span>
                         </div>
-                        <p class="doctor-credential">Nguyên Giám đốc Bệnh viện Đại học Y Hà Nội</p>
+                        <p class="doctor-credential">Nguyên Giám đốc Bệnh viện<br>Đại học Y Hà Nội</p>
                         <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Hơn 40 năm kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật.</p>
                         <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với chuyên gia</a>
                     </div>
@@ -790,7 +788,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <div class="p-6 text-center flex flex-col flex-1 items-center">
                         <div class="doctor-card-copy mb-3 leading-tight md:group-hover:text-medical transition-colors text-center w-full">
                             <span class="doctor-title-badge">THS.BS.</span>
-                            <span class="text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">DƯƠNG THỊ PHƯƠNG NĂNG</span>
+                            <span class="doctor-name--single-line text-[16px] md:text-[19px] font-black uppercase block text-navy md:group-hover:text-medical">DƯƠNG THỊ PHƯƠNG NĂNG</span>
                         </div>
                         <div class="doctor-position">
                             <span>Chuyên khoa Nội tiêu hóa</span>
@@ -1788,10 +1786,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 counter.textContent = formatCounter(target, target);
             };
 
-            // Trên mobile, khối 250.000+ nằm trong màn hình đầu và có thể trở thành LCP.
-            // Hiển thị giá trị cuối ngay để không cập nhật text liên tục trong lúc Lighthouse đo.
-            const shouldAnimateCounters = !prefersReducedMotion
-                && window.matchMedia('(min-width: 768px)').matches;
+            // Mobile vẫn chạy số nhưng dùng thời lượng ngắn và 20 FPS để giảm cập nhật main thread/LCP.
+            // Giá trị cuối có sẵn trong HTML để nội dung vẫn đúng khi JS bị tắt hoặc người dùng giảm chuyển động.
+            const isMobileCounterMode = window.matchMedia('(max-width: 767px)').matches;
+            const shouldAnimateCounters = !prefersReducedMotion;
 
             if (!shouldAnimateCounters) {
                 counters.forEach(renderCounterTarget);
@@ -1802,8 +1800,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
                 const animateCounter = (counter) => {
                     const target = Number(counter.dataset.target) || 0;
-                    const duration = Number(counter.dataset.duration) || 3000;
-                    const frameInterval = 1000 / 30;
+                    const desktopDuration = Number(counter.dataset.duration) || 3000;
+                    const mobileDuration = Number(counter.dataset.mobileDuration) || 700;
+                    const duration = isMobileCounterMode ? mobileDuration : desktopDuration;
+                    const frameInterval = 1000 / (isMobileCounterMode ? 20 : 30);
                     let startTime;
                     let lastPaintTime = -Infinity;
 

@@ -28,9 +28,9 @@ test('GTM is installed once while direct Google Ads and GA4 tracking remains act
 });
 
 test('large styles are cached separately and first-paint fonts avoid late swaps', () => {
-  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=57-domain-hero">/);
+  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=60-mobile-counter">/);
   assert.ok(
-    documentHtml.indexOf('href="assets/css/landing-page.css?v=57-domain-hero"')
+    documentHtml.indexOf('href="assets/css/landing-page.css?v=60-mobile-counter"')
       < documentHtml.indexOf('(function scheduleGoogleTag()'),
   );
   assert.doesNotMatch(documentHtml, /<style(?:\s|>)/);
@@ -105,12 +105,12 @@ test('page uses lightweight Hoàng Long icons for browser tabs and saved-page ic
   assert.ok(touchIcon.size > 0 && touchIcon.size < 20_000);
 });
 
-test('hero critical path uses responsive AVIF assets and avoids competing font preloads', async () => {
-  assert.match(html, /href="assets\/images\/hero\/hero-doctor-examination-mobile-v57\.avif"[^>]*type="image\/avif"[^>]*media="\(max-width: 767px\)"[^>]*fetchpriority="high"/);
-  assert.match(html, /href="assets\/images\/hero\/hero-doctor-examination-v57\.avif"[^>]*type="image\/avif"[^>]*media="\(min-width: 768px\)"[^>]*fetchpriority="high"/);
-  assert.match(html, /<source media="\(max-width: 767px\)" srcset="assets\/images\/hero\/hero-doctor-examination-mobile-v57\.avif" type="image\/avif">/);
+test('hero critical path uses the sharp responsive WebP assets and avoids competing font preloads', async () => {
+  assert.match(html, /href="assets\/images\/hero\/hero-doctor-examination-mobile\.webp"[^>]*type="image\/webp"[^>]*media="\(max-width: 767px\)"[^>]*fetchpriority="high"/);
+  assert.match(html, /href="assets\/images\/hero\/hero-doctor-examination\.webp"[^>]*type="image\/webp"[^>]*media="\(min-width: 768px\)"[^>]*fetchpriority="high"/);
   assert.match(html, /<source media="\(max-width: 767px\)" srcset="assets\/images\/hero\/hero-doctor-examination-mobile\.webp" type="image\/webp">/);
-  assert.match(html, /<source media="\(min-width: 768px\)" srcset="assets\/images\/hero\/hero-doctor-examination-v57\.avif" type="image\/avif">/);
+  assert.match(html, /class="hero-lcp-image"[\s\S]*?src="assets\/images\/hero\/hero-doctor-examination\.webp"[\s\S]*?width="4104"[\s\S]*?height="2736"/);
+  assert.doesNotMatch(html, /hero-doctor-examination-(?:mobile-)?v57\.avif/);
   assert.doesNotMatch(html, /rel="preload" as="font"/);
   assert.match(html, /logo-hoang-long\.png"[^>]*fetchpriority="low"/);
   assert.match(html, /\.hero-decor-orb \{ display: none !important; \}/);
@@ -121,12 +121,10 @@ test('hero critical path uses responsive AVIF assets and avoids competing font p
   assert.match(documentHtml, /data-target="13" data-duration="800"/);
   assert.match(documentHtml, /data-target="100" data-duration="1100"/);
 
-  const mobileHero = await stat(new URL('../assets/images/hero/hero-doctor-examination-mobile-v57.avif', import.meta.url));
-  const desktopHero = await stat(new URL('../assets/images/hero/hero-doctor-examination-v57.avif', import.meta.url));
-  const desktopFallback = await stat(new URL('../assets/images/hero/hero-doctor-examination-v57.webp', import.meta.url));
-  assert.ok(mobileHero.size > 20_000 && mobileHero.size < 40_000);
-  assert.ok(desktopHero.size > 20_000 && desktopHero.size < 40_000);
-  assert.ok(desktopFallback.size > 40_000 && desktopFallback.size < 60_000);
+  const mobileHero = await stat(new URL('../assets/images/hero/hero-doctor-examination-mobile.webp', import.meta.url));
+  const desktopHero = await stat(new URL('../assets/images/hero/hero-doctor-examination.webp', import.meta.url));
+  assert.ok(mobileHero.size > 45_000 && mobileHero.size < 60_000);
+  assert.ok(desktopHero.size > 130_000 && desktopHero.size < 170_000);
 });
 
 test('below-fold measurements and timers stay out of the initial main-thread path', () => {
@@ -245,7 +243,7 @@ test('doctor section contains ten cards, four-up desktop layout and lightweight 
   assert.match(html, /Phó Chủ tịch · Hội Khoa học Tiêu hóa Việt Nam/);
   assert.match(html, /Giám đốc chuyên môn - Phòng khám Đa khoa Hoàng Long CS1/);
   assert.match(html, /Giám đốc chuyên môn - Phòng khám Đa khoa Hoàng Long CS2/);
-  assert.match(html, /Nguyên Giám đốc Bệnh viện Đại học Y Hà Nội/);
+  assert.match(html, /Nguyên Giám đốc Bệnh viện<br>Đại học Y Hà Nội/);
   assert.match(html, /Chủ nhiệm Bộ môn Ngoại Khoa Dã Chiến Học Viện Quân y/);
   assert.match(html, /Nguyên Giám đốc Bệnh viện Thanh Nhàn/);
   assert.match(html, /Nguyên Giám đốc Trung tâm ứng dụng công nghệ y học – Nội soi tiêu hóa/);
@@ -309,6 +307,21 @@ test('doctor cards follow the approved expert order', () => {
   }
 });
 
+test('approved doctor typography keeps Dr Long credential break and Dr Nang name on one line', () => {
+  assert.match(html, /<p class="doctor-credential">Nguyên Giám đốc Bệnh viện<br>Đại học Y Hà Nội<\/p>/);
+  assert.match(html, /class="doctor-name--single-line[^"]*">DƯƠNG THỊ PHƯƠNG NĂNG<\/span>/);
+  assert.match(html, /\.doctor-name--single-line\s*\{[^}]*white-space:\s*nowrap;[^}]*font-size:\s*16px\s*!important;/s);
+  assert.match(html, /@media \(min-width:\s*768px\)\s*\{\s*\.doctor-name--single-line\s*\{[^}]*font-size:\s*19px\s*!important;/s);
+  assert.match(html, /@media \(min-width:\s*1024px\) and \(max-width:\s*1199px\)\s*\{\s*\.doctor-name--single-line\s*\{[^}]*transform:\s*scaleX\(\.86\);/s);
+});
+
+test('mobile consultation fields use restrained corners', () => {
+  assert.match(
+    stylesheet,
+    /@media \(max-width:\s*767px\)\s*\{[\s\S]*?\.form-input\s*\{[^}]*border-radius:\s*6px\s*!important;/,
+  );
+});
+
 test('first five doctor cards use expert CTA and remaining cards use doctor CTA', () => {
   const trackStart = html.indexOf('id="doctorCarouselTrack"');
   const trackEnd = html.indexOf('doctor-carousel__nav doctor-carousel__nav--next', trackStart);
@@ -320,13 +333,16 @@ test('first five doctor cards use expert CTA and remaining cards use doctor CTA'
   cards.slice(5).forEach(card => assert.match(card, />Đặt lịch với bác sĩ<\/a>/));
 });
 
-test('trust metrics render final values on mobile and animate only on larger screens', () => {
-  assert.match(html, /class="counter" data-target="250000" data-duration="1400">250\.000<\/span>/);
-  assert.match(html, /class="counter" data-target="13" data-duration="800">13<\/span>\+/);
-  assert.match(html, /class="counter" data-target="100" data-duration="1100">100<\/span>\+/);
-  assert.match(html, /const shouldAnimateCounters = !prefersReducedMotion\s*&& window\.matchMedia\('\(min-width: 768px\)'\)\.matches;/s);
+test('trust metrics count on mobile with a shorter low-frequency animation', () => {
+  assert.match(html, /class="counter" data-target="250000" data-duration="1400" data-mobile-duration="750">250\.000<\/span>/);
+  assert.match(html, /class="counter" data-target="13" data-duration="800" data-mobile-duration="550">13<\/span>\+/);
+  assert.match(html, /class="counter" data-target="100" data-duration="1100" data-mobile-duration="650">100<\/span>\+/);
+  assert.match(html, /const isMobileCounterMode = window\.matchMedia\('\(max-width: 767px\)'\)\.matches;/);
+  assert.match(html, /const shouldAnimateCounters = !prefersReducedMotion;/);
   assert.match(html, /if \(!shouldAnimateCounters\) \{\s*counters\.forEach\(renderCounterTarget\);/s);
   assert.match(html, /else \{\s*counters\.forEach\(\(counter\) => \{\s*counter\.textContent = '0';/s);
+  assert.match(html, /const duration = isMobileCounterMode \? mobileDuration : desktopDuration;/);
+  assert.match(html, /const frameInterval = 1000 \/ \(isMobileCounterMode \? 20 : 30\);/);
   assert.doesNotMatch(html, /data-target="110"/);
 });
 

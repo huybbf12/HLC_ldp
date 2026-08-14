@@ -1297,6 +1297,29 @@ section h2 {
     z-index: 3;
     margin-top: -43px !important;
 }
+.doctor-name--single-line {
+    width: calc(100% + 36px);
+    margin-right: -18px;
+    margin-left: -18px;
+    white-space: nowrap;
+    font-size: 16px !important;
+    letter-spacing: -.04em;
+}
+@media (min-width: 768px) {
+    .doctor-name--single-line {
+        width: calc(100% + 40px);
+        margin-right: -20px;
+        margin-left: -20px;
+        font-size: 19px !important;
+        letter-spacing: -.075em;
+    }
+}
+@media (min-width: 1024px) and (max-width: 1199px) {
+    .doctor-name--single-line {
+        transform: scaleX(.86);
+        transform-origin: center;
+    }
+}
 .doctor-title-badge {
     display: inline-flex;
     align-items: center;
@@ -2448,6 +2471,7 @@ footer .bg-white {
     .form-input {
         min-height: 50px;
         padding: 12px 14px !important;
+        border-radius: 6px !important;
         font-size: 14.5px;
     }
     .form-input::placeholder { font-size: 14px; }
