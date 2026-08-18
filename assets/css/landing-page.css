@@ -293,6 +293,25 @@ img { -webkit-user-drag: none; user-select: none; }
     background-color: rgba(255,255,255,0.95); color: #1E293B; font-family: 'Nunito', sans-serif; font-size: 14.5px; font-weight: 600; transition: all 0.2s;
 }
 .form-input:focus { border-color: #e63946; background-color: #ffffff; box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.15); outline: none; }
+.lead-select-field {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 7px;
+}
+.lead-select-field > label {
+    color: #334155;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.35;
+}
+.lead-select-field > label span { color: #e63946; }
+.lead-select-field select { height: 100%; }
+.lead-select-field input[type="date"] {
+    color: #475569;
+    color-scheme: light;
+}
 
 /* Ẩn thanh cuộn dọc & Hiển thị thanh cuộn đẹp */
 .hide-scrollbar::-webkit-scrollbar { display: none; }
@@ -2468,6 +2487,11 @@ footer .bg-white {
     }
     .registration-card h3 { font-size: 23px !important; text-align: center; }
     .registration-card form { gap: 12px; }
+    .lead-select-field { gap: 6px; }
+    .lead-select-field > label {
+        font-size: 12.5px;
+        line-height: 1.3;
+    }
     .form-input {
         min-height: 50px;
         padding: 12px 14px !important;
@@ -2481,6 +2505,7 @@ footer .bg-white {
         padding-bottom: 15px !important;
         line-height: 1.35;
     }
+    .lead-select-field input[type="date"] { min-height: 58px; }
     textarea.form-input { min-height: 108px; }
     .registration-card .btn-primary {
         width: 100%;

@@ -8,12 +8,59 @@
 
 const SPREADSHEET_ID = '1KgKKoN4qwxw4qmRHp6wMxUY0ZxNgkCUoVQYwOfwAPug';
 const SHEET_NAME = 'Lead Landing Page';
-const NOTIFICATION_EMAIL = 'pkdk.hoanglong10@gmail.com';
+// Gửi cùng một thông báo lead tới cả hai hộp thư, không tạo email riêng lặp lại.
+const NOTIFICATION_EMAILS = [
+  'pkdk.hoanglong10@gmail.com',
+  'cskh@hoanglongclinic.vn',
+];
 const REFERENCE_PREFIX = 'HLC-NS';
 const REFERENCE_TIME_ZONE = 'Asia/Ho_Chi_Minh';
-const LEAD_SCHEMA_VERSION = '2';
+const LEAD_SCHEMA_VERSION = '4';
 const DUPLICATE_PHONE_WINDOW_MS = 24 * 60 * 60 * 1000;
 const DUPLICATE_PHONE_SCAN_LIMIT = 500;
+const APPOINTMENT_WINDOW_DAYS = 366;
+const PROVINCE_CITIES = [
+  'Hà Nội',
+  'An Giang',
+  'Bắc Ninh',
+  'Cà Mau',
+  'Cần Thơ',
+  'Cao Bằng',
+  'Đà Nẵng',
+  'Đắk Lắk',
+  'Điện Biên',
+  'Đồng Nai',
+  'Đồng Tháp',
+  'Gia Lai',
+  'Hà Tĩnh',
+  'Hải Phòng',
+  'Thành phố Hồ Chí Minh',
+  'Huế',
+  'Hưng Yên',
+  'Khánh Hòa',
+  'Lai Châu',
+  'Lâm Đồng',
+  'Lạng Sơn',
+  'Lào Cai',
+  'Nghệ An',
+  'Ninh Bình',
+  'Phú Thọ',
+  'Quảng Ngãi',
+  'Quảng Ninh',
+  'Quảng Trị',
+  'Sơn La',
+  'Tây Ninh',
+  'Thái Nguyên',
+  'Thanh Hóa',
+  'Tuyên Quang',
+  'Vĩnh Long',
+];
+const SERVICES = [
+  'Nội soi dạ dày / đại tràng tiền mê',
+  'Khám bệnh lý tiêu hóa, gan mật',
+  'Gói tầm soát ung thư sớm',
+  'Khám sức khỏe tổng quát',
+];
 
 const HEADERS = [
   'Mã tham chiếu',
@@ -21,6 +68,8 @@ const HEADERS = [
   'Thời gian',
   'Họ và tên',
   'Số điện thoại',
+  'Tỉnh/Thành phố sinh sống',
+  'Ngày mong muốn thăm khám',
   'Dịch vụ quan tâm',
   'Ghi chú',
   'Nguồn trang',
@@ -49,6 +98,32 @@ function cleanText_(value, maxLength) {
 function safeCell_(value, maxLength) {
   var text = cleanText_(value, maxLength);
   return /^[=+\-@]/.test(text) ? "'" + text : text;
+}
+
+function isValidAppointmentDate_(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+
+  var parsed = new Date(value + 'T00:00:00.000Z');
+  if (
+    isNaN(parsed.getTime()) ||
+    Utilities.formatDate(parsed, 'UTC', 'yyyy-MM-dd') !== value
+  ) {
+    return false;
+  }
+
+  var today = Utilities.formatDate(new Date(), REFERENCE_TIME_ZONE, 'yyyy-MM-dd');
+  var latest = Utilities.formatDate(
+    new Date(Date.now() + APPOINTMENT_WINDOW_DAYS * 24 * 60 * 60 * 1000),
+    REFERENCE_TIME_ZONE,
+    'yyyy-MM-dd'
+  );
+  return value >= today && value <= latest;
+}
+
+function formatAppointmentDate_(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return value || 'Chưa xác định';
+  var parts = value.split('-');
+  return parts[2] + '/' + parts[1] + '/' + parts[0];
 }
 
 function escapeHtml_(value) {
@@ -117,6 +192,26 @@ function backfillReferenceCodes_(sheet) {
   });
 }
 
+function migrateLeadQualificationColumns_(sheet) {
+  // Nâng cấp cả cấu trúc cũ chưa có hai cột và cấu trúc v3 đã dùng lựa chọn
+  // khu vực/thời gian chung. Không xóa hoặc ghi đè dữ liệu lead hiện có.
+  var provinceHeader = cleanText_(sheet.getRange(1, 6).getValue(), 100);
+  if (provinceHeader === 'Khu vực sinh sống') {
+    sheet.getRange(1, 6).setValue('Tỉnh/Thành phố sinh sống');
+  } else if (provinceHeader !== 'Tỉnh/Thành phố sinh sống') {
+    sheet.insertColumnBefore(6);
+    sheet.getRange(1, 6).setValue('Tỉnh/Thành phố sinh sống');
+  }
+
+  var appointmentHeader = cleanText_(sheet.getRange(1, 7).getValue(), 100);
+  if (appointmentHeader === 'Thời gian mong muốn thăm khám') {
+    sheet.getRange(1, 7).setValue('Ngày mong muốn thăm khám');
+  } else if (appointmentHeader !== 'Ngày mong muốn thăm khám') {
+    sheet.insertColumnBefore(7);
+    sheet.getRange(1, 7).setValue('Ngày mong muốn thăm khám');
+  }
+}
+
 function getOrCreateSheet_() {
   var spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
   var sheet = spreadsheet.getSheetByName(SHEET_NAME);
@@ -143,6 +238,7 @@ function getOrCreateSheet_() {
       sheet.getRange(1, 2).setValue('Mã hệ thống');
     }
 
+    migrateLeadQualificationColumns_(sheet);
     styleHeader_(sheet);
     backfillReferenceCodes_(sheet);
     properties.setProperty('LEAD_SCHEMA_VERSION', LEAD_SCHEMA_VERSION);
@@ -189,6 +285,8 @@ function findRecentLeadByPhone_(sheet, phone, now) {
 }
 
 function sendLeadEmail_(lead) {
+  var provinceCity = lead.provinceCity || 'Chưa xác định';
+  var appointmentDate = formatAppointmentDate_(lead.appointmentDate);
   var service = lead.service || 'Chưa chọn';
   var note = lead.note || 'Không có';
   var subject = '[' + lead.referenceCode + '] Lead nội soi – ' + lead.name + ' – ' + lead.phone;
@@ -200,6 +298,8 @@ function sendLeadEmail_(lead) {
     '<tr><td style="font-weight:bold;border-bottom:1px solid #e5e7eb">Mã hệ thống</td><td style="border-bottom:1px solid #e5e7eb">' + escapeHtml_(lead.leadId) + '</td></tr>',
     '<tr><td style="font-weight:bold;border-bottom:1px solid #e5e7eb">Họ và tên</td><td style="border-bottom:1px solid #e5e7eb">' + escapeHtml_(lead.name) + '</td></tr>',
     '<tr><td style="font-weight:bold;border-bottom:1px solid #e5e7eb">Số điện thoại</td><td style="border-bottom:1px solid #e5e7eb"><a href="tel:' + escapeHtml_(lead.phone) + '">' + escapeHtml_(lead.phone) + '</a></td></tr>',
+    '<tr><td style="font-weight:bold;border-bottom:1px solid #e5e7eb">Tỉnh/Thành phố sinh sống</td><td style="border-bottom:1px solid #e5e7eb">' + escapeHtml_(provinceCity) + '</td></tr>',
+    '<tr><td style="font-weight:bold;border-bottom:1px solid #e5e7eb">Ngày mong muốn thăm khám</td><td style="border-bottom:1px solid #e5e7eb">' + escapeHtml_(appointmentDate) + '</td></tr>',
     '<tr><td style="font-weight:bold;border-bottom:1px solid #e5e7eb">Dịch vụ</td><td style="border-bottom:1px solid #e5e7eb">' + escapeHtml_(service) + '</td></tr>',
     '<tr><td style="font-weight:bold;border-bottom:1px solid #e5e7eb">Ghi chú</td><td style="border-bottom:1px solid #e5e7eb">' + escapeHtml_(note) + '</td></tr>',
     '<tr><td style="font-weight:bold;border-bottom:1px solid #e5e7eb">Nguồn trang</td><td style="border-bottom:1px solid #e5e7eb">' + escapeHtml_(lead.sourceUrl || 'Không xác định') + '</td></tr>',
@@ -209,7 +309,7 @@ function sendLeadEmail_(lead) {
   ].join('');
 
   MailApp.sendEmail({
-    to: NOTIFICATION_EMAIL,
+    to: NOTIFICATION_EMAILS.join(','),
     subject: subject,
     htmlBody: htmlBody,
     body: [
@@ -218,6 +318,8 @@ function sendLeadEmail_(lead) {
       'Mã hệ thống: ' + lead.leadId,
       'Họ và tên: ' + lead.name,
       'Số điện thoại: ' + lead.phone,
+      'Tỉnh/Thành phố sinh sống: ' + provinceCity,
+      'Ngày mong muốn thăm khám: ' + appointmentDate,
       'Dịch vụ: ' + service,
       'Ghi chú: ' + note,
       'Nguồn: ' + (lead.sourceUrl || 'Không xác định'),
@@ -287,6 +389,8 @@ function doPost(event) {
   lead.leadId = cleanText_(lead.leadId, 100);
   lead.name = cleanText_(lead.name, 100);
   lead.phone = cleanText_(lead.phone, 30);
+  lead.provinceCity = cleanText_(lead.provinceCity, 80);
+  lead.appointmentDate = cleanText_(lead.appointmentDate, 10);
   lead.service = cleanText_(lead.service, 120);
   lead.note = cleanText_(lead.note, 500);
   lead.sourceUrl = cleanText_(lead.sourceUrl, 500);
@@ -295,7 +399,15 @@ function doPost(event) {
   lead.utmMedium = cleanText_(lead.utmMedium, 120);
   lead.utmCampaign = cleanText_(lead.utmCampaign, 160);
 
-  if (!lead.leadId || lead.name.length < 2 || !/^0(?:3|5|7|8|9)\d{8}$/.test(lead.phone) || lead.consent !== true) {
+  if (
+    !lead.leadId ||
+    lead.name.length < 2 ||
+    !/^0(?:3|5|7|8|9)\d{8}$/.test(lead.phone) ||
+    PROVINCE_CITIES.indexOf(lead.provinceCity) === -1 ||
+    !isValidAppointmentDate_(lead.appointmentDate) ||
+    (lead.service && SERVICES.indexOf(lead.service) === -1) ||
+    lead.consent !== true
+  ) {
     return jsonResponse_({ ok: false, error: 'Dữ liệu lead không hợp lệ.' });
   }
 
@@ -338,6 +450,8 @@ function doPost(event) {
       submittedAt,
       safeCell_(lead.name, 100),
       safeCell_(lead.phone, 30),
+      safeCell_(lead.provinceCity, 80),
+      safeCell_(lead.appointmentDate, 10),
       safeCell_(lead.service, 120),
       safeCell_(lead.note, 500),
       safeCell_(lead.sourceUrl, 500),
@@ -358,10 +472,10 @@ function doPost(event) {
   var emailSent = true;
   try {
     sendLeadEmail_(lead);
-    sheet.getRange(rowNumber, 14).setValue('Đã gửi');
+    sheet.getRange(rowNumber, 16).setValue('Đã gửi');
   } catch (error) {
     emailSent = false;
-    sheet.getRange(rowNumber, 14).setValue('Lỗi gửi – kiểm tra quota/quyền Gmail');
+    sheet.getRange(rowNumber, 16).setValue('Lỗi gửi – kiểm tra quota/quyền Gmail');
   }
 
   return jsonResponse_({

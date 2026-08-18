@@ -24,6 +24,18 @@ const OLD_HEADERS = [
   'Thông báo email',
 ];
 
+function vietnamDateDaysFromNow(days) {
+  const date = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(date);
+  const getPart = type => parts.find(part => part.type === type)?.value || '';
+  return `${getPart('year')}-${getPart('month')}-${getPart('day')}`;
+}
+
 function createHarness() {
   const data = [
     [...OLD_HEADERS],
@@ -166,7 +178,7 @@ function createHarness() {
     releaseLock() { this.locked = false; },
   };
 
-  const formatDate = (date, timeZone) => {
+  const formatDate = (date, timeZone, pattern) => {
     const parts = new Intl.DateTimeFormat('en-CA', {
       timeZone,
       year: 'numeric',
@@ -174,6 +186,9 @@ function createHarness() {
       day: '2-digit',
     }).formatToParts(date);
     const getPart = type => parts.find(part => part.type === type).value;
+    if (pattern === 'yyyy-MM-dd') {
+      return `${getPart('year')}-${getPart('month')}-${getPart('day')}`;
+    }
     return `${getPart('year')}${getPart('month')}${getPart('day')}`;
   };
 
@@ -229,22 +244,81 @@ test('existing Sheet is migrated without losing old lead data', () => {
   assert.equal(data[2][0], 'HLC-NS-20260724-002');
   assert.equal(data[1][1], 'uuid-old-1');
   assert.equal(data[1][3], 'Khách cũ 1');
+  assert.equal(data[0][5], 'Tỉnh/Thành phố sinh sống');
+  assert.equal(data[0][6], 'Ngày mong muốn thăm khám');
+  assert.equal(data[1][5], '');
+  assert.equal(data[1][6], '');
+  assert.equal(data[1][7], 'Nội soi');
   assert.equal(properties.get('LEAD_SEQUENCE_20260724'), '2');
-  assert.equal(properties.get('LEAD_SCHEMA_VERSION'), '2');
+  assert.equal(properties.get('LEAD_SCHEMA_VERSION'), '4');
 
   vm.runInContext('getOrCreateSheet_()', context);
   assert.equal(metrics.getRangeCalls, callsAfterMigration);
 });
 
+test('schema v2 is upgraded in place to v4 without duplicating identifier columns', () => {
+  const { context, data, properties } = createHarness();
+
+  data[0][0] = 'Mã hệ thống';
+  data.forEach((row, index) => {
+    row.unshift(index === 0 ? 'Mã tham chiếu' : `HLC-NS-20260724-00${index}`);
+  });
+  properties.set('LEAD_SCHEMA_VERSION', '2');
+
+  vm.runInContext('getOrCreateSheet_()', context);
+
+  assert.equal(data[0][0], 'Mã tham chiếu');
+  assert.equal(data[0][1], 'Mã hệ thống');
+  assert.equal(data[0][5], 'Tỉnh/Thành phố sinh sống');
+  assert.equal(data[0][6], 'Ngày mong muốn thăm khám');
+  assert.equal(data[0][7], 'Dịch vụ quan tâm');
+  assert.equal(data[1][0], 'HLC-NS-20260724-001');
+  assert.equal(data[1][1], 'uuid-old-1');
+  assert.equal(data[1][3], 'Khách cũ 1');
+  assert.equal(data[1][7], 'Nội soi');
+  assert.equal(properties.get('LEAD_SCHEMA_VERSION'), '4');
+});
+
+test('schema v3 qualification columns are renamed in place without shifting lead data', () => {
+  const { context, data, properties } = createHarness();
+
+  data[0][0] = 'Mã hệ thống';
+  data.forEach((row, index) => {
+    row.unshift(index === 0 ? 'Mã tham chiếu' : `HLC-NS-20260724-00${index}`);
+    row.splice(
+      5,
+      0,
+      index === 0 ? 'Khu vực sinh sống' : 'Hà Nội',
+      index === 0 ? 'Thời gian mong muốn thăm khám' : 'Trong tuần này',
+    );
+  });
+  properties.set('LEAD_SCHEMA_VERSION', '3');
+  const columnCountBefore = data[0].length;
+
+  vm.runInContext('getOrCreateSheet_()', context);
+
+  assert.equal(data[0].length, columnCountBefore);
+  assert.equal(data[0][5], 'Tỉnh/Thành phố sinh sống');
+  assert.equal(data[0][6], 'Ngày mong muốn thăm khám');
+  assert.equal(data[1][5], 'Hà Nội');
+  assert.equal(data[1][6], 'Trong tuần này');
+  assert.equal(data[1][7], 'Nội soi');
+  assert.equal(properties.get('LEAD_SCHEMA_VERSION'), '4');
+});
+
 test('new lead receives the next reference code in Sheet and email', () => {
   const { context, data, sentEmails } = createHarness();
+  const appointmentDate = vietnamDateDaysFromNow(2);
+  const [appointmentYear, appointmentMonth, appointmentDay] = appointmentDate.split('-');
   const lead = {
     secret: 'test-secret',
     leadId: 'uuid-new-3',
     submittedAt: '2026-07-24T03:00:00.000Z',
     name: 'Nguyễn Văn An',
     phone: '0911111111',
-    service: 'Nội soi',
+    provinceCity: 'Hà Nội',
+    appointmentDate,
+    service: 'Nội soi dạ dày / đại tràng tiền mê',
     note: '',
     sourceUrl: 'https://example.com',
     referrer: '',
@@ -263,22 +337,37 @@ test('new lead receives the next reference code in Sheet and email', () => {
   assert.equal(result.referenceCode, 'HLC-NS-20260724-003');
   assert.equal(newestRow[0], 'HLC-NS-20260724-003');
   assert.equal(newestRow[1], 'uuid-new-3');
-  assert.equal(newestRow[13], 'Đã gửi');
+  assert.equal(newestRow[5], 'Hà Nội');
+  assert.equal(newestRow[6], appointmentDate);
+  assert.equal(newestRow[15], 'Đã gửi');
   assert.equal(sentEmails.length, 1);
-  assert.equal(sentEmails[0].to, 'pkdk.hoanglong10@gmail.com');
+  assert.equal(
+    sentEmails[0].to,
+    'pkdk.hoanglong10@gmail.com,cskh@hoanglongclinic.vn',
+  );
+  assert.equal(Object.hasOwn(sentEmails[0], 'cc'), false);
+  assert.equal(Object.hasOwn(sentEmails[0], 'bcc'), false);
   assert.match(sentEmails[0].subject, /HLC-NS-20260724-003/);
+  assert.match(sentEmails[0].htmlBody, /Tỉnh\/Thành phố sinh sống[\s\S]*Hà Nội/);
+  assert.match(
+    sentEmails[0].htmlBody,
+    new RegExp(`Ngày mong muốn thăm khám[\\s\\S]*${appointmentDay}\\/${appointmentMonth}\\/${appointmentYear}`),
+  );
 });
 
 test('same phone submitted again within 24 hours is suppressed without a second row or email', () => {
   const { context, data, sentEmails } = createHarness();
   const submittedAt = new Date().toISOString();
+  const appointmentDate = vietnamDateDaysFromNow(3);
   const firstLead = {
     secret: 'test-secret',
     leadId: 'uuid-dedupe-first',
     submittedAt,
     name: 'Khách kiểm thử',
     phone: '0933333333',
-    service: 'Nội soi',
+    provinceCity: 'Bắc Ninh',
+    appointmentDate,
+    service: 'Nội soi dạ dày / đại tràng tiền mê',
     note: '',
     sourceUrl: 'https://example.com',
     referrer: '',
@@ -310,4 +399,69 @@ test('same phone submitted again within 24 hours is suppressed without a second 
   assert.equal(secondResult.referenceCode, firstResult.referenceCode);
   assert.equal(data.length, rowsAfterFirst);
   assert.equal(sentEmails.length, emailsAfterFirst);
+});
+
+test('Apps Script rejects province and appointment values outside the approved rules', () => {
+  const { context, data, sentEmails } = createHarness();
+  context.__event = {
+    postData: {
+      contents: JSON.stringify({
+        secret: 'test-secret',
+        leadId: 'uuid-invalid-choice',
+        submittedAt: '2026-07-24T03:00:00.000Z',
+        name: 'Khách kiểm thử',
+        phone: '0911111111',
+        provinceCity: 'Dữ liệu bot tự chèn',
+        appointmentDate: vietnamDateDaysFromNow(2),
+        service: 'Nội soi dạ dày / đại tràng tiền mê',
+        note: '',
+        sourceUrl: 'https://example.com',
+        referrer: '',
+        utmSource: 'google',
+        utmMedium: 'cpc',
+        utmCampaign: 'noi-soi',
+        consent: true,
+      }),
+    },
+  };
+
+  const rowsBefore = data.length;
+  const response = vm.runInContext('doPost(__event)', context);
+  const result = JSON.parse(response.text);
+
+  assert.equal(result.ok, false);
+  assert.equal(data.length, rowsBefore);
+  assert.equal(sentEmails.length, 0);
+});
+
+test('Apps Script rejects an impossible appointment date even with a valid province', () => {
+  const { context, data, sentEmails } = createHarness();
+  context.__event = {
+    postData: {
+      contents: JSON.stringify({
+        secret: 'test-secret',
+        leadId: 'uuid-invalid-date',
+        submittedAt: new Date().toISOString(),
+        name: 'Khách kiểm thử',
+        phone: '0911111111',
+        provinceCity: 'Hà Nội',
+        appointmentDate: '2026-02-30',
+        service: '',
+        note: '',
+        sourceUrl: 'https://example.com',
+        referrer: '',
+        utmSource: 'google',
+        utmMedium: 'cpc',
+        utmCampaign: 'noi-soi',
+        consent: true,
+      }),
+    },
+  };
+
+  const rowsBefore = data.length;
+  const result = JSON.parse(vm.runInContext('doPost(__event)', context).text);
+
+  assert.equal(result.ok, false);
+  assert.equal(data.length, rowsBefore);
+  assert.equal(sentEmails.length, 0);
 });

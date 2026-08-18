@@ -5,9 +5,10 @@ Landing page đã có luồng nhận đăng ký:
 `Form trên website → Vercel Function /api/lead → Google Apps Script → Google Sheet + Gmail`
 
 - Google Sheet đích: `1KgKKoN4qwxw4qmRHp6wMxUY0ZxNgkCUoVQYwOfwAPug`
-- Email nhận thông báo: `pkdk.hoanglong10@gmail.com`
+- Email nhận thông báo: `pkdk.hoanglong10@gmail.com` và `cskh@hoanglongclinic.vn`
 - Tab dữ liệu được tự tạo: `Lead Landing Page`
 - Mã tham chiếu dễ theo dõi: `HLC-NS-YYYYMMDD-001`
+- Hai trường sàng lọc: `Tỉnh/Thành phố sinh sống` theo 34 đơn vị hành chính cấp tỉnh và `Ngày mong muốn thăm khám` bằng lịch chọn ngày
 
 Mỗi ngày, phần số thứ tự bắt đầu lại từ `001`. UUID cũ vẫn được giữ trong cột `Mã hệ thống` để chống ghi trùng.
 
@@ -15,11 +16,15 @@ Mỗi ngày, phần số thứ tự bắt đầu lại từ `001`. UUID cũ vẫ
 
 Nếu landing page của bạn đang nhận được Sheet và email, không cần tạo lại secret hoặc deployment Apps Script:
 
-1. Thay toàn bộ code hiện tại trong Apps Script bằng nội dung mới của `integrations/google-apps-script.gs`.
-2. Trong danh sách hàm ở thanh công cụ Apps Script, chọn `prepareLeadSystem` rồi nhấn **Run** một lần. Hàm này chuẩn bị cấu trúc Sheet và bộ đếm trước khi khách gửi form.
-3. Chọn **Deploy → Manage deployments → Edit → New version → Deploy**.
-4. Đẩy toàn bộ mã nguồn mới lên GitHub để Vercel tự triển khai, hoặc chạy `npx vercel@latest --prod`.
+> Nếu bản v62 với 34 tỉnh/thành và lịch chọn ngày đã chạy trên Vercel, thay đổi hai người nhận chỉ cần cập nhật Apps Script theo bước 2–5 bên dưới; không cần deploy lại frontend. Nếu v62 chưa được đưa lên production, hãy triển khai toàn bộ gói v63 theo đủ các bước.
+
+1. Đẩy toàn bộ mã nguồn mới lên GitHub để Vercel tự triển khai, hoặc chạy `npx vercel@latest --prod`.
+2. Khi Vercel báo deployment mới đã sẵn sàng, thay toàn bộ code hiện tại trong Apps Script bằng nội dung mới của `integrations/google-apps-script.gs`.
+3. Trong danh sách hàm ở thanh công cụ Apps Script, chọn `prepareLeadSystem` rồi nhấn **Run** một lần. Hàm này chuẩn bị cấu trúc Sheet và bộ đếm trước khi khách gửi form.
+4. Chọn **Deploy → Manage deployments → Edit → New version → Deploy**.
 5. Gửi một form thử.
+
+Không cần tạo lại `GOOGLE_APPS_SCRIPT_URL`, `LEAD_WEBHOOK_SECRET` hoặc một tab Sheet mới. Đưa website lên trước giúp form cũ không bị Apps Script mới từ chối trong khoảng chuyển phiên bản; lead phát sinh trong vài phút chuyển tiếp vẫn được bản Apps Script cũ lưu, nhưng có thể chưa có hai thông tin bổ sung. Hai trường mới sẽ đi vào đầy đủ sau khi bạn tạo **New version** cho deployment Apps Script hiện tại.
 
 Lần nhận lead đầu tiên sau khi cập nhật, Apps Script sẽ:
 
@@ -28,8 +33,29 @@ Lần nhận lead đầu tiên sau khi cập nhật, Apps Script sẽ:
 - Tạo mã tham chiếu cho các dòng cũ dựa trên ngày nhận lead.
 - Tiếp tục đánh số an toàn cho lead mới mà không xóa hoặc ghi đè dữ liệu.
 - Ghi nhớ phiên bản cấu trúc và bộ đếm, tránh quét lại toàn bộ Sheet trong mỗi lượt đăng ký.
+- Chèn thêm cột `Tỉnh/Thành phố sinh sống` và `Ngày mong muốn thăm khám` ngay sau cột số điện thoại; dữ liệu cũ được dịch sang phải và giữ nguyên.
+- Đưa hai thông tin mới vào cả dòng Google Sheet và email thông báo.
 
-## 1. Thiết lập Google Sheet và Gmail
+Danh sách trên form gồm đúng 34 tỉnh/thành được công bố từ ngày 12/6/2025: 28 tỉnh và 6 thành phố trực thuộc Trung ương. Mã nguồn kiểm tra lại danh sách này ở cả Vercel Function và Apps Script, nên request tự chèn một địa phương không có trong danh sách sẽ không đi vào Sheet/Gmail. Nguồn đối chiếu: [Chính phủ – Chi tiết 34 đơn vị hành chính cấp tỉnh](https://xaydungchinhsach.chinhphu.vn/chi-tiet-34-don-vi-hanh-chinh-cap-tinh-tu-12-6-2025-119250612141845533.htm).
+
+Trường ngày dùng lịch gốc của trình duyệt/điện thoại và chỉ nhận ngày từ hôm nay đến tối đa 12 tháng tới. Sheet lưu ngày theo dạng `YYYY-MM-DD` để dễ lọc/sắp xếp; email hiển thị dạng `DD/MM/YYYY` để nhân viên dễ đọc.
+
+### Cập nhật hai trường mới vào hệ thống hiện tại
+
+Apps Script gửi cùng một thông báo tới cả `pkdk.hoanglong10@gmail.com` và `cskh@hoanglongclinic.vn`. Bạn không cần đăng nhập hoặc cấp quyền tài khoản `cskh@hoanglongclinic.vn`: email vẫn được gửi bằng tài khoản Google đang triển khai Apps Script, còn địa chỉ CSKH chỉ là người nhận bổ sung. Hai địa chỉ được đặt trong trường `to`; không tạo hai lần ghi Sheet và không dùng `cc`/`bcc`.
+
+Thực hiện đúng thứ tự dưới đây để không làm gián đoạn form đang chạy quảng cáo:
+
+1. Đẩy mã nguồn website bản này lên GitHub/Vercel và chờ deployment báo **Ready**.
+2. Trong Apps Script gắn với Sheet hiện tại, thay toàn bộ `Code.gs` bằng file `integrations/google-apps-script.gs` của bản này rồi **Save**.
+3. Chọn hàm `prepareLeadSystem` trên thanh công cụ và nhấn **Run** một lần. Nếu Google hỏi quyền, cấp quyền bằng tài khoản hiện đang sở hữu Apps Script và Sheet.
+4. Mở tab `Lead Landing Page` và kiểm tra hai cột mới nằm sau `Số điện thoại`. Không tự chèn cột thủ công.
+5. Chọn **Deploy → Manage deployments → Edit** deployment Web App đang dùng → chọn **New version** → **Deploy**. Không tạo một deployment mới nếu muốn giữ nguyên URL `/exec` đang khai báo trên Vercel.
+6. Gửi một lead thử. Sheet phải có đúng một dòng mới và cả hai hộp thư phải nhận cùng một thông báo.
+
+Hai người nhận được khai báo trong mảng `NOTIFICATION_EMAILS`. Không tạo deployment Apps Script mới; chỉ tạo **New version** cho deployment Web App hiện tại để giữ nguyên URL `/exec`. ID Sheet vẫn lấy từ `SPREADSHEET_ID` hiện tại.
+
+## 1. Thiết lập ban đầu – bỏ qua nếu hệ thống đang nhận Sheet và email bình thường
 
 Thao tác này cần thực hiện một lần bằng tài khoản Google có quyền chỉnh sửa Sheet.
 
@@ -100,6 +126,7 @@ Nếu cả hai biến Turnstile chưa được khai báo, form vẫn chạy theo
 - Kết quả Turnstile phải khớp chính xác cả hostname hiện tại và action `lead_form`; token của website hoặc tác vụ khác không được chấp nhận.
 - API từ chối POST có `Origin` khác domain hiện tại khi trình duyệt gửi header này.
 - Google Apps Script bỏ qua số điện thoại đã được tiếp nhận trong **24 giờ gần nhất** (tối đa 500 lead gần nhất), không tạo thêm dòng Sheet hoặc email trùng.
+- `Tỉnh/Thành phố` và `Dịch vụ` được kiểm tra bằng danh sách cho phép; `Ngày mong muốn thăm khám` phải là ngày có thật, không ở quá khứ và không xa hơn 12 tháng. Các quy tắc đều được kiểm tra ở cả Vercel Function và Apps Script.
 - Lead trùng hoặc submission bị honeypot loại không phát sự kiện GA4 `generate_lead`, giúp số chuyển đổi sạch hơn.
 
 ### Không chặn nhầm bot tìm kiếm hợp lệ
@@ -116,7 +143,28 @@ Tên miền `noisoihoanglong.net` phải nằm trong danh sách hostname của T
 
 ### Rate limit ở Vercel Firewall
 
-Sau khi bản mới chạy ổn định, tạo rule chỉ khớp **method `POST` + path `/api/lead`**. Bắt đầu ở chế độ **Log** với ngưỡng tham chiếu `10 request/10 phút/IP` trong ít nhất 24–48 giờ; sau khi xem dữ liệu mới chuyển sang Rate Limit hoặc Challenge. Không áp rule này lên `GET /`, ảnh, CSS, JavaScript hoặc `/api/turnstile-config`, và không dùng điều kiện rộng kiểu User-Agent chứa `bot`, `crawler`, `spider` hay `headless`. Không đặt ngưỡng quá thấp vì mạng cơ quan hoặc 4G có thể dùng chung IP. Đây là lớp bổ sung; Turnstile và chống trùng vẫn là lớp chính của form.
+Tạo rule trong **Vercel project → Firewall → Configure → Add New → Rule**:
+
+1. Tên rule: `Theo dõi spam POST lead`.
+2. Điều kiện 1: `Method` bằng `POST`.
+3. Điều kiện 2 nối bằng `AND`: `Path` bằng chính xác `/api/lead`.
+4. Action: `Rate Limit`; chiến lược `Fixed Window`; counting key `IP`.
+5. Thời gian: `600 giây`; ngưỡng ban đầu: `10 request`.
+6. Action khi vượt ngưỡng: chọn `Log` trong 24–48 giờ đầu.
+7. **Save Rule → Review Changes → Publish**.
+8. Nếu log không cho thấy người thật bị chạm ngưỡng, đổi action vượt ngưỡng sang `429` hoặc `Deny`, rồi Publish lại.
+
+Không áp rule này lên `GET /`, ảnh, CSS, JavaScript hoặc `/api/turnstile-config`, và không dùng điều kiện rộng kiểu User-Agent chứa `bot`, `crawler`, `spider` hay `headless`. Không đặt ngưỡng quá thấp vì mạng cơ quan hoặc 4G có thể dùng chung IP. Vercel khuyến nghị thử rule bằng Log trước khi chặn; cấu hình Firewall có hiệu lực mà không cần redeploy website. Tài liệu chính thức: [Vercel WAF Custom Rules](https://vercel.com/docs/vercel-firewall/vercel-waf/custom-rules) và [Vercel WAF Rate Limiting](https://vercel.com/docs/vercel-firewall/vercel-waf/rate-limiting).
+
+### Lọc theo quốc gia mà không ảnh hưởng Googlebot
+
+Nếu phòng khám chỉ nhận khách tại Việt Nam, trước tiên hãy tạo một rule **Log** với ba điều kiện `Method = POST`, `Path = /api/lead`, `Country != VN`. Theo dõi vài ngày rồi mới chuyển sang `Deny`. Vì rule chỉ áp dụng cho POST của form nên Googlebot/AdsBot vẫn có thể GET landing page, ảnh, CSS, `robots.txt` và `sitemap.xml` bình thường.
+
+Không nên chặn toàn bộ lượt truy cập ngoài Việt Nam ngay từ đầu: khách đang đi công tác, dùng VPN hoặc mạng định tuyến sai quốc gia cũng có thể bị loại. Nếu domain thực sự được proxy qua Cloudflare (không chỉ cài Turnstile), có thể dùng WAF expression `(http.request.method eq "POST" and http.request.uri.path eq "/api/lead" and ip.src.country ne "VN" and not cf.client.bot)` với **Managed Challenge**. Nếu DNS vẫn đi thẳng vào Vercel, rule Cloudflare WAF sẽ không bảo vệ request; khi đó dùng Vercel Firewall ở trên. Tài liệu chính thức: [Cloudflare country rules](https://developers.cloudflare.com/waf/custom-rules/use-cases/allow-traffic-from-specific-countries/) và [Cloudflare verified bots](https://developers.cloudflare.com/waf/custom-rules/use-cases/allow-traffic-from-verified-bots/).
+
+### Khi nào mới nên thêm OTP
+
+Hãy chạy bản có hai trường mới, Turnstile và rate limit trong khoảng 3–7 ngày rồi so sánh tỷ lệ lead thật/spam. Nếu bot vẫn nhập đúng lựa chọn và dùng số điện thoại có vẻ hợp lệ, lớp tiếp theo mới nên là OTP SMS/Zalo cho các lượt đáng ngờ. OTP cần một nhà cung cấp gửi mã và cơ chế hết hạn/chống thử mã; không nên gửi OTP qua Gmail hoặc bật cho mọi người ngay vì sẽ làm giảm chuyển đổi của người bệnh lớn tuổi.
 
 ### Theo dõi quyết định chống spam
 
@@ -129,6 +177,7 @@ Các quyết định được ghi bằng structured log phía server:
 | `hlc_timing_verified` | Request nhanh nhưng đã vượt Turnstile nên vẫn được nhận |
 | `hlc_turnstile_rejected` | Token thiếu, sai, hết hạn hoặc không khớp hostname/action |
 | `hlc_origin_rejected` | Trình duyệt gửi request từ một website khác |
+| `hlc_form_value_rejected` | Request cố gửi tỉnh/thành phố, ngày khám hoặc dịch vụ không hợp lệ |
 
 Các log này không gửi sang GA4, Google Sheet hoặc Gmail và không thay đổi các sự kiện chuyển đổi hiện có. Mỗi log chỉ có thời điểm, quốc gia/khu vực ước tính, user agent, hostname nguồn/referrer, UTM và lý do quyết định nếu request cung cấp. Hệ thống không ghi tên, số điện thoại, ghi chú, IP đầy đủ, token Turnstile hoặc nội dung bot đã điền vào ô bẫy.
 
@@ -162,7 +211,9 @@ Thời gian trong Runtime Logs hiển thị theo UTC. Vercel hiện lưu Runtime
 4. Kiểm tra:
 
    - Tab `Lead Landing Page` trong Google Sheet có một dòng mới.
-   - `pkdk.hoanglong10@gmail.com` nhận được email thông báo.
+   - `pkdk.hoanglong10@gmail.com` và `cskh@hoanglongclinic.vn` cùng nhận được email thông báo.
+   - Hai cột `Tỉnh/Thành phố sinh sống` và `Ngày mong muốn thăm khám` có đúng lựa chọn vừa thử.
+   - Email có hai dòng thông tin tương ứng để nhân viên ưu tiên gọi lại.
    - Cột `Mã tham chiếu` có dạng `HLC-NS-20260724-001`.
    - Form hiển thị thông báo thành công kèm biểu tượng tích; mã tham chiếu chỉ xuất hiện trong Sheet và email.
    - Cột `Thông báo email` hiển thị `Đã gửi`.
@@ -263,4 +314,4 @@ Trang gửi ba sự kiện chính của form tới GA4 `G-GLBFPTHWG6`:
 4. DebugView cần hiện `lead_submit_attempt`; nếu Sheet/email nhận lead thành công thì hiện thêm `generate_lead`. Nếu chỉ thấy `lead_form_error`, kiểm tra chi tiết tham số `error_type`.
 5. Trong GA4, mở **Admin → Data display → Events** và đánh dấu chính xác `generate_lead` là **Key event**. Không đánh dấu `lead_submit_attempt` để tránh tính các lượt gửi thất bại là chuyển đổi.
 
-Chế độ debug chỉ được bật trên thiết bị có tham số `ga_debug=1`; trang production thông thường không ghi log debug. Các sự kiện GA4 không chứa họ tên, số điện thoại, ghi chú hay dịch vụ người dùng đã chọn.
+Chế độ debug chỉ được bật trên thiết bị có tham số `ga_debug=1`; trang production thông thường không ghi log debug. Các sự kiện GA4 không chứa họ tên, số điện thoại, tỉnh/thành phố, ngày mong muốn, ghi chú hay dịch vụ người dùng đã chọn. Hai trường mới chỉ đi vào backend, Sheet và Gmail; tên sự kiện cùng cách tính `generate_lead` hiện tại không đổi.

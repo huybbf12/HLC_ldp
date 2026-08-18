@@ -26,7 +26,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- Ưu tiên trực tiếp ảnh WebP gốc sắc nét theo từng kích thước màn hình. -->
 <link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination-mobile.webp" type="image/webp" media="(max-width: 767px)" fetchpriority="high">
 <link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high">
-<link rel="stylesheet" href="assets/css/landing-page.css?v=60-mobile-counter">
+<link rel="stylesheet" href="assets/css/landing-page.css?v=62-province-date-fields">
 
 <!-- Google tag: xếp hàng dữ liệu ngay, chỉ tải thư viện sau tương tác đầu tiên hoặc khi trang đã ổn định. -->
 <script>
@@ -1138,6 +1138,53 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
                             <input type="text" name="name" required minlength="2" maxlength="100" placeholder="Họ và Tên *" class="form-input w-full" aria-label="Họ và tên" autocomplete="name">
                             <input type="tel" name="phone" required maxlength="20" pattern="(?:\+?84|0)[ .\-]?(?:3|5|7|8|9)(?:[ .\-]?[0-9]){8}" title="Nhập số điện thoại Việt Nam hợp lệ, ví dụ 0912345678" placeholder="Số điện thoại *" class="form-input w-full" aria-label="Số điện thoại" autocomplete="tel" inputmode="tel">
+
+                            <div class="lead-select-field">
+                                <label for="lead-province-city">Tỉnh/Thành phố đang sinh sống <span aria-hidden="true">*</span></label>
+                                <select id="lead-province-city" name="provinceCity" required class="form-input text-gray-500 w-full" aria-label="Tỉnh hoặc thành phố đang sinh sống" autocomplete="address-level1">
+                                    <option value="">Chọn tỉnh/thành phố</option>
+                                    <option value="ha-noi">Hà Nội</option>
+                                    <option value="an-giang">An Giang</option>
+                                    <option value="bac-ninh">Bắc Ninh</option>
+                                    <option value="ca-mau">Cà Mau</option>
+                                    <option value="can-tho">Cần Thơ</option>
+                                    <option value="cao-bang">Cao Bằng</option>
+                                    <option value="da-nang">Đà Nẵng</option>
+                                    <option value="dak-lak">Đắk Lắk</option>
+                                    <option value="dien-bien">Điện Biên</option>
+                                    <option value="dong-nai">Đồng Nai</option>
+                                    <option value="dong-thap">Đồng Tháp</option>
+                                    <option value="gia-lai">Gia Lai</option>
+                                    <option value="ha-tinh">Hà Tĩnh</option>
+                                    <option value="hai-phong">Hải Phòng</option>
+                                    <option value="ho-chi-minh">Thành phố Hồ Chí Minh</option>
+                                    <option value="hue">Huế</option>
+                                    <option value="hung-yen">Hưng Yên</option>
+                                    <option value="khanh-hoa">Khánh Hòa</option>
+                                    <option value="lai-chau">Lai Châu</option>
+                                    <option value="lam-dong">Lâm Đồng</option>
+                                    <option value="lang-son">Lạng Sơn</option>
+                                    <option value="lao-cai">Lào Cai</option>
+                                    <option value="nghe-an">Nghệ An</option>
+                                    <option value="ninh-binh">Ninh Bình</option>
+                                    <option value="phu-tho">Phú Thọ</option>
+                                    <option value="quang-ngai">Quảng Ngãi</option>
+                                    <option value="quang-ninh">Quảng Ninh</option>
+                                    <option value="quang-tri">Quảng Trị</option>
+                                    <option value="son-la">Sơn La</option>
+                                    <option value="tay-ninh">Tây Ninh</option>
+                                    <option value="thai-nguyen">Thái Nguyên</option>
+                                    <option value="thanh-hoa">Thanh Hóa</option>
+                                    <option value="tuyen-quang">Tuyên Quang</option>
+                                    <option value="vinh-long">Vĩnh Long</option>
+                                </select>
+                            </div>
+
+                            <div class="lead-select-field">
+                                <label for="lead-appointment-date">Ngày mong muốn thăm khám <span aria-hidden="true">*</span></label>
+                                <input id="lead-appointment-date" type="date" name="appointmentDate" required class="form-input w-full" aria-label="Ngày mong muốn thăm khám">
+                            </div>
+
                             <select name="service" class="form-input text-gray-500 w-full md:col-span-2" aria-label="Dịch vụ quan tâm, không bắt buộc">
                                 <option value="">-- Dịch vụ quan tâm (không bắt buộc) --</option>
                                 <option value="Nội soi dạ dày / đại tràng tiền mê">Nội soi dạ dày / đại tràng tiền mê</option>
@@ -2024,6 +2071,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             const submitButton = document.getElementById('lead-submit');
             const formStatus = document.getElementById('lead-form-status');
             const startedAtInput = leadForm.elements.namedItem('formStartedAt');
+            const appointmentDateInput = leadForm.elements.namedItem('appointmentDate');
             const turnstileContainer = document.getElementById('turnstile-container');
             const turnstileMount = document.getElementById('turnstile-widget');
             const defaultButtonHtml = submitButton.innerHTML;
@@ -2032,6 +2080,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             let turnstileToken = '';
             let turnstileWidgetId = null;
             let turnstileLoadPromise = null;
+
+            if (appointmentDateInput instanceof HTMLInputElement) {
+                const formatLocalDate = date => {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                };
+                const today = new Date();
+                const latestAppointmentDate = new Date(today);
+                latestAppointmentDate.setDate(latestAppointmentDate.getDate() + 366);
+                appointmentDateInput.min = formatLocalDate(today);
+                appointmentDateInput.max = formatLocalDate(latestAppointmentDate);
+            }
 
             const trackLeadFormStart = () => {
                 if (hasTrackedFormStart) return;
@@ -2239,6 +2301,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 const payload = {
                     name: formData.get('name'),
                     phone: formData.get('phone'),
+                    provinceCity: formData.get('provinceCity'),
+                    appointmentDate: formData.get('appointmentDate'),
                     service: formData.get('service'),
                     note: formData.get('note'),
                     consent: formData.get('consent') === 'yes',

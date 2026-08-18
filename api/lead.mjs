@@ -7,6 +7,49 @@ const MAX_BODY_LENGTH = 20_000;
 const MIN_FORM_FILL_TIME_MS = 4_000;
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const TURNSTILE_ACTION = 'lead_form';
+const PROVINCE_CITY_OPTIONS = new Map([
+  ['ha-noi', 'Hà Nội'],
+  ['an-giang', 'An Giang'],
+  ['bac-ninh', 'Bắc Ninh'],
+  ['ca-mau', 'Cà Mau'],
+  ['can-tho', 'Cần Thơ'],
+  ['cao-bang', 'Cao Bằng'],
+  ['da-nang', 'Đà Nẵng'],
+  ['dak-lak', 'Đắk Lắk'],
+  ['dien-bien', 'Điện Biên'],
+  ['dong-nai', 'Đồng Nai'],
+  ['dong-thap', 'Đồng Tháp'],
+  ['gia-lai', 'Gia Lai'],
+  ['ha-tinh', 'Hà Tĩnh'],
+  ['hai-phong', 'Hải Phòng'],
+  ['ho-chi-minh', 'Thành phố Hồ Chí Minh'],
+  ['hue', 'Huế'],
+  ['hung-yen', 'Hưng Yên'],
+  ['khanh-hoa', 'Khánh Hòa'],
+  ['lai-chau', 'Lai Châu'],
+  ['lam-dong', 'Lâm Đồng'],
+  ['lang-son', 'Lạng Sơn'],
+  ['lao-cai', 'Lào Cai'],
+  ['nghe-an', 'Nghệ An'],
+  ['ninh-binh', 'Ninh Bình'],
+  ['phu-tho', 'Phú Thọ'],
+  ['quang-ngai', 'Quảng Ngãi'],
+  ['quang-ninh', 'Quảng Ninh'],
+  ['quang-tri', 'Quảng Trị'],
+  ['son-la', 'Sơn La'],
+  ['tay-ninh', 'Tây Ninh'],
+  ['thai-nguyen', 'Thái Nguyên'],
+  ['thanh-hoa', 'Thanh Hóa'],
+  ['tuyen-quang', 'Tuyên Quang'],
+  ['vinh-long', 'Vĩnh Long'],
+]);
+const APPOINTMENT_WINDOW_DAYS = 366;
+const SERVICE_OPTIONS = new Set([
+  'Nội soi dạ dày / đại tràng tiền mê',
+  'Khám bệnh lý tiêu hóa, gan mật',
+  'Gói tầm soát ung thư sớm',
+  'Khám sức khỏe tổng quát',
+]);
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -72,6 +115,28 @@ function getFormTimingSignal(value) {
     reason: elapsed < MIN_FORM_FILL_TIME_MS ? 'submitted_too_quickly' : 'timing_ok',
     elapsedMs: elapsed,
   };
+}
+
+function getVietnamDateKey(date) {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(date);
+  const getPart = type => parts.find(part => part.type === type)?.value || '';
+  return `${getPart('year')}-${getPart('month')}-${getPart('day')}`;
+}
+
+function isValidAppointmentDate(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+
+  const parsed = new Date(`${value}T00:00:00Z`);
+  if (Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== value) return false;
+
+  const today = getVietnamDateKey(new Date());
+  const latest = getVietnamDateKey(new Date(Date.now() + APPOINTMENT_WINDOW_DAYS * 24 * 60 * 60 * 1000));
+  return value >= today && value <= latest;
 }
 
 function getRequestHost(request) {
@@ -164,6 +229,15 @@ function logTimingDecision(request, body, timing, decision) {
       verification: decision === 'allowed' ? 'turnstile_passed' : 'turnstile_unavailable',
     }
   );
+}
+
+function rejectInvalidField(request, body, field, message) {
+  logSecurityDecision('hlc_form_value_rejected', request, body, {
+    decision: 'blocked',
+    reason: 'invalid_form_value',
+    field,
+  });
+  return json({ ok: false, field, message }, 400);
 }
 
 async function verifyTurnstile(request, token, secret) {
@@ -278,6 +352,9 @@ export async function POST(request) {
 
   const name = cleanText(body.name, 100);
   const phone = normalizeVietnamesePhone(body.phone);
+  const provinceCityKey = cleanText(body.provinceCity, 80);
+  const provinceCity = PROVINCE_CITY_OPTIONS.get(provinceCityKey) || '';
+  const appointmentDate = cleanText(body.appointmentDate, 10);
   const service = cleanText(body.service, 120);
   const note = cleanText(body.note, 500, true);
   const consent = body.consent === true || ['true', 'yes', 'on', '1'].includes(String(body.consent).toLowerCase());
@@ -287,6 +364,15 @@ export async function POST(request) {
   }
   if (!isValidVietnameseMobile(phone)) {
     return json({ ok: false, field: 'phone', message: 'Vui lòng nhập số điện thoại Việt Nam hợp lệ.' }, 400);
+  }
+  if (!provinceCity) {
+    return rejectInvalidField(request, body, 'provinceCity', 'Vui lòng chọn tỉnh/thành phố đang sinh sống.');
+  }
+  if (!isValidAppointmentDate(appointmentDate)) {
+    return rejectInvalidField(request, body, 'appointmentDate', 'Vui lòng chọn ngày thăm khám hợp lệ trong vòng 12 tháng tới.');
+  }
+  if (service && !SERVICE_OPTIONS.has(service)) {
+    return rejectInvalidField(request, body, 'service', 'Dịch vụ quan tâm không hợp lệ.');
   }
   if (!consent) {
     return json({ ok: false, field: 'consent', message: 'Vui lòng đồng ý để phòng khám liên hệ tư vấn.' }, 400);
@@ -374,6 +460,8 @@ export async function POST(request) {
     submittedAt: new Date().toISOString(),
     name,
     phone,
+    provinceCity,
+    appointmentDate,
     service,
     note,
     consent: true,

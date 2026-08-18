@@ -28,9 +28,9 @@ test('GTM is installed once while direct Google Ads and GA4 tracking remains act
 });
 
 test('large styles are cached separately and first-paint fonts avoid late swaps', () => {
-  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=60-mobile-counter">/);
+  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=62-province-date-fields">/);
   assert.ok(
-    documentHtml.indexOf('href="assets/css/landing-page.css?v=60-mobile-counter"')
+    documentHtml.indexOf('href="assets/css/landing-page.css?v=62-province-date-fields"')
       < documentHtml.indexOf('(function scheduleGoogleTag()'),
   );
   assert.doesNotMatch(documentHtml, /<style(?:\s|>)/);
@@ -320,6 +320,33 @@ test('mobile consultation fields use restrained corners', () => {
     stylesheet,
     /@media \(max-width:\s*767px\)\s*\{[\s\S]*?\.form-input\s*\{[^}]*border-radius:\s*6px\s*!important;/,
   );
+});
+
+test('lead form uses the 34 post-merger provinces and a native appointment calendar', () => {
+  const formStart = documentHtml.indexOf('<form id="lead-form"');
+  const formEnd = documentHtml.indexOf('</form>', formStart);
+  const form = documentHtml.slice(formStart, formEnd);
+  const provinceSelect = form.match(/<select[^>]*name="provinceCity"[^>]*>([\s\S]*?)<\/select>/)?.[1] ?? '';
+  const provinceValues = [...provinceSelect.matchAll(/<option value="([^"]+)">/g)].map(match => match[1]);
+  const expectedProvinceValues = [
+    'ha-noi', 'an-giang', 'bac-ninh', 'ca-mau', 'can-tho', 'cao-bang', 'da-nang',
+    'dak-lak', 'dien-bien', 'dong-nai', 'dong-thap', 'gia-lai', 'ha-tinh', 'hai-phong',
+    'ho-chi-minh', 'hue', 'hung-yen', 'khanh-hoa', 'lai-chau', 'lam-dong', 'lang-son',
+    'lao-cai', 'nghe-an', 'ninh-binh', 'phu-tho', 'quang-ngai', 'quang-ninh', 'quang-tri',
+    'son-la', 'tay-ninh', 'thai-nguyen', 'thanh-hoa', 'tuyen-quang', 'vinh-long',
+  ];
+
+  assert.ok(formStart > -1 && formEnd > formStart);
+  assert.match(form, /name="provinceCity" required/);
+  assert.deepEqual(provinceValues, expectedProvinceValues);
+  assert.match(form, /value="ho-chi-minh">Thành phố Hồ Chí Minh</);
+  assert.match(form, /value="hue">Huế</);
+  assert.match(form, /type="date" name="appointmentDate" required/);
+  assert.match(documentHtml, /appointmentDateInput\.min = formatLocalDate\(today\)/);
+  assert.match(documentHtml, /appointmentDateInput\.max = formatLocalDate\(latestAppointmentDate\)/);
+  assert.match(documentHtml, /provinceCity: formData\.get\('provinceCity'\)/);
+  assert.match(documentHtml, /appointmentDate: formData\.get\('appointmentDate'\)/);
+  assert.match(stylesheet, /\.lead-select-field > label\s*\{[^}]*font-size:\s*13px;/s);
 });
 
 test('first five doctor cards use expert CTA and remaining cards use doctor CTA', () => {

@@ -8,10 +8,24 @@ const originalSecret = process.env.LEAD_WEBHOOK_SECRET;
 const originalTurnstileSiteKey = process.env.TURNSTILE_SITE_KEY;
 const originalTurnstileSecret = process.env.TURNSTILE_SECRET_KEY;
 
+function vietnamDateDaysFromNow(days) {
+  const date = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(date);
+  const getPart = type => parts.find(part => part.type === type)?.value || '';
+  return `${getPart('year')}-${getPart('month')}-${getPart('day')}`;
+}
+
 function validBody(overrides = {}) {
   return {
     name: 'Nguyễn Văn An',
     phone: '0912 345 678',
+    provinceCity: 'ha-noi',
+    appointmentDate: vietnamDateDaysFromNow(2),
     service: 'Nội soi dạ dày / đại tràng tiền mê',
     note: 'Cần được tư vấn lịch khám.',
     consent: true,
@@ -92,6 +106,8 @@ test('valid lead is normalized and forwarded to Apps Script', async () => {
   assert.equal(result.ok, true);
   assert.equal(forwarded.url, process.env.GOOGLE_APPS_SCRIPT_URL);
   assert.equal(forwarded.body.phone, '0912345678');
+  assert.equal(forwarded.body.provinceCity, 'Hà Nội');
+  assert.equal(forwarded.body.appointmentDate, vietnamDateDaysFromNow(2));
   assert.equal(forwarded.body.secret, process.env.LEAD_WEBHOOK_SECRET);
   assert.equal(forwarded.body.utmSource, 'facebook');
   assert.match(forwarded.body.leadId, /^[0-9a-f-]{36}$/);
@@ -116,6 +132,106 @@ test('consent is required', async () => {
   assert.equal(response.status, 400);
   assert.equal(result.ok, false);
   assert.equal(result.field, 'consent');
+});
+
+test('province or city must be one of the 34 visible form choices', async () => {
+  let fetchWasCalled = false;
+  let validationLog = '';
+  const originalConsoleInfo = console.info;
+  globalThis.fetch = async () => {
+    fetchWasCalled = true;
+    return Response.json({ ok: true });
+  };
+  console.info = message => {
+    validationLog = String(message);
+  };
+
+  try {
+    const response = await POST(requestFor(validBody({ provinceCity: 'noi-khac-do-bot-chen' })));
+    const result = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(result.ok, false);
+    assert.equal(result.field, 'provinceCity');
+    assert.equal(fetchWasCalled, false);
+
+    const parsedLog = JSON.parse(validationLog);
+    assert.equal(parsedLog.event, 'hlc_form_value_rejected');
+    assert.equal(parsedLog.field, 'provinceCity');
+    assert.equal(validationLog.includes('Nguyễn Văn An'), false);
+    assert.equal(validationLog.includes('0912 345 678'), false);
+    assert.equal(validationLog.includes('noi-khac-do-bot-chen'), false);
+  } finally {
+    console.info = originalConsoleInfo;
+  }
+});
+
+test('appointment date must be a real date within the next 12 months', async () => {
+  let fetchWasCalled = false;
+  const originalConsoleInfo = console.info;
+  globalThis.fetch = async () => {
+    fetchWasCalled = true;
+    return Response.json({ ok: true });
+  };
+  console.info = () => {};
+
+  try {
+    const response = await POST(requestFor(validBody({ appointmentDate: '2026-02-30' })));
+    const result = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(result.ok, false);
+    assert.equal(result.field, 'appointmentDate');
+    assert.equal(fetchWasCalled, false);
+  } finally {
+    console.info = originalConsoleInfo;
+  }
+});
+
+test('appointment dates in the past or beyond the allowed window are rejected', async () => {
+  let fetchWasCalled = false;
+  const originalConsoleInfo = console.info;
+  globalThis.fetch = async () => {
+    fetchWasCalled = true;
+    return Response.json({ ok: true });
+  };
+  console.info = () => {};
+
+  try {
+    for (const appointmentDate of [vietnamDateDaysFromNow(-1), vietnamDateDaysFromNow(370)]) {
+      const response = await POST(requestFor(validBody({ appointmentDate })));
+      const result = await response.json();
+
+      assert.equal(response.status, 400);
+      assert.equal(result.ok, false);
+      assert.equal(result.field, 'appointmentDate');
+    }
+    assert.equal(fetchWasCalled, false);
+  } finally {
+    console.info = originalConsoleInfo;
+  }
+});
+
+test('optional service rejects values outside the approved list', async () => {
+  let fetchWasCalled = false;
+  const originalConsoleInfo = console.info;
+  globalThis.fetch = async () => {
+    fetchWasCalled = true;
+    return Response.json({ ok: true });
+  };
+  console.info = () => {};
+
+  try {
+    const response = await POST(requestFor(validBody({ service: 'Dữ liệu tự chèn' })));
+    const result = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(result.ok, false);
+    assert.equal(result.field, 'service');
+    assert.equal(fetchWasCalled, false);
+  } finally {
+    console.info = originalConsoleInfo;
+  }
 });
 
 test('honeypot submission is discarded without calling Apps Script', async () => {
