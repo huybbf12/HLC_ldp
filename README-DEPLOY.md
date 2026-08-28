@@ -12,6 +12,27 @@ Landing page đã có luồng nhận đăng ký:
 
 Mỗi ngày, phần số thứ tự bắt đầu lại từ `001`. UUID cũ vẫn được giữ trong cột `Mã hệ thống` để chống ghi trùng.
 
+## V68 – ảnh sắc nét và tinh chỉnh tương tác mobile
+
+V68 giữ nguyên cơ chế font ổn định của V67, đồng thời:
+
+- Thay 16 ảnh không gian khám bệnh bằng ảnh WebP gốc 1920 × 1280 và gỡ hiệu ứng phóng ảnh gây cảm giác mờ.
+- Làm nổi bật cụm niềm tin ở hero, nội dung chuyên môn và số năm kinh nghiệm của từng bác sĩ.
+- Khôi phục hiệu ứng thu hút chú ý cho hai CTA chính trên mobile.
+- Ngắt dòng thông điệp hero trước “Tầm soát”, khóa hướng kéo slider ảnh và bỏ animation mở câu trả lời FAQ.
+
+Chỉ cần deploy toàn bộ thư mục V68 lên project Vercel hiện tại. Không cần thay đổi Google Apps Script, Google Sheet, biến môi trường, GA4, Google Ads hoặc Turnstile.
+
+## V67 – preload font an toàn ở lần tải đầu
+
+V67 chỉ thay đổi cách trình duyệt tải font ở vùng nhìn đầu tiên:
+
+- Preload đúng các tệp Nunito và Be Vietnam Pro được hero sử dụng trước khi tải CSS.
+- Giữ `font-display: swap` để font thương hiệu luôn được áp dụng, kể cả khi mở file HTML trực tiếp hoặc mạng tải chậm.
+- Bổ sung chuỗi font dự phòng gần với font chính và đổi phiên bản URL CSS để trình duyệt không giữ bản cũ trong cache.
+
+Khi nâng cấp từ V65 hoặc V66, chỉ cần deploy toàn bộ thư mục V67 lên project Vercel hiện tại. Không cần sửa Apps Script, Google Sheet, biến môi trường, GA4, Google Ads hoặc Turnstile.
+
 ## Nâng cấp từ phiên bản đã hoạt động
 
 Nếu landing page của bạn đang nhận được Sheet và email, không cần tạo lại secret hoặc deployment Apps Script:

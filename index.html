@@ -23,10 +23,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
+<!-- Font của vùng nhìn đầu tiên: tải ngay từ HTML để tránh đợi CSS rồi mới phát hiện font. -->
+<link rel="preload" href="assets/fonts/nunito-vietnamese-variable.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="assets/fonts/nunito-latin-variable.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="assets/fonts/be-vietnam-pro-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="assets/fonts/be-vietnam-pro-latin-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="assets/fonts/be-vietnam-pro-800.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="assets/fonts/be-vietnam-pro-latin-800.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
 <!-- Ưu tiên trực tiếp ảnh WebP gốc sắc nét theo từng kích thước màn hình. -->
 <link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination-mobile.webp" type="image/webp" media="(max-width: 767px)" fetchpriority="high">
 <link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high">
-<link rel="stylesheet" href="assets/css/landing-page.css?v=62-province-date-fields">
+<link rel="stylesheet" href="assets/css/landing-page.css?v=68-visual-mobile-polish">
 
 <!-- Google tag: xếp hàng dữ liệu ngay, chỉ tải thư viện sau tương tác đầu tiên hoặc khi trang đã ổn định. -->
 <script>
@@ -236,7 +244,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <span class="hero-title-health">khỏe mạnh</span>
                             </span>
                             <span class="block text-[18px] md:text-[24px] lg:text-[28px] font-extrabold mt-3 md:mt-4 leading-[1.4] text-transparent bg-clip-text bg-gradient-to-r from-primaryDark to-medical uppercase">
-                                Khám tiêu hóa chuyên sâu – Tầm soát <span class="hero-mobile-cluster">sớm <span class="hero-ai-break">tích hợp AI</span></span>
+                                Khám tiêu hóa chuyên sâu <span class="hero-screening-break">– Tầm soát <span class="hero-mobile-cluster">sớm <span class="hero-ai-break">tích hợp AI</span></span></span>
                             </span>
                         </h1>
 
@@ -263,7 +271,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <div class="hero-visual flex flex-col items-center relative lg:col-span-5 z-10 mt-2 md:mt-6">
                         <div class="hero-trust-panel">
                             <div class="hero-trust-header">
-                                <span class="hero-trust-kicker">Niềm tin qua từng lượt khám</span>
+                                <span class="hero-trust-kicker">Niềm tin qua từng lượt thăm khám</span>
                                 <span class="hero-trust-shield" aria-hidden="true"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-shield-heart"></use></svg></span>
                             </div>
 
@@ -294,7 +302,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <a href="#registration-form" class="hero-result-ribbon" aria-label="Đi đến biểu mẫu đăng ký nhận tư vấn">
                                 <span class="hero-result-ribbon__icon" aria-hidden="true"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-file-circle-check"></use></svg></span>
                                 <div>
-                                    <small>Quy trình thuận tiện</small>
+                                    <small>Khám ngay hôm nay</small>
                                     <strong>Nhận kết quả trong ngày</strong>
                                 </div>
                                 <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-arrow-right"></use></svg>
@@ -444,89 +452,89 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <!-- Ảnh 1 -->
                     <li>
                         <a href="assets/images/clinic/pk1.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk1.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk1.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
                     <!-- Ảnh 2 -->
                     <li>
                         <a href="assets/images/clinic/pk2.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk2.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk2.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
                     <!-- Ảnh 3 -->
                     <li>
                         <a href="assets/images/clinic/pk3.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk3.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk3.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
                     <!-- Ảnh 4 -->
                     <li>
                         <a href="assets/images/clinic/pk4.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk4.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk4.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
                     <!-- Ảnh 5 -->
                     <li>
                         <a href="assets/images/clinic/pk5.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk5.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk5.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
                     <!-- Ảnh 6 -->
                     <li>
                         <a href="assets/images/clinic/pk6.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk6.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk6.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
                     <!-- Ảnh 7 -->
                     <li>
                         <a href="assets/images/clinic/pk7.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk7.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk7.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
                     <!-- Ảnh 8 -->
                     <li>
                         <a href="assets/images/clinic/pk8.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk8.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk8.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
                     <li>
                         <a href="assets/images/clinic/pk9.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk9.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk9.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
                     <li>
                         <a href="assets/images/clinic/pk10.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk10.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk10.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
                     <li>
                         <a href="assets/images/clinic/pk11.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk11.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk11.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
                     <li>
                         <a href="assets/images/clinic/pk12.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk12.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk12.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
                     <li>
                         <a href="assets/images/clinic/pk13.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk13.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk13.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
                     <li>
                         <a href="assets/images/clinic/pk14.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk14.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk14.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
                     <li>
                         <a href="assets/images/clinic/pk15.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk15.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk15.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
                     <li>
                         <a href="assets/images/clinic/pk16.webp" data-caption="Không gian phòng khám">
-                            <img src="assets/images/clinic/pk16.webp" alt="Cơ sở vật chất" class="rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition duration-300 md:transform md:hover:scale-[1.02] cursor-zoom-in" decoding="async" loading="lazy" width="600" height="400">
+                            <img src="assets/images/clinic/pk16.webp" alt="Cơ sở vật chất" class="rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
 
@@ -543,11 +551,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <div class="mri-ct-visual order-2 lg:order-1">
                         <div class="mri-ct-visual-grid grid grid-cols-2 gap-3 md:gap-5 relative">
                             <figure class="mri-gallery-item">
-                                <img src="assets/images/clinic/pk11.webp" alt="Phòng chụp cộng hưởng từ MRI tại Hoàng Long Clinic" decoding="async" loading="lazy" width="600" height="400">
+                                <img src="assets/images/clinic/pk11.webp" alt="Phòng chụp cộng hưởng từ MRI tại Hoàng Long Clinic" decoding="async" loading="lazy" width="1920" height="1280">
                                 <figcaption>Phòng chụp MRI</figcaption>
                             </figure>
                             <figure class="mri-gallery-item">
-                                <img src="assets/images/clinic/pk12.webp" alt="Phòng chụp cắt lớp vi tính CT tại Hoàng Long Clinic" decoding="async" loading="lazy" width="600" height="400">
+                                <img src="assets/images/clinic/pk12.webp" alt="Phòng chụp cắt lớp vi tính CT tại Hoàng Long Clinic" decoding="async" loading="lazy" width="1920" height="1280">
                                 <figcaption>Phòng chụp CT</figcaption>
                             </figure>
                             <figure class="mri-gallery-item mri-gallery-item--equipment">
@@ -675,9 +683,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <section id="chuyen-gia" class="py-10 md:py-12 relative z-10 bg-white/80 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 md:px-6">
             <div class="text-center max-w-4xl mx-auto mb-10 md:mb-12">
-                <div class="badge mb-4">Bảo Chứng Chuyên Môn</div>
+                <div class="badge mb-4">Về chuyên môn của chúng tôi</div>
                 <h2 class="text-[26px] md:text-[38px] font-black text-medical uppercase mt-2 mb-4 leading-tight">Đội ngũ chuyên gia đầu ngành</h2>
-                <p class="text-[14.5px] md:text-[17px] text-bodyText font-semibold mt-2 px-2 md:px-0">Quy tụ chuyên gia đầu ngành cùng đội ngũ bác sĩ chuyên khoa đang công tác tại hai cơ sở Hoàng Long, đồng hành thăm khám chuyên sâu và toàn diện.</p>
+                <p class="text-[14.5px] md:text-[17px] text-bodyText font-semibold mt-2 px-2 md:px-0">Quy tụ chuyên gia đầu ngành cùng đội ngũ bác sĩ chuyên khoa đang công tác tại hai cơ sở Hoàng Long, <span class="doctor-intro-follow">đồng hành thăm khám chuyên sâu và toàn diện.</span></p>
             </div>
 
             <div class="doctor-carousel" data-doctor-carousel>
@@ -700,7 +708,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <span>Phó Chủ tịch · Hội Khoa học Tiêu hóa Việt Nam</span>
                         </div>
                         <p class="doctor-credential">Nguyên Giám đốc Bệnh viện<br>Đại học Y Hà Nội</p>
-                        <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Hơn 40 năm kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật.</p>
+                        <p class="doctor-experience flex-1"><strong class="doctor-experience__years">Hơn 40 năm</strong><span>kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật.</span></p>
                         <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với chuyên gia</a>
                     </div>
                 </div>
@@ -719,7 +727,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <span>Viện trưởng · Viện Nghiên cứu &amp; Đào tạo Tiêu hóa, Gan mật</span>
                         </div>
                         <p class="doctor-credential">Nguyên Giám đốc Trung tâm ứng dụng công nghệ y học – Nội soi tiêu hóa</p>
-                        <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Gần 30 năm kinh nghiệm nghiên cứu và phát triển các kỹ thuật mới trong điều trị các bệnh lý tiêu hóa.</p>
+                        <p class="doctor-experience flex-1"><strong class="doctor-experience__years">Gần 30 năm</strong><span>kinh nghiệm nghiên cứu và phát triển các kỹ thuật mới trong điều trị các bệnh lý tiêu hóa.</span></p>
                         <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với chuyên gia</a>
                     </div>
                 </div>
@@ -738,7 +746,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <span>Giám đốc chuyên môn - Phòng khám Đa khoa Hoàng Long CS1</span>
                         </div>
                         <p class="doctor-credential">Chủ nhiệm Bộ môn Ngoại Khoa Dã Chiến Học Viện Quân y</p>
-                        <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Với gần 50 năm kinh nghiệm trong lĩnh vực Ngoại tiêu hóa.</p>
+                        <p class="doctor-experience flex-1"><strong class="doctor-experience__years">Gần 50 năm</strong><span>kinh nghiệm trong lĩnh vực Ngoại tiêu hóa.</span></p>
                         <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với chuyên gia</a>
                     </div>
                 </div>
@@ -757,7 +765,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <span>Giám đốc chuyên môn - Phòng khám Đa khoa Hoàng Long CS2</span>
                         </div>
                         <p class="doctor-credential">Nguyên Giám đốc Bệnh viện Thanh Nhàn</p>
-                        <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Hơn 30 năm kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật.</p>
+                        <p class="doctor-experience flex-1"><strong class="doctor-experience__years">Hơn 30 năm</strong><span>kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật.</span></p>
                         <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với chuyên gia</a>
                     </div>
                 </div>
@@ -775,7 +783,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <div class="doctor-position">
                             <span>Chuyên khoa Nội tiêu hóa</span>
                         </div>
-                        <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Hơn 30 năm kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật.</p>
+                        <p class="doctor-experience flex-1"><strong class="doctor-experience__years">Hơn 30 năm</strong><span>kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật.</span></p>
                         <a href="#registration-form" class="btn-outline w-full shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với chuyên gia</a>
                     </div>
                 </div>
@@ -793,7 +801,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <div class="doctor-position">
                             <span>Chuyên khoa Nội tiêu hóa</span>
                         </div>
-                        <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Hơn 5 năm công tác tại Phòng khám Đa khoa Hoàng Long.</p>
+                        <p class="doctor-experience flex-1"><strong class="doctor-experience__years">Hơn 5 năm</strong><span>công tác tại Phòng khám Đa khoa Hoàng Long.</span></p>
                         <a href="#registration-form" class="btn-outline w-full mt-auto shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với bác sĩ</a>
                     </div>
                 </div>
@@ -811,7 +819,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <div class="doctor-position">
                             <span>Chuyên khoa Chẩn đoán hình ảnh</span>
                         </div>
-                        <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Hơn 10 năm công tác tại Phòng khám Đa khoa Hoàng Long.</p>
+                        <p class="doctor-experience flex-1"><strong class="doctor-experience__years">Hơn 10 năm</strong><span>công tác tại Phòng khám Đa khoa Hoàng Long.</span></p>
                         <a href="#registration-form" class="btn-outline w-full mt-auto shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với bác sĩ</a>
                     </div>
                 </div>
@@ -829,7 +837,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <div class="doctor-position">
                             <span>Chuyên khoa Nội tổng hợp</span>
                         </div>
-                        <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Hơn 6 năm công tác tại Phòng khám Đa khoa Hoàng Long.</p>
+                        <p class="doctor-experience flex-1"><strong class="doctor-experience__years">Hơn 6 năm</strong><span>công tác tại Phòng khám Đa khoa Hoàng Long.</span></p>
                         <a href="#registration-form" class="btn-outline w-full mt-auto shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với bác sĩ</a>
                     </div>
                 </div>
@@ -847,7 +855,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <div class="doctor-position">
                             <span>Chuyên khoa Nội khoa</span>
                         </div>
-                        <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Hơn 4 năm công tác tại Phòng khám Đa khoa Hoàng Long.</p>
+                        <p class="doctor-experience flex-1"><strong class="doctor-experience__years">Hơn 4 năm</strong><span>công tác tại Phòng khám Đa khoa Hoàng Long.</span></p>
                         <a href="#registration-form" class="btn-outline w-full mt-auto shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với bác sĩ</a>
                     </div>
                 </div>
@@ -865,7 +873,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <div class="doctor-position">
                             <span>Chuyên khoa Truyền nhiễm</span>
                         </div>
-                        <p class="doctor-experience text-[13.5px] md:text-[14px] text-bodyText font-medium flex-1">Hơn 4 năm công tác tại Phòng khám Đa khoa Hoàng Long.</p>
+                        <p class="doctor-experience flex-1"><strong class="doctor-experience__years">Hơn 4 năm</strong><span>công tác tại Phòng khám Đa khoa Hoàng Long.</span></p>
                         <a href="#registration-form" class="btn-outline w-full mt-auto shrink-0 md:group-hover:bg-accent md:group-hover:text-white">Đặt lịch với bác sĩ</a>
                     </div>
                 </div>
@@ -1802,7 +1810,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         const revealTargets = document.querySelectorAll(
             '.difference-grid > div, .risk-stats, #thuc-trang .base-card, ' +
             '.facility-promise__item, #mri-ct .mri-ct-panel, #he-thong-day-soi .scope-card, ' +
-            '#trang-thiet-bi .uk-slider-items > li, #chuyen-gia .grid > div, #faq details'
+            '#chuyen-gia .grid > div, #faq details'
         );
         if (!prefersReducedMotion && 'IntersectionObserver' in window && revealTargets.length) {
             revealTargets.forEach((target, index) => {
@@ -1936,6 +1944,49 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         if (clinicSlider) {
             const sliderTrack = clinicSlider.querySelector('.uk-slider-items');
             const sliderButtons = clinicSlider.querySelectorAll('[uk-slider-item]');
+            let clinicTouchStartX = 0;
+            let clinicTouchStartY = 0;
+            let clinicTouchScrollLeft = 0;
+            let clinicTouchAxis = null;
+            let clinicGestureMoved = false;
+
+            sliderTrack.addEventListener('touchstart', event => {
+                if (event.touches.length !== 1) return;
+                const touch = event.touches[0];
+                clinicTouchStartX = touch.clientX;
+                clinicTouchStartY = touch.clientY;
+                clinicTouchScrollLeft = sliderTrack.scrollLeft;
+                clinicTouchAxis = null;
+                clinicGestureMoved = false;
+            }, { passive: true });
+
+            sliderTrack.addEventListener('touchmove', event => {
+                if (event.touches.length !== 1) return;
+                const touch = event.touches[0];
+                const deltaX = touch.clientX - clinicTouchStartX;
+                const deltaY = touch.clientY - clinicTouchStartY;
+
+                if (!clinicTouchAxis && Math.max(Math.abs(deltaX), Math.abs(deltaY)) >= 7) {
+                    clinicTouchAxis = Math.abs(deltaX) > Math.abs(deltaY) ? 'horizontal' : 'vertical';
+                }
+                if (clinicTouchAxis !== 'horizontal') return;
+
+                event.preventDefault();
+                sliderTrack.scrollLeft = clinicTouchScrollLeft - deltaX;
+                clinicGestureMoved = Math.abs(deltaX) >= 9;
+            }, { passive: false });
+
+            sliderTrack.addEventListener('touchend', () => {
+                clinicTouchAxis = null;
+                window.setTimeout(() => { clinicGestureMoved = false; }, 220);
+            }, { passive: true });
+
+            sliderTrack.addEventListener('click', event => {
+                if (!clinicGestureMoved) return;
+                event.preventDefault();
+                event.stopPropagation();
+            }, true);
+
             const moveSlider = (direction) => {
                 const atEnd = sliderTrack.scrollLeft + sliderTrack.clientWidth >= sliderTrack.scrollWidth - 8;
                 if (direction > 0 && atEnd) {

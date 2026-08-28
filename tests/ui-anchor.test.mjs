@@ -28,9 +28,9 @@ test('GTM is installed once while direct Google Ads and GA4 tracking remains act
 });
 
 test('large styles are cached separately and first-paint fonts avoid late swaps', () => {
-  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=62-province-date-fields">/);
+  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=68-visual-mobile-polish">/);
   assert.ok(
-    documentHtml.indexOf('href="assets/css/landing-page.css?v=62-province-date-fields"')
+    documentHtml.indexOf('href="assets/css/landing-page.css?v=68-visual-mobile-polish"')
       < documentHtml.indexOf('(function scheduleGoogleTag()'),
   );
   assert.doesNotMatch(documentHtml, /<style(?:\s|>)/);
@@ -105,16 +105,17 @@ test('page uses lightweight Hoàng Long icons for browser tabs and saved-page ic
   assert.ok(touchIcon.size > 0 && touchIcon.size < 20_000);
 });
 
-test('hero critical path uses the sharp responsive WebP assets and avoids competing font preloads', async () => {
+test('hero critical path keeps the sharp responsive WebP assets alongside critical font preloads', async () => {
   assert.match(html, /href="assets\/images\/hero\/hero-doctor-examination-mobile\.webp"[^>]*type="image\/webp"[^>]*media="\(max-width: 767px\)"[^>]*fetchpriority="high"/);
   assert.match(html, /href="assets\/images\/hero\/hero-doctor-examination\.webp"[^>]*type="image\/webp"[^>]*media="\(min-width: 768px\)"[^>]*fetchpriority="high"/);
   assert.match(html, /<source media="\(max-width: 767px\)" srcset="assets\/images\/hero\/hero-doctor-examination-mobile\.webp" type="image\/webp">/);
   assert.match(html, /class="hero-lcp-image"[\s\S]*?src="assets\/images\/hero\/hero-doctor-examination\.webp"[\s\S]*?width="4104"[\s\S]*?height="2736"/);
   assert.doesNotMatch(html, /hero-doctor-examination-(?:mobile-)?v57\.avif/);
-  assert.doesNotMatch(html, /rel="preload" as="font"/);
+  assert.equal((documentHtml.match(/<link rel="preload"[^>]+as="font"/g) ?? []).length, 6);
   assert.match(html, /logo-hoang-long\.png"[^>]*fetchpriority="low"/);
   assert.match(html, /\.hero-decor-orb \{ display: none !important; \}/);
-  assert.match(html, /\.hero-section \.btn-primary,[\s\S]*?animation: none !important;/);
+  assert.match(html, /\.btn-primary \{ animation: ctaAttention 1\.2s ease-in-out infinite !important; \}/);
+  assert.doesNotMatch(html, /\.hero-section \.btn-primary,[\s\S]*?animation: none !important;/);
   assert.match(documentHtml, /class="hero-lcp-image"[\s\S]*?loading="eager"[\s\S]*?fetchpriority="high"[\s\S]*?decoding="sync"/);
   assert.doesNotMatch(documentHtml, /class="hero-shell[^\"]*backdrop-blur/);
   assert.match(documentHtml, /data-target="250000" data-duration="1400"/);
@@ -151,7 +152,7 @@ test('mobile difference heading stays intact and Dr Kinh shows his experience', 
   const kinhCard = html.slice(kinhStart, kinhEnd);
 
   assert.ok(kinhStart > -1 && kinhEnd > kinhStart);
-  assert.match(kinhCard, /Hơn 30 năm kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật\./);
+  assert.match(kinhCard, /doctor-experience__years">Hơn 30 năm<\/strong><span>kinh nghiệm trong lĩnh vực Tiêu hóa - Gan mật\./);
 });
 
 test('all appointment and consultation CTAs target the registration card', () => {
@@ -202,13 +203,36 @@ test('appointment CTAs use one first-click-safe scroll handler on desktop and mo
   );
 });
 
-test('mobile hero keeps “sớm tích hợp AI” together', () => {
+test('mobile hero starts a new line at the screening message and keeps the AI phrase together', () => {
   assert.match(
     html,
-    /Tầm soát <span class="hero-mobile-cluster">sớm <span class="hero-ai-break">tích hợp AI<\/span><\/span>/,
+    /<span class="hero-screening-break">– Tầm soát <span class="hero-mobile-cluster">sớm <span class="hero-ai-break">tích hợp AI<\/span><\/span><\/span>/,
   );
+  assert.match(html, /\.hero-screening-break\s*\{[^}]*display:\s*block;[^}]*margin-top:\s*2px;/s);
   assert.match(html, /\.hero-mobile-cluster\s*\{[^}]*display:\s*inline-block;[^}]*white-space:\s*nowrap;/s);
   assert.match(html, /\.hero-mobile-cluster \.hero-ai-break\s*\{[^}]*display:\s*inline;/s);
+});
+
+test('V68 visual and mobile interaction refinements remain present', async () => {
+  assert.match(documentHtml, /Niềm tin qua từng lượt thăm khám/);
+  assert.match(documentHtml, /<small>Khám ngay hôm nay<\/small>/);
+  assert.match(documentHtml, /Về chuyên môn của chúng tôi/);
+  assert.match(documentHtml, /class="doctor-intro-follow">đồng hành thăm khám chuyên sâu và toàn diện/);
+  assert.equal((documentHtml.match(/class="doctor-experience__years"/g) ?? []).length, 10);
+  assert.doesNotMatch(stylesheet, /details\[open\] summary ~ \*\s*\{[^}]*animation:/s);
+  assert.doesNotMatch(stylesheet, /@keyframes\s+sweep/);
+  assert.doesNotMatch(stylesheet, /\.hero-section \.btn-primary,\s*\.registration-card \.btn-primary\s*\{\s*animation:\s*none/s);
+  assert.match(stylesheet, /\[uk-slider\] \.uk-slider-items\s*\{[^}]*touch-action:\s*pan-y pinch-zoom;/s);
+  assert.match(documentHtml, /clinicTouchAxis = Math\.abs\(deltaX\) > Math\.abs\(deltaY\) \? 'horizontal' : 'vertical'/);
+  assert.doesNotMatch(documentHtml, /#trang-thiet-bi \.uk-slider-items > li, #chuyen-gia/);
+
+  for (let index = 1; index <= 16; index += 1) {
+    const imagePath = new URL(`../assets/images/clinic/pk${index}.webp`, import.meta.url);
+    const imageStat = await stat(imagePath);
+    assert.ok(imageStat.size > 30_000, `pk${index}.webp must use the sharper source asset`);
+  }
+  assert.equal((documentHtml.match(/width="1920" height="1280"/g) ?? []).length >= 18, true);
+  assert.doesNotMatch(documentHtml, /md:hover:scale-\[1\.02\]/);
 });
 
 test('MRI gallery crops images cleanly and uses the updated doctor portrait', () => {
@@ -239,7 +263,7 @@ test('doctor section contains ten cards, four-up desktop layout and lightweight 
   assert.match(html, /src="assets\/images\/doctors\/nguyen-thanh-tung\.webp"/);
   assert.doesNotMatch(html, /ĐINH DUY HẢI|BÁC SĨ CHI/);
   assert.match(html, /moveDoctorCarousel/);
-  assert.match(html, /Với gần 50 năm kinh nghiệm trong lĩnh vực Ngoại tiêu hóa\./);
+  assert.match(html, /doctor-experience__years">Gần 50 năm<\/strong><span>kinh nghiệm trong lĩnh vực Ngoại tiêu hóa\./);
   assert.match(html, /Phó Chủ tịch · Hội Khoa học Tiêu hóa Việt Nam/);
   assert.match(html, /Giám đốc chuyên môn - Phòng khám Đa khoa Hoàng Long CS1/);
   assert.match(html, /Giám đốc chuyên môn - Phòng khám Đa khoa Hoàng Long CS2/);
@@ -275,10 +299,10 @@ test('all ten doctor cards use the latest vertical portraits and supplied experi
   });
   assert.doesNotMatch(html, /data-photo-temporary="bs-hai"/);
   assert.match(html, /alt="BSCKII\. Nguyễn Bá Kinh"/);
-  assert.match(html, /Hơn 6 năm công tác tại Phòng khám Đa khoa Hoàng Long\./);
-  assert.match(html, /Hơn 5 năm công tác tại Phòng khám Đa khoa Hoàng Long\./);
-  assert.match(html, /Hơn 10 năm công tác tại Phòng khám Đa khoa Hoàng Long\./);
-  assert.equal((html.match(/Hơn 4 năm công tác tại Phòng khám Đa khoa Hoàng Long\./g) ?? []).length, 2);
+  assert.match(html, /doctor-experience__years">Hơn 6 năm<\/strong><span>công tác tại Phòng khám Đa khoa Hoàng Long\./);
+  assert.match(html, /doctor-experience__years">Hơn 5 năm<\/strong><span>công tác tại Phòng khám Đa khoa Hoàng Long\./);
+  assert.match(html, /doctor-experience__years">Hơn 10 năm<\/strong><span>công tác tại Phòng khám Đa khoa Hoàng Long\./);
+  assert.equal((html.match(/doctor-experience__years">Hơn 4 năm<\/strong><span>công tác tại Phòng khám Đa khoa Hoàng Long\./g) ?? []).length, 2);
   assert.doesNotMatch(html, /Thầy thuốc ưu tú/);
 });
 

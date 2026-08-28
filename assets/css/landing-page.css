@@ -87,13 +87,14 @@
 /* CẤU TRÚC NỀN BACKGROUND BLUR XUYÊN SUỐT */
 body {
     color: #475569;
+    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     position: relative;
     background-color: #f8fafc;
     overflow-x: hidden; /* Ngăn triệt để lỗi cuộn ngang trên Mobile */
 }
 
-h1, h2, h3, h4, h5, h6 { font-family: 'Be Vietnam Pro', sans-serif; color: #1E293B; }
+h1, h2, h3, h4, h5, h6 { font-family: 'Be Vietnam Pro', 'Segoe UI', Arial, sans-serif; color: #1E293B; }
 h2.text-medical, h3.text-medical { color: #084C7A !important; }
 
 .body-bg-img {
@@ -355,8 +356,6 @@ img { -webkit-user-drag: none; user-select: none; }
 /* Custom Accordion FAQ */
 details > summary { list-style: none; cursor: pointer; }
 details > summary::-webkit-details-marker { display: none; }
-details[open] summary ~ * { animation: sweep .3s ease-in-out; }
-@keyframes sweep { 0% {opacity: 0; margin-top: -10px} 100% {opacity: 1; margin-top: 0px} }
 
 /* Nút điều hướng slider CSS thuần */
 .uk-slidenav {
@@ -455,6 +454,11 @@ section[id].anchor-layout-ready {
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     overscroll-behavior-inline: contain;
+}
+[uk-slider] .uk-slider-items a,
+[uk-slider] .uk-slider-items img {
+    -webkit-user-drag: none;
+    user-select: none;
 }
 [uk-slider] .uk-slider-items::-webkit-scrollbar { display: none; }
 [uk-slider] .uk-slider-items > li {
@@ -886,8 +890,8 @@ section[id] { scroll-margin-top: 88px; }
 .hero-trust-panel {
     position: relative;
     width: 100%;
-    max-width: 480px;
-    padding: 25px;
+    max-width: 500px;
+    padding: 30px;
     overflow: hidden;
     border: 1px solid rgba(255,255,255,.2);
     border-radius: 28px;
@@ -916,22 +920,23 @@ section[id] { scroll-margin-top: 88px; }
     align-items: center;
     justify-content: space-between;
     gap: 14px;
-    margin-bottom: 22px;
+    margin-bottom: 25px;
 }
 .hero-trust-kicker {
     display: inline-flex;
     align-items: center;
-    gap: 9px;
+    gap: 11px;
     color: rgba(255,255,255,.78);
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 900;
     letter-spacing: .075em;
+    line-height: 1.35;
     text-transform: uppercase;
 }
 .hero-trust-kicker::before {
     content: '';
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     flex: 0 0 auto;
     border-radius: 50%;
     background: #e63946;
@@ -946,8 +951,8 @@ section[id] { scroll-margin-top: 88px; }
 .hero-trust-shield {
     display: grid;
     place-items: center;
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
     flex: 0 0 auto;
     border: 1px solid rgba(255,255,255,.16);
     border-radius: 12px;
@@ -1135,7 +1140,7 @@ section[id] { scroll-margin-top: 88px; }
         padding-top: clamp(195px, 18.25vw, 255px);
     }
     .hero-trust-panel {
-        max-width: 450px;
+        max-width: 480px;
         margin-left: auto;
     }
     .fujifilm-brand-line { white-space: nowrap; }
@@ -1280,6 +1285,7 @@ section h2 {
 #trang-thiet-bi .uk-slider-items img {
     border-radius: 14px !important;
     box-shadow: none !important;
+    transform: none !important;
 }
 .uk-slidenav {
     border-color: var(--line) !important;
@@ -1399,7 +1405,33 @@ section h2 {
     text-align: center;
 }
 .doctor-experience {
+    display: flex;
+    width: 100%;
+    min-height: 96px;
     margin-bottom: 16px !important;
+    padding: 12px 13px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    border: 1px solid rgba(110,165,47,.2);
+    border-radius: 12px;
+    color: #405466;
+    background: linear-gradient(145deg, #f7fbf2, #f3f8fa);
+    font-family: 'Nunito', sans-serif;
+    font-size: 13.5px;
+    font-weight: 750;
+    line-height: 1.45;
+}
+.doctor-experience__years {
+    color: #d92f3e;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 1.25;
+}
+.doctor-intro-follow {
+    display: block;
 }
 .doctor-placeholder {
     position: relative;
@@ -1928,8 +1960,6 @@ footer .bg-white {
     /* Giảm chi phí raster/paint trên GPU di động nhưng giữ nguyên bố cục hero. */
     .hero-decor-orb { display: none !important; }
     .hero-shell > .bg-medical-pattern { opacity: .18 !important; }
-    .hero-section .btn-primary,
-    .registration-card .btn-primary { animation: none !important; }
     .hero-lcp-image {
         top: 0;
         left: 68%;
@@ -2190,17 +2220,18 @@ footer .bg-white {
     .hero-trust-panel {
         width: 100%;
         max-width: none;
-        padding: 18px;
-        border-radius: 18px;
+        padding: 21px;
+        border-radius: 20px;
         background:
             radial-gradient(circle at 100% 0%, rgba(185,223,141,.15), transparent 34%),
             linear-gradient(145deg, rgba(5,25,38,.66), rgba(12,55,76,.5));
         -webkit-backdrop-filter: blur(10px);
         backdrop-filter: blur(10px);
     }
-    .hero-trust-header { margin-bottom: 15px; }
-    .hero-trust-kicker { font-size: 9.5px; letter-spacing: .06em; }
-    .hero-trust-shield { width: 34px; height: 34px; border-radius: 10px; }
+    .hero-trust-header { margin-bottom: 18px; }
+    .hero-trust-kicker { gap: 8px; font-size: 11px; letter-spacing: .045em; line-height: 1.35; }
+    .hero-trust-kicker::before { width: 9px; height: 9px; }
+    .hero-trust-shield { width: 38px; height: 38px; border-radius: 11px; }
     .hero-trust-primary { padding-bottom: 16px; }
     .hero-trust-number {
         font-size: clamp(44px, 13.5vw, 58px);
@@ -2347,6 +2378,8 @@ footer .bg-white {
         gap: 12px;
         padding: 0 26px 14px !important;
         scroll-padding-inline: 26px;
+        touch-action: pan-y pinch-zoom;
+        overscroll-behavior-x: contain;
     }
     [uk-slider] .uk-slider-items > li {
         flex: 0 0 84% !important;
@@ -2894,10 +2927,17 @@ footer .bg-white {
     display: block;
     margin-top: 2px;
 }
+.hero-screening-break {
+    display: inline;
+}
 .hero-mobile-cluster {
     display: contents;
 }
 @media (max-width: 767px) {
+    .hero-screening-break {
+        display: block;
+        margin-top: 2px;
+    }
     .hero-mobile-cluster {
         display: inline-block;
         white-space: nowrap;
