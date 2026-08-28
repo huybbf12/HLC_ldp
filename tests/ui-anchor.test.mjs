@@ -28,9 +28,9 @@ test('GTM is installed once while direct Google Ads and GA4 tracking remains act
 });
 
 test('large styles are cached separately and first-paint fonts avoid late swaps', () => {
-  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=70-diagnostic-showcase-refined">/);
+  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=71-mobile-form-touch">/);
   assert.ok(
-    documentHtml.indexOf('href="assets/css/landing-page.css?v=70-diagnostic-showcase-refined"')
+    documentHtml.indexOf('href="assets/css/landing-page.css?v=71-mobile-form-touch"')
       < documentHtml.indexOf('(function scheduleGoogleTag()'),
   );
   assert.doesNotMatch(documentHtml, /<style(?:\s|>)/);
@@ -370,6 +370,18 @@ test('mobile consultation fields use restrained corners', () => {
     stylesheet,
     /@media \(max-width:\s*767px\)\s*\{[\s\S]*?\.form-input\s*\{[^}]*border-radius:\s*6px\s*!important;/,
   );
+});
+
+test('mobile lead selectors and appointment date have comfortable touch targets', () => {
+  assert.match(documentHtml, /id="lead-province-city"[^>]*class="[^"]*lead-touch-control/);
+  assert.match(documentHtml, /id="lead-appointment-date"[^>]*class="[^"]*lead-touch-control/);
+  assert.match(documentHtml, /name="service"[^>]*class="[^"]*lead-touch-control/);
+  assert.match(documentHtml, /<option value="">Dịch vụ quan tâm \(không bắt buộc\)<\/option>/);
+  assert.match(
+    stylesheet,
+    /@media \(max-width:\s*767px\)\s*\{[\s\S]*?\.lead-touch-control\s*\{[^}]*min-height:\s*60px;[^}]*padding:\s*16px 46px 16px 16px\s*!important;[^}]*font-size:\s*16px;/,
+  );
+  assert.match(stylesheet, /select\.lead-touch-control\s*\{[^}]*text-overflow:\s*ellipsis;/s);
 });
 
 test('lead form uses the 34 post-merger provinces and a native appointment calendar', () => {

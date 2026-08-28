@@ -23,7 +23,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
-<!-- Font của vùng nhìn đầu tiên: tải ngay từ HTML để tránh đợi CSS rồi mới phát hiện font. -->
 <link rel="preload" href="assets/fonts/nunito-vietnamese-variable.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 <link rel="preload" href="assets/fonts/nunito-latin-variable.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 <link rel="preload" href="assets/fonts/be-vietnam-pro-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
@@ -31,10 +30,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="preload" href="assets/fonts/be-vietnam-pro-800.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 <link rel="preload" href="assets/fonts/be-vietnam-pro-latin-800.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 
-<!-- Ưu tiên trực tiếp ảnh WebP gốc sắc nét theo từng kích thước màn hình. -->
 <link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination-mobile.webp" type="image/webp" media="(max-width: 767px)" fetchpriority="high">
 <link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high">
-<link rel="stylesheet" href="assets/css/landing-page.css?v=70-diagnostic-showcase-refined">
+<link rel="stylesheet" href="assets/css/landing-page.css?v=71-mobile-form-touch">
 
 <!-- Google tag: xếp hàng dữ liệu ngay, chỉ tải thư viện sau tương tác đầu tiên hoặc khi trang đã ổn định. -->
 <script>
@@ -77,10 +75,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   })();
 </script>
 
-<!-- Tailwind đã được biên dịch sẵn để giảm thời gian tải và tránh biên dịch trên trình duyệt -->
-
-
-
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
@@ -88,7 +82,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <!-- Bộ icon SVG nội bộ: chỉ chứa đúng các biểu tượng trang đang dùng -->
     <svg class="icon-sprite" aria-hidden="true" focusable="false">
         <defs>
         <symbol id="icon-comment-dots" viewBox="0 0 512 512"><path d="M256 448c141.4 0 256-93.1 256-208S397.4 32 256 32S0 125.1 0 240c0 45.1 17.7 86.8 47.7 120.9c-1.9 24.5-11.4 46.3-21.4 62.9c-5.5 9.2-11.1 16.6-15.2 21.6c-2.1 2.5-3.7 4.4-4.9 5.7c-.6 .6-1 1.1-1.3 1.4l-.3 .3 0 0 0 0 0 0 0 0c-4.6 4.6-5.9 11.4-3.4 17.4c2.5 6 8.3 9.9 14.8 9.9c28.7 0 57.6-8.9 81.6-19.3c22.9-10 42.4-21.9 54.3-30.6c31.8 11.5 67 17.9 104.1 17.9zM128 208a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm128 0a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm96 32a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></symbol>
@@ -233,7 +226,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <div class="hero-content text-left lg:col-span-7 relative z-20">
                         <div class="hero-care-badge badge mb-4 md:mb-6 bg-white/80 backdrop-blur-md border border-primary/30 shadow-sm"><svg class="icon text-primary" aria-hidden="true" focusable="false"><use href="#icon-stethoscope"></use></svg> Chăm sóc sức khỏe tiêu hóa</div>
 
-                        <!-- CHỈNH CỠ CHỮ HEADER CHO MOBILE -->
                         <h1 class="font-black leading-[1.25] mb-5 md:mb-6">
                             <span class="block text-[14px] md:text-[18px] lg:text-[20px] text-gray-500 font-bold uppercase tracking-[0.1em] md:tracking-[0.15em] mb-2 md:mb-3 font-sans">
                                 Phòng Khám Đa Khoa Hoàng Long
@@ -393,7 +385,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <div class="health-impact-card health-impact-card--chronic base-card bg-white/95 text-center flex flex-col items-center border-none shadow-xl border border-accent/20 p-6 md:p-8 h-full relative overflow-hidden md:hover:shadow-2xl transition-shadow transform md:-translate-y-2" data-step="02">
                         <div class="w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-xl flex items-center justify-center text-[32px] md:text-[40px] mb-4 bg-red-50 text-accent shadow-sm"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-triangle-exclamation"></use></svg></div>
                         <h3 class="font-bold text-[16px] md:text-[17px] text-navy mb-3 font-sans min-h-[50px] flex items-center justify-center w-full px-2">Nguy Cơ Tiến Triển Các Bệnh Lý Mạn&nbsp;Tính</h3>
-                        <!-- ĐÃ FIX TEXT Y KHOA VÀ THÊM KÝ TỰ CHỐNG TRÀN CHỮ (&nbsp;) CHO TỪ "TRẦM TRỌNG" -->
                         <p class="text-bodyText text-[14px] md:text-[14.5px] leading-[1.7] md:leading-[1.75] font-medium flex-1">Viêm loét tiêu hóa nếu không phát hiện, điều trị kịp thời có thể diễn tiến thành viêm mãn tính, xuất huyết, thiếu máu.</p>
                     </div>
                     <div class="health-impact-card health-impact-card--screening base-card bg-white/95 text-center flex flex-col items-center border-none p-6 md:p-8 h-full shadow-lg" data-step="03">
@@ -444,54 +435,45 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </div>
         </div>
 
-        <!-- SLIDER CƠ SỞ VẬT CHẤT: Đã gỡ khoảng cách và set uk-grid-small để hiển thị ĐỦ 4 ẢNH không lẹm viền -->
         <div class="w-full max-w-[1600px] mx-auto relative px-2 md:px-10 my-4">
             <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1" uk-slider="autoplay: true; autoplay-interval: 2000; pause-on-hover: true;">
 
                 <ul class="uk-slider-items uk-child-width-1-2 uk-child-width-1-3@s uk-child-width-1-4@m uk-grid uk-grid-small" uk-lightbox="animation: slide">
-                    <!-- Ảnh 1 -->
                     <li>
                         <a href="assets/images/clinic/pk1.webp" data-caption="Không gian phòng khám">
                             <img src="assets/images/clinic/pk1.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
-                    <!-- Ảnh 2 -->
                     <li>
                         <a href="assets/images/clinic/pk2.webp" data-caption="Không gian phòng khám">
                             <img src="assets/images/clinic/pk2.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
-                    <!-- Ảnh 3 -->
                     <li>
                         <a href="assets/images/clinic/pk3.webp" data-caption="Không gian phòng khám">
                             <img src="assets/images/clinic/pk3.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
-                    <!-- Ảnh 4 -->
                     <li>
                         <a href="assets/images/clinic/pk4.webp" data-caption="Không gian phòng khám">
                             <img src="assets/images/clinic/pk4.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
-                    <!-- Ảnh 5 -->
                     <li>
                         <a href="assets/images/clinic/pk5.webp" data-caption="Không gian phòng khám">
                             <img src="assets/images/clinic/pk5.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
-                    <!-- Ảnh 6 -->
                     <li>
                         <a href="assets/images/clinic/pk6.webp" data-caption="Không gian phòng khám">
                             <img src="assets/images/clinic/pk6.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
-                    <!-- Ảnh 7 -->
                     <li>
                         <a href="assets/images/clinic/pk7.webp" data-caption="Không gian phòng khám">
                             <img src="assets/images/clinic/pk7.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
                         </a>
                     </li>
-                    <!-- Ảnh 8 -->
                     <li>
                         <a href="assets/images/clinic/pk8.webp" data-caption="Không gian phòng khám">
                             <img src="assets/images/clinic/pk8.webp" alt="Cơ sở vật chất" class="rounded-[1rem] md:rounded-[1.25rem] h-32 md:h-56 w-full object-cover shadow-sm md:hover:shadow-lg transition-shadow duration-300 cursor-zoom-in" decoding="async" loading="lazy" width="1920" height="1280">
@@ -636,9 +618,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <!-- Dây 600 -->
                     <div class="scope-card scope-card--standard base-card group bg-white/95 text-center flex flex-col items-center border-none p-5 md:p-6 h-full shadow-lg">
                         <div class="scope-card__visual relative w-full h-40 md:h-48 mb-4 md:mb-5 rounded-[1rem] overflow-hidden shadow-sm shrink-0 bg-white">
-                            <!-- Ảnh Mặc Định -->
                             <img src="assets/images/endoscopy/z8020613938987_02028f6d364cb0159ed89fe16d9bf31d.webp" alt="Dây soi 600 Mặc định" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 md:group-hover:opacity-0 z-20" decoding="async" loading="lazy" width="600" height="400">
-                            <!-- Ảnh Khi Hover -->
                             <img src="assets/images/endoscopy/z8013701086573_cae7d286e1753fa35396de3cba3f5574.webp" alt="Dây soi 600 Thực tế" class="absolute inset-0 w-full h-full object-contain p-2 opacity-0 transition-opacity duration-500 md:group-hover:opacity-100 z-10 active:opacity-100" decoding="async" loading="lazy" width="600" height="400">
                         </div>
                         <div class="scope-card__heading">
@@ -650,14 +630,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <li class="flex items-start gap-2.5"><svg class="icon text-primary mt-1 text-[13px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg><span>Dùng kiểm tra sức khỏe định kỳ</span></li>
                             <li class="flex items-start gap-2.5"><svg class="icon text-primary mt-1 text-[13px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg><span>Kiểm tra lại sau điều trị bệnh lý tiêu hóa thông thường</span></li>
                         </ul>
-                        <!-- Ghi chú cho Mobile -->
                         <span class="md:hidden text-accent/80 text-[12px] italic mt-3 block">*(Chạm vào ảnh để xem thực tế)</span>
                     </div>
 
                     <!-- Dây Laser -->
                     <div class="scope-card scope-card--advanced base-card group bg-white/95 text-center flex flex-col items-center border-none shadow-xl border border-primary/20 p-5 md:p-6 h-full relative">
                         <div class="scope-card__visual relative w-full h-40 md:h-48 mb-4 md:mb-5 rounded-[1rem] overflow-hidden shadow-sm border border-primary/10 shrink-0 bg-white">
-                            <!-- Ảnh Mặc Định (Chớp tắt BLI/LCI) -->
                             <div class="absolute inset-0 w-full h-full transition-opacity duration-500 md:group-hover:opacity-0 z-20">
                                 <img src="assets/images/endoscopy/z8020618232769_6bc90d6b48651be33c66ee3df3d761d6.webp" alt="Dây soi LCI" class="absolute inset-0 w-full h-full object-cover" decoding="async" loading="lazy" width="600" height="400">
                                 <img src="assets/images/endoscopy/z8020618232770_4361368caf53da4d5c39cc6a302834e3.webp" alt="Dây soi BLI" class="absolute inset-0 w-full h-full object-cover animate-crossfade" decoding="async" loading="lazy" width="600" height="400">
@@ -665,7 +643,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     BLI ⇄ LCI
                                 </div>
                             </div>
-                            <!-- Ảnh Khi Hover -->
                             <img src="assets/images/endoscopy/z8013714412558_60683ffdda4edf6f0f2de284b6d68a69.webp" alt="Dây soi Laser Thực tế" class="absolute inset-0 w-full h-full object-contain p-2 opacity-0 transition-opacity duration-500 md:group-hover:opacity-100 z-10 active:opacity-100" decoding="async" loading="lazy" width="600" height="400">
                         </div>
                         <div class="scope-card__heading">
@@ -683,9 +660,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <!-- Dây Zoom -->
                     <div class="scope-card scope-card--zoom base-card group bg-white/95 text-center flex flex-col items-center border-none p-5 md:p-6 h-full shadow-lg">
                         <div class="scope-card__visual relative w-full h-40 md:h-48 mb-4 md:mb-5 rounded-[1rem] overflow-hidden shadow-sm shrink-0 bg-white">
-                            <!-- Ảnh Mặc Định -->
                             <img src="assets/images/endoscopy/z8020618827689_0cfbf76e91e3da362491900ba5f015e8.webp" alt="Dây soi Zoom Mặc định" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 md:group-hover:opacity-0 z-20" decoding="async" loading="lazy" width="600" height="400">
-                            <!-- Ảnh Khi Hover -->
                             <img src="assets/images/endoscopy/z8013714412558_60683ffdda4edf6f0f2de284b6d68a69.webp" alt="Dây soi Zoom Thực tế" class="absolute inset-0 w-full h-full object-contain p-2 opacity-0 transition-opacity duration-500 md:group-hover:opacity-100 z-10 active:opacity-100" decoding="async" loading="lazy" width="600" height="400">
                         </div>
                         <div class="scope-card__heading">
@@ -912,7 +887,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
     </section>
 
-    <!-- GỘP ĐÁNH GIÁ (11 REVIEW THẬT) & FORM ĐĂNG KÝ (ĐÃ FIXPADDING MOBILE) -->
+    <!-- ĐÁNH GIÁ & FORM ĐĂNG KÝ -->
     <section id="review-registration" class="relative py-10 md:py-16 overflow-hidden z-10 rounded-t-[2rem] md:rounded-t-[3rem]">
 
         <div class="review-bg-image absolute inset-0 z-0 bg-cover bg-center"></div>
@@ -942,7 +917,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <!-- BOX CÓ THANH CUỘN CHO REVIEW -->
                     <div class="review-list flex flex-col gap-3 overflow-y-auto pr-2 review-scroll-dark">
 
-                        <!-- Review 1 -->
                         <div class="bg-white/10 backdrop-blur-md border border-white/10 p-4 md:p-5 rounded-[1.25rem] relative shrink-0">
                             <svg class="icon absolute top-4 right-4 text-[20px] md:text-[24px] text-white/10" aria-hidden="true" focusable="false"><use href="#icon-quote-right"></use></svg>
                             <div class="flex items-center gap-3 mb-2">
@@ -961,7 +935,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div>
                         </div>
 
-                        <!-- Review 2 -->
                         <div class="bg-white/10 backdrop-blur-md border border-white/10 p-4 md:p-5 rounded-[1.25rem] relative shrink-0">
                             <svg class="icon absolute top-4 right-4 text-[20px] md:text-[24px] text-white/10" aria-hidden="true" focusable="false"><use href="#icon-quote-right"></use></svg>
                             <div class="flex items-center gap-3 mb-2">
@@ -980,7 +953,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div>
                         </div>
 
-                        <!-- Review 3 -->
                         <div class="bg-white/10 backdrop-blur-md border border-white/10 p-4 md:p-5 rounded-[1.25rem] relative shrink-0">
                             <svg class="icon absolute top-4 right-4 text-[20px] md:text-[24px] text-white/10" aria-hidden="true" focusable="false"><use href="#icon-quote-right"></use></svg>
                             <div class="flex items-center gap-3 mb-2">
@@ -999,7 +971,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div>
                         </div>
 
-                        <!-- Review 4 -->
                         <div class="bg-white/10 backdrop-blur-md border border-white/10 p-4 md:p-5 rounded-[1.25rem] relative shrink-0">
                             <svg class="icon absolute top-4 right-4 text-[20px] md:text-[24px] text-white/10" aria-hidden="true" focusable="false"><use href="#icon-quote-right"></use></svg>
                             <div class="flex items-center gap-3 mb-2">
@@ -1018,7 +989,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div>
                         </div>
 
-                        <!-- Review 5 -->
                         <div class="bg-white/10 backdrop-blur-md border border-white/10 p-4 md:p-5 rounded-[1.25rem] relative shrink-0">
                             <svg class="icon absolute top-4 right-4 text-[20px] md:text-[24px] text-white/10" aria-hidden="true" focusable="false"><use href="#icon-quote-right"></use></svg>
                             <div class="flex items-center gap-3 mb-2">
@@ -1037,7 +1007,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div>
                         </div>
 
-                        <!-- Review 6 -->
                         <div class="bg-white/10 backdrop-blur-md border border-white/10 p-4 md:p-5 rounded-[1.25rem] relative shrink-0">
                             <svg class="icon absolute top-4 right-4 text-[20px] md:text-[24px] text-white/10" aria-hidden="true" focusable="false"><use href="#icon-quote-right"></use></svg>
                             <div class="flex items-center gap-3 mb-2">
@@ -1056,7 +1025,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div>
                         </div>
 
-                        <!-- Review 7 -->
                         <div class="bg-white/10 backdrop-blur-md border border-white/10 p-4 md:p-5 rounded-[1.25rem] relative shrink-0">
                             <svg class="icon absolute top-4 right-4 text-[20px] md:text-[24px] text-white/10" aria-hidden="true" focusable="false"><use href="#icon-quote-right"></use></svg>
                             <div class="flex items-center gap-3 mb-2">
@@ -1075,7 +1043,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div>
                         </div>
 
-                        <!-- Review 8 -->
                         <div class="bg-white/10 backdrop-blur-md border border-white/10 p-4 md:p-5 rounded-[1.25rem] relative shrink-0">
                             <svg class="icon absolute top-4 right-4 text-[20px] md:text-[24px] text-white/10" aria-hidden="true" focusable="false"><use href="#icon-quote-right"></use></svg>
                             <div class="flex items-center gap-3 mb-2">
@@ -1094,7 +1061,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div>
                         </div>
 
-                        <!-- Review 9 -->
                         <div class="bg-white/10 backdrop-blur-md border border-white/10 p-4 md:p-5 rounded-[1.25rem] relative shrink-0">
                             <svg class="icon absolute top-4 right-4 text-[20px] md:text-[24px] text-white/10" aria-hidden="true" focusable="false"><use href="#icon-quote-right"></use></svg>
                             <div class="flex items-center gap-3 mb-2">
@@ -1113,7 +1079,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div>
                         </div>
 
-                        <!-- Review 10 -->
                         <div class="bg-white/10 backdrop-blur-md border border-white/10 p-4 md:p-5 rounded-[1.25rem] relative shrink-0">
                             <svg class="icon absolute top-4 right-4 text-[20px] md:text-[24px] text-white/10" aria-hidden="true" focusable="false"><use href="#icon-quote-right"></use></svg>
                             <div class="flex items-center gap-3 mb-2">
@@ -1132,7 +1097,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div>
                         </div>
 
-                        <!-- Review 11 -->
                         <div class="bg-white/10 backdrop-blur-md border border-white/10 p-4 md:p-5 rounded-[1.25rem] relative shrink-0">
                             <svg class="icon absolute top-4 right-4 text-[20px] md:text-[24px] text-white/10" aria-hidden="true" focusable="false"><use href="#icon-quote-right"></use></svg>
                             <div class="flex items-center gap-3 mb-2">
@@ -1174,7 +1138,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
                             <div class="lead-select-field">
                                 <label for="lead-province-city">Tỉnh/Thành phố đang sinh sống <span aria-hidden="true">*</span></label>
-                                <select id="lead-province-city" name="provinceCity" required class="form-input text-gray-500 w-full" aria-label="Tỉnh hoặc thành phố đang sinh sống" autocomplete="address-level1">
+                                <select id="lead-province-city" name="provinceCity" required class="form-input lead-touch-control text-gray-500 w-full" aria-label="Tỉnh hoặc thành phố đang sinh sống" autocomplete="address-level1">
                                     <option value="">Chọn tỉnh/thành phố</option>
                                     <option value="ha-noi">Hà Nội</option>
                                     <option value="an-giang">An Giang</option>
@@ -1215,11 +1179,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
                             <div class="lead-select-field">
                                 <label for="lead-appointment-date">Ngày mong muốn thăm khám <span aria-hidden="true">*</span></label>
-                                <input id="lead-appointment-date" type="date" name="appointmentDate" required class="form-input w-full" aria-label="Ngày mong muốn thăm khám">
+                                <input id="lead-appointment-date" type="date" name="appointmentDate" required class="form-input lead-touch-control w-full" aria-label="Ngày mong muốn thăm khám">
                             </div>
 
-                            <select name="service" class="form-input text-gray-500 w-full md:col-span-2" aria-label="Dịch vụ quan tâm, không bắt buộc">
-                                <option value="">-- Dịch vụ quan tâm (không bắt buộc) --</option>
+                            <select name="service" class="form-input lead-touch-control text-gray-500 w-full md:col-span-2" aria-label="Dịch vụ quan tâm, không bắt buộc">
+                                <option value="">Dịch vụ quan tâm (không bắt buộc)</option>
                                 <option value="Nội soi dạ dày / đại tràng tiền mê">Nội soi dạ dày / đại tràng tiền mê</option>
                                 <option value="Khám bệnh lý tiêu hóa, gan mật">Khám bệnh lý tiêu hóa, gan mật</option>
                                 <option value="Gói tầm soát ung thư sớm">Gói tầm soát ung thư sớm</option>
@@ -1268,7 +1232,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <p class="text-[14.5px] md:text-[17px] text-bodyText font-medium px-2 md:px-0">Giải đáp nhanh những thắc mắc phổ biến trước và sau khi thăm khám, nội soi.</p>
             </div>
 
-            <!-- Nới rộng max-h-[550px] để phù hợp với 14 câu hỏi -->
             <div class="bg-white/80 rounded-[1.5rem] md:rounded-[2rem] p-2 md:p-3 shadow-inner border border-gray-100">
                 <div class="overflow-y-auto max-h-[450px] md:max-h-[550px] pr-2 md:pr-3 review-scroll space-y-2.5 md:space-y-3">
 

@@ -12,6 +12,16 @@ Landing page đã có luồng nhận đăng ký:
 
 Mỗi ngày, phần số thứ tự bắt đầu lại từ `001`. UUID cũ vẫn được giữ trong cột `Mã hệ thống` để chống ghi trùng.
 
+## V71 – vùng chạm form mobile dễ sử dụng hơn
+
+V71 giữ nguyên toàn bộ luồng nhận đăng ký của V70 và tinh chỉnh riêng trải nghiệm trên điện thoại:
+
+- Tăng ba ô `Tỉnh/Thành phố`, `Ngày mong muốn thăm khám` và `Dịch vụ quan tâm` lên tối thiểu 60 px.
+- Dùng cỡ chữ 16 px, tăng khoảng cách giữa nhãn và ô nhập, chừa vùng riêng cho mũi tên của ô chọn.
+- Rút gọn nội dung mặc định của ô dịch vụ và loại bỏ các chú thích triển khai không còn cần thiết trong mã nguồn.
+
+Chỉ cần deploy toàn bộ thư mục V71 lên project Vercel hiện tại. Không cần thay đổi Google Apps Script, Google Sheet, biến môi trường, GA4, Google Ads hoặc Turnstile.
+
 ## V70 – hoàn thiện nội dung và thao tác xem ảnh MRI/CT
 
 V70 tinh chỉnh section chẩn đoán hình ảnh từ V69:
