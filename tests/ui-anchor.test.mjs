@@ -28,9 +28,9 @@ test('GTM is installed once while direct Google Ads and GA4 tracking remains act
 });
 
 test('large styles are cached separately and first-paint fonts avoid late swaps', () => {
-  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=68-visual-mobile-polish">/);
+  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=70-diagnostic-showcase-refined">/);
   assert.ok(
-    documentHtml.indexOf('href="assets/css/landing-page.css?v=68-visual-mobile-polish"')
+    documentHtml.indexOf('href="assets/css/landing-page.css?v=70-diagnostic-showcase-refined"')
       < documentHtml.indexOf('(function scheduleGoogleTag()'),
   );
   assert.doesNotMatch(documentHtml, /<style(?:\s|>)/);
@@ -235,14 +235,40 @@ test('V68 visual and mobile interaction refinements remain present', async () =>
   assert.doesNotMatch(documentHtml, /md:hover:scale-\[1\.02\]/);
 });
 
-test('MRI gallery crops images cleanly and uses the updated doctor portrait', () => {
-  assert.match(html, /\.mri-gallery-item\s*\{[^}]*background:\s*#0b3044;/s);
-  assert.match(
-    html,
-    /\.mri-gallery-item--equipment img\s*\{[^}]*padding:\s*0\s*!important;[^}]*object-fit:\s*cover;[^}]*transform:\s*scale\(1\.015\)\s*!important;/s,
-  );
+test('MRI and CT use two large technology showcases with real-room proof images', () => {
+  const sectionStart = documentHtml.indexOf('<div id="mri-ct"');
+  const sectionEnd = documentHtml.indexOf('<!-- HỆ THỐNG DÂY SOI -->', sectionStart);
+  const section = documentHtml.slice(sectionStart, sectionEnd);
+
+  assert.equal((section.match(/class="diagnostic-system-card /g) ?? []).length, 2);
+  assert.equal((section.match(/class="diagnostic-system-card__visual"/g) ?? []).length, 2);
+  assert.equal((section.match(/class="diagnostic-room-proof"/g) ?? []).length, 2);
+  assert.equal((section.match(/class="diagnostic-benefit"/g) ?? []).length, 3);
+  assert.equal((section.match(/class="diagnostic-room-proof__zoom"/g) ?? []).length, 2);
+  assert.match(section, /class="diagnostic-showcase-grid" uk-lightbox="animation: slide"/);
+  assert.match(section, /href="assets\/images\/clinic\/pk11\.webp"[^>]*aria-label="Phóng to ảnh phòng MRI thực tế"/);
+  assert.match(section, /href="assets\/images\/clinic\/pk12\.webp"[^>]*aria-label="Phóng to ảnh phòng CT thực tế"/);
+  assert.match(documentHtml, /const lightboxGroups = Array\.from\(document\.querySelectorAll\('\[uk-lightbox\]'\)\)/);
+  assert.match(documentHtml, /activeGalleryLinks = links;/);
+  assert.match(documentHtml, /lightboxCounter\.textContent = `\$\{activeGalleryIndex \+ 1\} \/ \$\{activeGalleryLinks\.length\}`;/);
+  assert.match(section, /class="diagnostic-intro-follow">hỗ trợ bác sĩ đánh giá chính xác hơn/);
+  assert.match(section, /Phát hiện, khoanh vùng chi tiết tổn thương trên toàn bộ hệ tiêu hóa\./);
+  assert.match(section, /Tầm soát chính xác các bệnh lý ở ổ bụng mà dây soi mềm không tiếp cận được\./);
+  assert.match(section, /Kết quả đồng bộ, giúp chuyên gia phân tích và thiết kế phác đồ điều trị phù hợp\./);
+  assert.match(stylesheet, /\.diagnostic-benefit-strip\s*\{[^}]*max-width:\s*1040px;[^}]*grid-template-columns:\s*1fr;/s);
+  assert.match(stylesheet, /\.diagnostic-intro-follow\s*\{[^}]*display:\s*block;/s);
+  assert.match(stylesheet, /\.mri-title-main\s*\{[^}]*font-size:\s*clamp\(34px, 3\.15vw, 44px\);/s);
+  assert.match(stylesheet, /\.diagnostic-showcase-grid\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\);/s);
+  assert.match(stylesheet, /\.diagnostic-system-card__visual\s*\{[^}]*aspect-ratio:\s*16 \/ 9;/s);
+  assert.match(stylesheet, /\.diagnostic-system-card__body\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\) minmax\(142px, \.42fr\);/s);
+  assert.match(stylesheet, /@media \(max-width: 1023px\)[\s\S]*?\.diagnostic-showcase-grid\s*\{\s*grid-template-columns:\s*1fr;/s);
+  assert.doesNotMatch(section, /mri-gallery-item|mri-ct-visual-grid/);
   assert.match(html, /src="assets\/images\/clinic\/mri-system\.webp"/);
   assert.match(html, /src="assets\/images\/clinic\/ct-system\.webp"/);
+  assert.match(html, /src="assets\/images\/clinic\/pk11\.webp"[^>]*alt="Phòng chụp cộng hưởng từ MRI thực tế/);
+  assert.match(html, /src="assets\/images\/clinic\/pk12\.webp"[^>]*alt="Phòng chụp cắt lớp vi tính CT thực tế/);
+  assert.match(html, />FUJIFILM ECHELON SMART 1\.5T<\/h3>/);
+  assert.match(html, />FUJIFILM SUPRIA 32<\/h3>/);
   assert.doesNotMatch(html, /hoanglongclinic\.vn\/Uploads\/(?:8-copy|7-chay-like)/);
   assert.match(html, /src="assets\/images\/doctors\/nghiem-dinh-phan\.webp"/);
   assert.doesNotMatch(html, /Ảnh tạm thời: dùng ảnh BS\. Hải/);

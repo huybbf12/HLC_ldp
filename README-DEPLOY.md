@@ -12,6 +12,28 @@ Landing page đã có luồng nhận đăng ký:
 
 Mỗi ngày, phần số thứ tự bắt đầu lại từ `001`. UUID cũ vẫn được giữ trong cột `Mã hệ thống` để chống ghi trùng.
 
+## V70 – hoàn thiện nội dung và thao tác xem ảnh MRI/CT
+
+V70 tinh chỉnh section chẩn đoán hình ảnh từ V69:
+
+- Tăng kích thước hai dòng tiêu đề và chủ động ngắt đoạn giới thiệu trước “hỗ trợ bác sĩ”.
+- Khôi phục ba lợi ích thành ba hàng dọc, giữ nguyên nội dung đã duyệt.
+- Viết hoa toàn bộ tên hai hệ thống `FUJIFILM ECHELON SMART 1.5T` và `FUJIFILM SUPRIA 32`.
+- Cho phép bấm hoặc chạm vào ảnh phòng MRI/CT để xem ảnh lớn bằng lightbox hiện có.
+
+Chỉ cần deploy toàn bộ thư mục V70 lên project Vercel hiện tại. Không cần thay đổi Google Apps Script, Google Sheet, biến môi trường, GA4, Google Ads hoặc Turnstile.
+
+## V69 – showcase hệ thống chẩn đoán hình ảnh
+
+V69 thiết kế lại toàn bộ section MRI và CT:
+
+- Thay lưới bốn ảnh nhỏ bằng hai showcase card lớn dành riêng cho MRI và CT.
+- Đưa ảnh thiết bị công nghệ lên vị trí chủ đạo, giữ ảnh phòng máy thực tế làm lớp minh chứng phụ.
+- Bổ sung tên model, nhãn công nghệ và dải ba lợi ích chẩn đoán dễ quét.
+- Trên tablet và mobile, hai hệ thống xếp dọc để ảnh giữ được kích thước lớn, không dùng slider hoặc thao tác kéo mới.
+
+Chỉ cần deploy toàn bộ thư mục V69 lên project Vercel hiện tại. Không cần thay đổi Google Apps Script, Google Sheet, biến môi trường, GA4, Google Ads hoặc Turnstile.
+
 ## V68 – ảnh sắc nét và tinh chỉnh tương tác mobile
 
 V68 giữ nguyên cơ chế font ổn định của V67, đồng thời:

@@ -1292,18 +1292,18 @@ section h2 {
     box-shadow: 0 8px 22px rgba(18,63,95,.12) !important;
 }
 #mri-ct { margin-top: 72px !important; margin-bottom: 72px !important; }
-#mri-ct img { border: 1px solid var(--line); border-radius: 18px !important; transform: none !important; }
+#mri-ct img { transform: none !important; }
 .mri-title-main,
 .mri-title-sub { display: block; }
 .mri-title-main {
-    font-size: clamp(24px, 2.65vw, 34px);
+    font-size: clamp(34px, 3.15vw, 44px);
     letter-spacing: -.04em;
     line-height: 1.18;
     white-space: nowrap;
 }
 .mri-title-sub {
     margin-top: 7px;
-    font-size: clamp(20px, 2.15vw, 28px);
+    font-size: clamp(25px, 2.45vw, 33px);
     line-height: 1.28;
 }
 #he-thong-day-soi {
@@ -2417,11 +2417,10 @@ footer .bg-white {
     #mri-ct .order-1 { text-align: left; }
     #mri-ct .order-1 h3 { font-size: 27px !important; line-height: 1.22 !important; }
     #mri-ct .order-1 h3 span { font-size: 18px !important; line-height: 1.4; }
-    .mri-title-main { font-size: clamp(19px, 6.15vw, 24px); }
-    .mri-title-sub { margin-top: 6px; font-size: clamp(17px, 5.35vw, 21px); }
+    .mri-title-main { font-size: clamp(25px, 7.2vw, 31px); }
+    .mri-title-sub { margin-top: 6px; font-size: clamp(21px, 6vw, 26px); }
     #mri-ct .order-1 p { font-size: 14px !important; line-height: 1.62 !important; }
     #mri-ct .order-2 { gap: 9px; }
-    #mri-ct img { min-height: 150px; border-radius: 13px !important; }
 
     /* Dây soi: logo luôn đi cùng “Nhật Bản”, ảnh có trạng thái chạm thực sự. */
     .fujifilm-brand-line { display: inline; }
@@ -3151,87 +3150,268 @@ footer .bg-white {
     position: relative;
     z-index: 1;
 }
-#mri-ct .mri-ct-visual img {
-    border-color: rgba(255,255,255,.2) !important;
-    box-shadow: 0 18px 38px rgba(0,0,0,.2) !important;
+#mri-ct .diagnostic-showcase__head {
+    max-width: 1120px;
+    margin: 0 auto;
+    text-align: center;
 }
-.mri-gallery-item {
-    position: relative;
-    height: 164px;
-    margin: 0;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,.2);
-    border-radius: 16px;
-    background: #0b3044;
-    box-shadow: 0 16px 34px rgba(0,0,0,.19);
-}
-#mri-ct .mri-ct-visual .mri-gallery-item img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    min-height: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    object-fit: cover;
-    transform: scale(1.015) !important;
-    box-shadow: none !important;
-}
-#mri-ct .mri-ct-visual .mri-gallery-item--equipment img {
-    padding: 0 !important;
-    object-fit: cover;
-    transform: scale(1.015) !important;
-}
-.mri-gallery-item figcaption {
-    position: absolute;
-    inset: auto 8px 8px;
-    padding: 6px 9px;
-    border: 1px solid rgba(255,255,255,.22);
-    border-radius: 9px;
-    color: #ffffff;
-    background: rgba(7,31,46,.76);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    font-family: 'Nunito', sans-serif;
-    font-size: 10.5px;
-    font-weight: 900;
-    letter-spacing: .045em;
-    line-height: 1.2;
-    text-transform: uppercase;
-}
-#mri-ct .mri-ct-copy .badge {
+#mri-ct .diagnostic-showcase__head .badge {
+    margin: 0 auto 17px;
     color: #dff2c8;
     border-color: rgba(204,234,169,.24);
     background: rgba(204,234,169,.1);
 }
+#mri-ct .mri-combined-title {
+    margin: 0;
+}
 #mri-ct .mri-title-main {
     color: #ffffff;
-    white-space: normal !important;
+    white-space: nowrap !important;
 }
 #mri-ct .mri-title-sub {
+    margin-top: 9px;
     color: #cceaa9 !important;
 }
-#mri-ct .mri-ct-copy > p {
+#mri-ct .diagnostic-showcase__head > p {
+    max-width: 800px;
+    margin: 17px auto 0;
     color: rgba(255,255,255,.76) !important;
+    font-size: 16px;
+    font-weight: 650;
+    line-height: 1.72;
 }
-#mri-ct .mri-benefit-list {
-    padding: 0 !important;
+.diagnostic-intro-follow {
+    display: block;
 }
-#mri-ct .mri-benefit-list li {
-    margin-top: 0;
-    padding: 12px 14px;
+.diagnostic-benefit-strip {
+    display: grid;
+    max-width: 1040px;
+    margin: 30px auto 34px;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+.diagnostic-benefit {
+    display: grid;
+    min-height: 66px;
+    padding: 14px 18px;
+    grid-template-columns: 28px minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
     border: 1px solid rgba(255,255,255,.11);
-    border-radius: 13px;
-    color: rgba(255,255,255,.92) !important;
-    background: rgba(255,255,255,.065);
+    border-radius: 14px;
+    background: rgba(255,255,255,.075);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+.diagnostic-benefit__icon {
+    display: grid;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    color: #cceaa9;
+    background: transparent;
+}
+.diagnostic-benefit__icon .icon {
+    width: 18px;
+    height: 18px;
+}
+.diagnostic-benefit p {
+    margin: 0;
+    color: #ffffff;
+    font-size: 14.5px;
+    font-weight: 800;
     line-height: 1.55;
 }
-#mri-ct .mri-benefit-list li + li {
-    margin-top: 9px;
+.diagnostic-showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
 }
-#mri-ct .mri-benefit-list .icon {
-    margin-top: 3px;
-    color: #b9df8d !important;
+.diagnostic-system-card {
+    --diagnostic-tone: #68a632;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.24);
+    border-radius: 24px;
+    background: #f8fbfc;
+    box-shadow: 0 22px 48px rgba(0,0,0,.24);
+    transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+}
+.diagnostic-system-card--ct {
+    --diagnostic-tone: #d94668;
+}
+.diagnostic-system-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 3;
+    height: 5px;
+    background: linear-gradient(90deg, var(--diagnostic-tone), rgba(255,255,255,.78));
+}
+.diagnostic-system-card__visual {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: #edf3f5;
+}
+#mri-ct .diagnostic-system-card__visual img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    border: 0;
+    border-radius: 0 !important;
+    object-fit: cover;
+}
+.diagnostic-system-card__body {
+    display: grid;
+    min-height: 188px;
+    padding: 21px;
+    grid-template-columns: minmax(0, 1fr) minmax(142px, .42fr);
+    align-items: stretch;
+    gap: 17px;
+    border-top: 1px solid #dfe9ed;
+    background:
+        radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--diagnostic-tone) 13%, transparent), transparent 46%),
+        #ffffff;
+}
+.diagnostic-system-card__copy {
+    min-width: 0;
+}
+.diagnostic-system-card__tags {
+    display: flex;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+.diagnostic-system-card__tags span {
+    display: inline-flex;
+    min-height: 25px;
+    padding: 5px 9px;
+    align-items: center;
+    border: 1px solid color-mix(in srgb, var(--diagnostic-tone) 28%, #dbe7ec);
+    border-radius: 999px;
+    color: color-mix(in srgb, var(--diagnostic-tone) 72%, #123f5f);
+    background: color-mix(in srgb, var(--diagnostic-tone) 9%, #ffffff);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .055em;
+    line-height: 1;
+    text-transform: uppercase;
+}
+.diagnostic-system-card h3 {
+    margin: 0;
+    color: #123f5f;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: clamp(18px, 1.55vw, 22px);
+    font-weight: 900;
+    letter-spacing: -.035em;
+    line-height: 1.28;
+}
+.diagnostic-system-card__copy p {
+    margin: 9px 0 0;
+    color: #526273;
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.55;
+}
+.diagnostic-room-proof {
+    position: relative;
+    min-height: 140px;
+    margin: 0;
+    overflow: hidden;
+    align-self: stretch;
+    border: 1px solid #d9e5ea;
+    border-radius: 14px;
+    background: #eaf1f4;
+    box-shadow: 0 10px 24px rgba(18,63,95,.12);
+}
+.diagnostic-room-proof > a {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 140px;
+    color: inherit;
+    cursor: zoom-in;
+}
+#mri-ct .diagnostic-room-proof img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 140px;
+    border: 0;
+    border-radius: 0 !important;
+    object-fit: cover;
+}
+.diagnostic-room-proof__zoom {
+    position: absolute;
+    inset: 8px 8px auto auto;
+    z-index: 2;
+    display: inline-flex;
+    min-height: 26px;
+    padding: 6px 9px;
+    align-items: center;
+    border: 1px solid rgba(255,255,255,.28);
+    border-radius: 999px;
+    color: #ffffff;
+    background: rgba(7,31,46,.7);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    line-height: 1;
+    pointer-events: none;
+    text-transform: uppercase;
+}
+.diagnostic-room-proof figcaption {
+    position: absolute;
+    inset: auto 7px 7px;
+    display: flex;
+    min-height: 28px;
+    padding: 6px 8px;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 1px solid rgba(255,255,255,.24);
+    border-radius: 8px;
+    color: #ffffff;
+    background: rgba(7,31,46,.78);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    font-size: 9.5px;
+    font-weight: 900;
+    letter-spacing: .035em;
+    line-height: 1.15;
+    text-align: center;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+.diagnostic-room-proof figcaption span {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: #8fd14f;
+    box-shadow: 0 0 0 4px rgba(143,209,79,.14);
+}
+@media (hover: hover) and (pointer: fine) {
+    .diagnostic-system-card:hover {
+        border-color: rgba(204,234,169,.5);
+        transform: translateY(-5px);
+        box-shadow: 0 30px 60px rgba(0,0,0,.3);
+    }
+}
+@media (max-width: 1023px) {
+    .diagnostic-showcase-grid {
+        grid-template-columns: 1fr;
+    }
+    .diagnostic-system-card__body {
+        grid-template-columns: minmax(0, 1fr) minmax(180px, .34fr);
+    }
 }
 
 .scope-card {
@@ -3432,30 +3612,48 @@ footer .bg-white {
     }
 
     #mri-ct .mri-ct-panel {
-        padding: 20px;
-        gap: 25px;
+        padding: 18px;
         border-radius: 21px;
     }
-    #mri-ct .mri-ct-copy {
-        text-align: left;
-    }
-    #mri-ct .mri-benefit-list li {
-        padding: 11px 12px;
-        border-radius: 11px;
+    #mri-ct .mri-title-main { white-space: normal !important; }
+    #mri-ct .diagnostic-showcase__head > p {
+        margin-top: 14px;
         font-size: 13.5px;
+        line-height: 1.62;
     }
-    #mri-ct .mri-ct-visual-grid {
+    .diagnostic-benefit-strip {
+        margin: 22px 0 25px;
         gap: 9px;
     }
-    .mri-gallery-item {
-        height: 128px;
-        border-radius: 12px;
+    .diagnostic-benefit {
+        min-height: 0;
+        padding: 13px 14px;
+        grid-template-columns: 24px minmax(0, 1fr);
+        gap: 10px;
+        border-radius: 13px;
     }
-    .mri-gallery-item figcaption {
-        inset: auto 6px 6px;
-        padding: 5px 7px;
-        border-radius: 7px;
-        font-size: 9px;
+    .diagnostic-benefit__icon {
+        width: 24px;
+        height: 24px;
+    }
+    .diagnostic-benefit__icon .icon { width: 16px; height: 16px; }
+    .diagnostic-benefit p { font-size: 13.5px; line-height: 1.55; }
+    .diagnostic-showcase-grid { gap: 18px; }
+    .diagnostic-system-card { border-radius: 18px; }
+    .diagnostic-system-card__body {
+        min-height: 0;
+        padding: 16px;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .diagnostic-system-card h3 { font-size: 19px; }
+    .diagnostic-system-card__copy p { font-size: 13px; line-height: 1.58; }
+    .diagnostic-room-proof { min-height: 164px; border-radius: 12px; }
+    .diagnostic-room-proof > a { min-height: 164px; }
+    #mri-ct .diagnostic-room-proof img { min-height: 164px; }
+    .diagnostic-room-proof figcaption {
+        inset: auto 8px 8px;
+        font-size: 9.5px;
     }
 
     #he-thong-day-soi .scope-card {

@@ -35,7 +35,7 @@ test('all font faces remain available after the preload window', () => {
   assert.doesNotMatch(css, /font-display:\s*optional;/);
 });
 
-test('font delivery remains self-hosted and versioned for V68', () => {
+test('font delivery remains self-hosted and versioned for V70', () => {
   assert.doesNotMatch(html, /fonts\.googleapis\.com|fonts\.gstatic\.com/);
-  assert.match(html, /landing-page\.css\?v=68-visual-mobile-polish/);
+  assert.match(html, /landing-page\.css\?v=70-diagnostic-showcase-refined/);
 });

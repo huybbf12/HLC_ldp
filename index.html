@@ -34,7 +34,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- Ưu tiên trực tiếp ảnh WebP gốc sắc nét theo từng kích thước màn hình. -->
 <link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination-mobile.webp" type="image/webp" media="(max-width: 767px)" fetchpriority="high">
 <link rel="preload" as="image" href="assets/images/hero/hero-doctor-examination.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high">
-<link rel="stylesheet" href="assets/css/landing-page.css?v=68-visual-mobile-polish">
+<link rel="stylesheet" href="assets/css/landing-page.css?v=70-diagnostic-showcase-refined">
 
 <!-- Google tag: xếp hàng dữ liệu ngay, chỉ tải thư viện sau tương tác đầu tiên hoặc khi trang đã ổn định. -->
 <script>
@@ -544,49 +544,74 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </div>
         </div>
 
-        <!-- SECTION MRI VÀ CT Scanner ĐÃ SỬA LẠI TỌA ĐỘ TRÊN MOBILE -->
+        <!-- SHOWCASE HỆ THỐNG CHẨN ĐOÁN HÌNH ẢNH MRI VÀ CT -->
         <div id="mri-ct" class="w-full bg-transparent mb-12 mt-8">
             <div class="max-w-7xl mx-auto px-4 md:px-6">
-                <div class="mri-ct-panel grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                    <div class="mri-ct-visual order-2 lg:order-1">
-                        <div class="mri-ct-visual-grid grid grid-cols-2 gap-3 md:gap-5 relative">
-                            <figure class="mri-gallery-item">
-                                <img src="assets/images/clinic/pk11.webp" alt="Phòng chụp cộng hưởng từ MRI tại Hoàng Long Clinic" decoding="async" loading="lazy" width="1920" height="1280">
-                                <figcaption>Phòng chụp MRI</figcaption>
-                            </figure>
-                            <figure class="mri-gallery-item">
-                                <img src="assets/images/clinic/pk12.webp" alt="Phòng chụp cắt lớp vi tính CT tại Hoàng Long Clinic" decoding="async" loading="lazy" width="1920" height="1280">
-                                <figcaption>Phòng chụp CT</figcaption>
-                            </figure>
-                            <figure class="mri-gallery-item mri-gallery-item--equipment">
-                                <img src="assets/images/clinic/mri-system.webp" alt="Hệ thống máy chụp cộng hưởng từ MRI Fujifilm Echelon Smart 1.5T tại Hoàng Long Clinic" decoding="async" loading="lazy" width="1200" height="675">
-                                <figcaption>Hệ thống MRI</figcaption>
-                            </figure>
-                            <figure class="mri-gallery-item mri-gallery-item--equipment">
-                                <img src="assets/images/clinic/ct-system.webp" alt="Hệ thống máy chụp cắt lớp vi tính CT Fujifilm Supria 32 tại Hoàng Long Clinic" decoding="async" loading="lazy" width="1200" height="675">
-                                <figcaption>Hệ thống CT</figcaption>
-                            </figure>
+                <div class="mri-ct-panel">
+                    <div class="diagnostic-showcase__head">
+                        <div class="badge">Chẩn đoán hình ảnh công nghệ cao</div>
+                        <h2 class="mri-combined-title font-black text-medical uppercase leading-tight">
+                            <span class="mri-title-main">Hệ thống chẩn đoán hình ảnh MRI và CT</span>
+                            <span class="mri-title-sub text-primary">Kết hợp cùng nội soi tiêu hóa</span>
+                        </h2>
+                        <p>Tại Hoàng Long, nội soi được kết hợp cùng MRI và CT nhằm bổ sung góc nhìn toàn diện, <span class="diagnostic-intro-follow">hỗ trợ bác sĩ đánh giá chính xác hơn cho từng người bệnh.</span></p>
+                    </div>
+
+                    <div class="diagnostic-benefit-strip" aria-label="Lợi ích của hệ thống chẩn đoán hình ảnh">
+                        <div class="diagnostic-benefit">
+                            <span class="diagnostic-benefit__icon" aria-hidden="true"><svg class="icon"><use href="#icon-circle-check"></use></svg></span>
+                            <p>Phát hiện, khoanh vùng chi tiết tổn thương trên toàn bộ hệ tiêu hóa.</p>
+                        </div>
+                        <div class="diagnostic-benefit">
+                            <span class="diagnostic-benefit__icon" aria-hidden="true"><svg class="icon"><use href="#icon-circle-check"></use></svg></span>
+                            <p>Tầm soát chính xác các bệnh lý ở ổ bụng mà dây soi mềm không tiếp cận được.</p>
+                        </div>
+                        <div class="diagnostic-benefit">
+                            <span class="diagnostic-benefit__icon" aria-hidden="true"><svg class="icon"><use href="#icon-circle-check"></use></svg></span>
+                            <p>Kết quả đồng bộ, giúp chuyên gia phân tích và thiết kế phác đồ điều trị phù hợp.</p>
                         </div>
                     </div>
-                    <div class="mri-ct-copy order-1 lg:pl-6 text-center md:text-left">
-                        <div class="flex flex-wrap justify-center md:justify-start items-center gap-3 mb-4">
-                            <div class="badge bg-primary/10 border border-primary/20 m-0">Chẩn Đoán Chính Xác</div>
-                        </div>
-                        <h2 class="mri-combined-title font-black text-medical uppercase mb-4 leading-tight"><span class="mri-title-main">Hệ thống chẩn đoán hình ảnh MRI và CT</span><span class="mri-title-sub text-primary">Kết hợp cùng nội soi tiêu hóa</span></h2>
-                        <p class="text-[14px] md:text-[16px] text-bodyText mb-5 font-medium leading-relaxed px-2 md:px-0">
-                            Tại Hoàng Long, chẩn đoán tiêu hóa không chỉ dừng ở nội soi. Chúng tôi kết hợp MRI và CT để mang lại góc nhìn toàn diện, chính xác nhất.
-                        </p>
-                        <ul class="mri-benefit-list space-y-3 mb-6 text-left px-2 md:px-0">
-                            <li class="flex items-start gap-3 text-[14px] md:text-[14.5px] font-bold text-navy font-sans">
-                                <svg class="icon text-primary mt-0.5 text-[16px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg> <div>Phát hiện, khoanh vùng chi tiết tổn thương trên toàn bộ hệ tiêu hóa.</div>
-                            </li>
-                            <li class="flex items-start gap-3 text-[14px] md:text-[14.5px] font-bold text-navy font-sans">
-                                <svg class="icon text-primary mt-0.5 text-[16px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg> <div>Tầm soát chính xác các bệnh lý ở ổ bụng mà dây soi mềm không tiếp cận được.</div>
-                            </li>
-                            <li class="flex items-start gap-3 text-[14px] md:text-[14.5px] font-bold text-navy font-sans">
-                                <svg class="icon text-primary mt-0.5 text-[16px] shrink-0" aria-hidden="true" focusable="false"><use href="#icon-circle-check"></use></svg> <div>Kết quả đồng bộ, giúp chuyên gia phân tích và thiết kế phác đồ điều trị phù hợp.</div>
-                            </li>
-                        </ul>
+
+                    <div class="diagnostic-showcase-grid" uk-lightbox="animation: slide">
+                        <article class="diagnostic-system-card diagnostic-system-card--mri" data-system="01">
+                            <figure class="diagnostic-system-card__visual">
+                                <img src="assets/images/clinic/mri-system.webp" alt="Hệ thống máy chụp cộng hưởng từ MRI Fujifilm Echelon Smart 1.5T tại Hoàng Long Clinic" decoding="async" loading="lazy" width="1200" height="675">
+                            </figure>
+                            <div class="diagnostic-system-card__body">
+                                <div class="diagnostic-system-card__copy">
+                                    <div class="diagnostic-system-card__tags"><span>MRI 1.5T</span><span>AI hỗ trợ</span></div>
+                                    <h3>FUJIFILM ECHELON SMART 1.5T</h3>
+                                    <p>Hỗ trợ bác sĩ khảo sát mô mềm và cấu trúc vùng bụng ở nhiều mặt phẳng, bổ sung góc nhìn bên cạnh nội soi.</p>
+                                </div>
+                                <figure class="diagnostic-room-proof">
+                                    <a href="assets/images/clinic/pk11.webp" data-caption="Phòng chụp cộng hưởng từ MRI thực tế tại Hoàng Long Clinic" aria-label="Phóng to ảnh phòng MRI thực tế">
+                                        <img src="assets/images/clinic/pk11.webp" alt="Phòng chụp cộng hưởng từ MRI thực tế tại Hoàng Long Clinic" decoding="async" loading="lazy" width="1920" height="1280">
+                                        <span class="diagnostic-room-proof__zoom" aria-hidden="true">＋ Xem ảnh lớn</span>
+                                    </a>
+                                    <figcaption><span aria-hidden="true"></span>Phòng MRI thực tế</figcaption>
+                                </figure>
+                            </div>
+                        </article>
+
+                        <article class="diagnostic-system-card diagnostic-system-card--ct" data-system="02">
+                            <figure class="diagnostic-system-card__visual">
+                                <img src="assets/images/clinic/ct-system.webp" alt="Hệ thống máy chụp cắt lớp vi tính CT Fujifilm Supria 32 tại Hoàng Long Clinic" decoding="async" loading="lazy" width="1200" height="675">
+                            </figure>
+                            <div class="diagnostic-system-card__body">
+                                <div class="diagnostic-system-card__copy">
+                                    <div class="diagnostic-system-card__tags"><span>CT Supria 32</span><span>AI hỗ trợ</span></div>
+                                    <h3>FUJIFILM SUPRIA 32</h3>
+                                    <p>Hỗ trợ khảo sát nhanh, tái tạo hình ảnh và đánh giá những vùng dây soi mềm không tiếp cận trực tiếp.</p>
+                                </div>
+                                <figure class="diagnostic-room-proof">
+                                    <a href="assets/images/clinic/pk12.webp" data-caption="Phòng chụp cắt lớp vi tính CT thực tế tại Hoàng Long Clinic" aria-label="Phóng to ảnh phòng CT thực tế">
+                                        <img src="assets/images/clinic/pk12.webp" alt="Phòng chụp cắt lớp vi tính CT thực tế tại Hoàng Long Clinic" decoding="async" loading="lazy" width="1920" height="1280">
+                                        <span class="diagnostic-room-proof__zoom" aria-hidden="true">＋ Xem ảnh lớn</span>
+                                    </a>
+                                    <figcaption><span aria-hidden="true"></span>Phòng CT thực tế</figcaption>
+                                </figure>
+                            </div>
+                        </article>
                     </div>
                 </div>
             </div>
@@ -2429,7 +2454,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
 
         // Lightbox ảnh thuần, dùng tài nguyên tương đối để hoạt động trên GitHub/Vercel.
-        const galleryLinks = Array.from(document.querySelectorAll('[uk-lightbox] a[href]'));
+        const lightboxGroups = Array.from(document.querySelectorAll('[uk-lightbox]'))
+            .map(group => Array.from(group.querySelectorAll('a[href]')))
+            .filter(links => links.length);
+        const galleryLinks = lightboxGroups.flat();
         if (galleryLinks.length) {
             const nativeLightbox = document.createElement('div');
             nativeLightbox.className = 'native-lightbox';
@@ -2450,18 +2478,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             const lightboxClose = nativeLightbox.querySelector('.native-lightbox__close');
             const lightboxPrevious = nativeLightbox.querySelector('.native-lightbox__prev');
             const lightboxNext = nativeLightbox.querySelector('.native-lightbox__next');
+            let activeGalleryLinks = galleryLinks;
             let activeGalleryIndex = 0;
             let lastFocusedElement = null;
             let touchStartX = 0;
 
             const showGalleryImage = index => {
-                activeGalleryIndex = (index + galleryLinks.length) % galleryLinks.length;
-                const link = galleryLinks[activeGalleryIndex];
+                activeGalleryIndex = (index + activeGalleryLinks.length) % activeGalleryLinks.length;
+                const link = activeGalleryLinks[activeGalleryIndex];
                 const thumbnail = link.querySelector('img');
                 lightboxImage.src = link.href;
                 lightboxImage.alt = thumbnail ? thumbnail.alt : 'Ảnh cơ sở vật chất';
                 lightboxCaption.textContent = link.dataset.caption || lightboxImage.alt;
-                lightboxCounter.textContent = `${activeGalleryIndex + 1} / ${galleryLinks.length}`;
+                lightboxCounter.textContent = `${activeGalleryIndex + 1} / ${activeGalleryLinks.length}`;
             };
 
             const closeLightbox = () => {
@@ -2473,14 +2502,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 }
             };
 
-            galleryLinks.forEach((link, index) => {
-                link.addEventListener('click', event => {
-                    event.preventDefault();
-                    lastFocusedElement = link;
-                    showGalleryImage(index);
-                    nativeLightbox.hidden = false;
-                    document.body.style.overflow = 'hidden';
-                    lightboxClose.focus();
+            lightboxGroups.forEach(links => {
+                links.forEach((link, index) => {
+                    link.addEventListener('click', event => {
+                        event.preventDefault();
+                        activeGalleryLinks = links;
+                        lastFocusedElement = link;
+                        showGalleryImage(index);
+                        nativeLightbox.hidden = false;
+                        document.body.style.overflow = 'hidden';
+                        lightboxClose.focus();
+                    });
                 });
             });
 
