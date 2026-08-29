@@ -28,9 +28,9 @@ test('GTM is installed once while direct Google Ads and GA4 tracking remains act
 });
 
 test('large styles are cached separately and first-paint fonts avoid late swaps', () => {
-  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=71-mobile-form-touch">/);
+  assert.match(documentHtml, /<link rel="stylesheet" href="assets\/css\/landing-page\.css\?v=73-mri-ct-labels">/);
   assert.ok(
-    documentHtml.indexOf('href="assets/css/landing-page.css?v=71-mobile-form-touch"')
+    documentHtml.indexOf('href="assets/css/landing-page.css?v=73-mri-ct-labels"')
       < documentHtml.indexOf('(function scheduleGoogleTag()'),
   );
   assert.doesNotMatch(documentHtml, /<style(?:\s|>)/);
@@ -245,6 +245,9 @@ test('MRI and CT use two large technology showcases with real-room proof images'
   assert.equal((section.match(/class="diagnostic-room-proof"/g) ?? []).length, 2);
   assert.equal((section.match(/class="diagnostic-benefit"/g) ?? []).length, 3);
   assert.equal((section.match(/class="diagnostic-room-proof__zoom"/g) ?? []).length, 2);
+  assert.equal((section.match(/>＋ xem ảnh<\/span>/g) ?? []).length, 2);
+  assert.doesNotMatch(section, /Xem ảnh lớn|<figcaption>/);
+  assert.doesNotMatch(section, />Phòng (?:MRI|CT) thực tế</);
   assert.match(section, /class="diagnostic-showcase-grid" uk-lightbox="animation: slide"/);
   assert.match(section, /href="assets\/images\/clinic\/pk11\.webp"[^>]*aria-label="Phóng to ảnh phòng MRI thực tế"/);
   assert.match(section, /href="assets\/images\/clinic\/pk12\.webp"[^>]*aria-label="Phóng to ảnh phòng CT thực tế"/);
@@ -370,6 +373,27 @@ test('mobile consultation fields use restrained corners', () => {
     stylesheet,
     /@media \(max-width:\s*767px\)\s*\{[\s\S]*?\.form-input\s*\{[^}]*border-radius:\s*6px\s*!important;/,
   );
+});
+
+test('document exposes one main landmark and headings never skip a level', () => {
+  assert.equal((documentHtml.match(/<main\b/g) ?? []).length, 1);
+  assert.match(documentHtml, /<\/nav>\s*<main id="main-content">/);
+  assert.match(documentHtml, /<\/main>\s*<!-- FOOTER -->\s*<footer/);
+
+  const headingLevels = [...documentHtml.matchAll(/<h([1-6])\b/g)].map(match => Number(match[1]));
+  assert.equal(headingLevels[0], 1);
+  headingLevels.slice(1).forEach((level, index) => {
+    assert.ok(level <= headingLevels[index] + 1, `heading ${index + 2} skips a level`);
+  });
+  assert.doesNotMatch(documentHtml, /<h4\b/);
+});
+
+test('review authors are text labels and footer groups are second-level sections', () => {
+  assert.equal((documentHtml.match(/class="review-author /g) ?? []).length, 11);
+  assert.match(documentHtml, /<h2[^>]*>Hỗ Trợ Khách Hàng<\/h2>/);
+  assert.match(documentHtml, /<h2[^>]*>Hệ Thống Cơ Sở<\/h2>/);
+  assert.match(documentHtml, /<h2[^>]*>Kết Nối Với Chúng Tôi<\/h2>/);
+  assert.match(stylesheet, /\.review-author\s*\{[^}]*margin:\s*0\s*!important;/s);
 });
 
 test('mobile lead selectors and appointment date have comfortable touch targets', () => {

@@ -12,6 +12,26 @@ Landing page đã có luồng nhận đăng ký:
 
 Mỗi ngày, phần số thứ tự bắt đầu lại từ `001`. UUID cũ vẫn được giữ trong cột `Mã hệ thống` để chống ghi trùng.
 
+## V73 – rút gọn nhãn ảnh phòng MRI/CT
+
+V73 giữ nguyên giao diện, form và toàn bộ luồng nhận đăng ký của V72, đồng thời:
+
+- Bỏ hai chú thích `Phòng MRI thực tế` và `Phòng CT thực tế` bên dưới ảnh.
+- Rút gọn nhãn thao tác trên cả hai ảnh từ `Xem ảnh lớn` thành `xem ảnh`.
+
+Chỉ cần deploy toàn bộ thư mục V73 lên project Vercel hiện tại. Không cần thay đổi Google Apps Script, Google Sheet, biến môi trường, GA4, Google Ads hoặc Turnstile.
+
+## V72 – chuẩn hóa cấu trúc truy cập
+
+V72 giữ nguyên giao diện và toàn bộ luồng nhận đăng ký của V71, đồng thời:
+
+- Bổ sung một vùng nội dung chính `<main>` bao quanh các section từ hero đến FAQ.
+- Chuẩn hóa thứ tự tiêu đề, không còn chuyển trực tiếp từ `h2` xuống `h4`.
+- Chuyển tên người đánh giá về văn bản thường và giữ nguyên toàn bộ kiểu trình bày hiện tại.
+- Dùng tiêu đề cấp hai cho ba nhóm thông tin độc lập trong footer.
+
+Chỉ cần deploy toàn bộ thư mục V72 lên project Vercel hiện tại. Không cần thay đổi Google Apps Script, Google Sheet, biến môi trường, GA4, Google Ads hoặc Turnstile.
+
 ## V71 – vùng chạm form mobile dễ sử dụng hơn
 
 V71 giữ nguyên toàn bộ luồng nhận đăng ký của V70 và tinh chỉnh riêng trải nghiệm trên điện thoại:

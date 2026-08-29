@@ -35,7 +35,7 @@ test('all font faces remain available after the preload window', () => {
   assert.doesNotMatch(css, /font-display:\s*optional;/);
 });
 
-test('font delivery remains self-hosted and versioned for V71', () => {
+test('font delivery remains self-hosted and versioned for V73', () => {
   assert.doesNotMatch(html, /fonts\.googleapis\.com|fonts\.gstatic\.com/);
-  assert.match(html, /landing-page\.css\?v=71-mobile-form-touch/);
+  assert.match(html, /landing-page\.css\?v=73-mri-ct-labels/);
 });

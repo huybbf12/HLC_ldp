@@ -410,7 +410,7 @@ details > summary::-webkit-details-marker { display: none; }
     row-gap: 1px;
     min-width: 0;
 }
-.review-list > div > .flex.items-center.gap-3 > div:last-child h4 {
+.review-list > div > .flex.items-center.gap-3 > div:last-child .review-author {
     margin: 0 !important;
     line-height: 1.25;
 }
@@ -2501,7 +2501,7 @@ footer .bg-white {
         align-items: flex-start;
         row-gap: 3px;
     }
-    .review-list > div > .flex.items-center.gap-3 > div:last-child h4 {
+    .review-list > div > .flex.items-center.gap-3 > div:last-child .review-author {
         width: 100%;
         font-size: 14px !important;
     }
